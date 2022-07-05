@@ -14,7 +14,7 @@
 
 - checker: "second pattern"
   actions: "italic"
+  name: "text"
   args:
     - arg1
     - arg2
-  name: "text"

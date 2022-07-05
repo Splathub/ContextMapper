@@ -23,7 +23,7 @@ public class IdentityParser {
 
         ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
 
-        ArrayList<Identity> identities = new ArrayList<Identity>();
+        ArrayList<Identity> identities = new ArrayList<>(identitiesData.size());
 
         for (Map<String, Object> identityData : identitiesData) {
 
