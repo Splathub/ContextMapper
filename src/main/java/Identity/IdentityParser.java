@@ -32,7 +32,7 @@ public class IdentityParser {
                     new Checker((String) identityData.get("checker")),
                     new Action((String) identityData.get("actions")),
                     (String) identityData.get("name"),
-                    new String[]{}
+                    args.toArray(new String[0])
             ));
         }
 

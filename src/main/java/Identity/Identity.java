@@ -32,8 +32,6 @@ public class Identity {
 
     @Override
     public String toString() {
-        System.out.println(this.name);
-        System.out.println(this.args);
         return this.name;
     }
 }
