@@ -1,5 +1,3 @@
-import Identity.Identity;
-import Identity.Passive.PassiveAction;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.metadata.Metadata;
@@ -10,7 +8,6 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 public class ContextMapper {
 
@@ -34,7 +31,7 @@ public class ContextMapper {
 
     public String process() {
 
-        ContentHandler handler = new XMLStyleCodeContentHandler();
+        ContentHandler handler = new XMLStyleCodeContentHandler(null);
         Metadata metadata = new Metadata();
         ParseContext pcontext = new ParseContext();
 

@@ -1,4 +1,4 @@
-package Identity.Passive;
+package Identity.passive;
 
 public interface PassiveAction {
 
