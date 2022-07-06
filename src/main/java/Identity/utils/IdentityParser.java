@@ -27,13 +27,13 @@ public class IdentityParser {
 
         for (Map<String, Object> identityData : identitiesData) {
 
-            ArrayList<String> args = (ArrayList<String>) identityData.get("args");
+            Map<String, String> args = (Map<String, String>) identityData.get("args");
 
             identities.add(new Identity(
                     new IdentityChecker.CheckerC((String) identityData.get("checker")),
                     new Identity.Action.ActionC((String) identityData.get("actions")),
                     (String) identityData.get("name"),
-                    args.toArray(new String[0])
+                    args
             ));
         }
 

@@ -11,7 +11,7 @@ public class Identity {
     private final IdentityChecker checker;
     private final IdentityAction action;
     private final String attribute;
-    private final Map<String,Object> args;
+    private final Map<String, Object> args;
 
 
     public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> args) {
