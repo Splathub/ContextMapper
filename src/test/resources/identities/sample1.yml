@@ -1,0 +1,20 @@
+- checker: "first pattern"
+  actions: "bold italic"
+  name: "text"
+  args:
+    - arg1
+    - arg2
+
+- checker: "second patter"
+  actions: "bold"
+  name: "text"
+  args:
+    - arg1
+    - arg2
+
+- checker: "second pattern"
+  actions: "italic"
+  args:
+    - arg1
+    - arg2
+  name: "text"
