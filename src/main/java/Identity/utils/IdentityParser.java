@@ -33,7 +33,7 @@ public class IdentityParser {
                     new IdentityChecker.CheckerC((String) identityData.get("checker")),
                     new Identity.Action.ActionC((String) identityData.get("actions")),
                     (String) identityData.get("name"),
-                    new String[]{}
+                    args.toArray(new String[0])
             ));
         }
 
