@@ -3,6 +3,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import Identity.Identity;
+import Identity.IdentityParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,31 +12,35 @@ import org.xml.sax.SAXException;
 public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     private final Logger LOG = LoggerFactory.getLogger(XMLStyleCodeContentHandler.class);
 
-    private final Identity[] identities;
+    private Identity[] identities;
     private final int identityWindow = 3;
     private int atIdentity;
     private int prevIdentity;
 
     public XMLStyleCodeContentHandler(OutputStream stream, String encoding, String identityFile) throws UnsupportedEncodingException {
         super(stream, encoding);
-        identities = new Identity[0];
+        setIdentities(identityFile);
     }
 
     public XMLStyleCodeContentHandler(String encoding, String identityFile) {
         super(encoding);
-        identities = new Identity[0];
+        setIdentities(identityFile);
     }
 
     public XMLStyleCodeContentHandler(String identityFile) {
         super(null);
-        identities = new Identity[1];
+        setIdentities(identityFile);
     }
 
-    private void setupIdentity(String identityFile) {
-        //TODO: set identities from static util class that handles file and parses (builder)
-        //identities = new Identity[0];
+    private setIdentities(String identityFile) {
+        try {
+            identities = IdentityParser.parse(identityFile);
+        }
+        catch (Exception e) {
+            LOG.error("Failed to parse identityFile, defaulting to regular XML!");
+            identities = new Identity[0];
+        }
     }
-
 
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (super.inStartElement && identities.length > 0) {
