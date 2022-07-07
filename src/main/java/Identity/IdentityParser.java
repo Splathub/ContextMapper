@@ -1,7 +1,7 @@
 package Identity;
 
-import Identity.Action.Action;
-import Identity.Checker.Checker;
+import Identity.action.Action;
+import Identity.checker.Checker;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class IdentityParser {
 
-    public static ArrayList<Identity> parse(String path) throws IOException {
+    public static Identity[] parse(String path) throws IOException {
         Yaml yaml = new Yaml();
 
         File initialFile = new File(path);
@@ -22,19 +22,19 @@ public class IdentityParser {
 
         ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
 
-        ArrayList<Identity> identities = new ArrayList<>(identitiesData.size());
+        Identity[] identities = new Identity[identitiesData.size()];
 
-        for (Map<String, Object> identityData : identitiesData) {
+        for ( int i = 0; i < identities.length; i ++ ){
+            Map<String, Object> identityData = identitiesData.get(i);
 
-            Map<String, String> args = (Map<String, String>) identityData.get("args");
-
-            identities.add(new Identity(
+            identities[i] = (new Identity(
                     new Checker((String) identityData.get("checker")),
                     new Action((String) identityData.get("actions")),
                     (String) identityData.get("name"),
-                    args
+                    (Map<String, Object>) identityData.get("args")
             ));
         }
+
 
         return identities;
     }

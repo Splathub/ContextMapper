@@ -9,6 +9,5 @@ public class ContextMapperProcess {
         ContextMapper cm = new ContextMapper(SAMPLE_PDF, null);
 
         System.out.println(cm.process());
-
     }
 }

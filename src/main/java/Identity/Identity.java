@@ -8,18 +8,18 @@ import java.util.Map;
 public class Identity {
 
     private final String id;
-    private final IdentityChecker checker;
-    private final IdentityAction action;
     private final String attribute;
+    private final IdentityAction action;
+    private final IdentityChecker checker;
     private final Map<String, Object> args;
 
 
     public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> args) {
         this.id = id;
-        this.checker = checker;
-        this.action = action;
-        attribute = buildAttribute();
         this.args = args;
+        this.action = action;
+        this.checker = checker;
+        attribute = buildAttribute();
     }
 
     public String checkedProcess(char[] context, int start, int length) {

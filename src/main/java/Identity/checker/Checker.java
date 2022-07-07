@@ -1,4 +1,4 @@
-package Identity.Checker;
+package Identity.checker;
 
 public class Checker implements IdentityChecker{
     private String pattern;
@@ -8,7 +8,7 @@ public class Checker implements IdentityChecker{
     }
 
     @Override
-    public boolean check(String context) {
+    public boolean check(char[] context, int start, int length) {
         return false;
     }
 }

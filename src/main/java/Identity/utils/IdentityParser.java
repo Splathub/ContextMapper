@@ -1,6 +1,8 @@
 package Identity.utils;
 
 import Identity.Identity;
+import Identity.action.Action;
+import Identity.checker.Checker;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -23,18 +25,18 @@ public class IdentityParser {
 
         ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
 
-        ArrayList<Identity> identities = new ArrayList<>(identitiesData.size());
+        Identity[] identities = new Identity[identitiesData.size()];
 
-        for (Map<String, Object> identityData : identitiesData) {
+        for ( int i = 0; i < identities.length ; i ++ ){
+            Map<String, Object> identityData = identitiesData.get(i);
 
-            Map<String, String> args = (Map<String, String>) identityData.get("args");
 
-            identities.add(new Identity(
-                    new IdentityChecker.CheckerC((String) identityData.get("checker")),
-                    new Identity.Action.ActionC((String) identityData.get("actions")),
+            identities[i] = new Identity(
+                    new Checker((String) identityData.get("checker")),
+                    new Action((String) identityData.get("actions")),
                     (String) identityData.get("name"),
-                    args
-            ));
+                    (Map<String, Object>) identityData.get("args")
+            );
         }
 
         return identities;
