@@ -3,19 +3,22 @@ package Identity;
 import Identity.action.IdentityAction;
 import Identity.checker.IdentityChecker;
 
+import java.util.Map;
+
 public class Identity {
 
     private final String id;
-    private final IdentityChecker checker;
-    private final IdentityAction action;
     private final String attribute;
-    //TODO: parameters as map
+    private final IdentityAction action;
+    private final IdentityChecker checker;
+    private final Map<String, Object> args;
 
 
-    public Identity(IdentityChecker checker, IdentityAction action, String id) {
+    public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> args) {
         this.id = id;
-        this.checker = checker;
+        this.args = args;
         this.action = action;
+        this.checker = checker;
         attribute = buildAttribute();
     }
 
@@ -49,4 +52,8 @@ public class Identity {
         return String.format(" id=\"%s\"", id);
     }
 
+    @Override
+    public String toString() {
+        return String.format("Identity (%s %s)", checker.getClass().getName(), action.getClass().getName());
+    }
 }
