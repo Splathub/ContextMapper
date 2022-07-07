@@ -3,7 +3,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import Identity.Identity;
-import Identity.IdentityParser;
+//import Identity.IdentityParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +32,9 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
         setIdentities(identityFile);
     }
 
-    private setIdentities(String identityFile) {
+    private void setIdentities(String identityFile) {
         try {
-            identities = IdentityParser.parse(identityFile);
+            //identities = IdentityParser.parse(identityFile);
         }
         catch (Exception e) {
             LOG.error("Failed to parse identityFile, defaulting to regular XML!");
