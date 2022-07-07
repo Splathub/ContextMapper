@@ -12,7 +12,6 @@ public class ContextMapperProcess {
     final static String SAMPLE_PDF = "src/test/resources/samples/sample2.pdf";
 
     public static void main (String[] args) throws NoSuchMethodException, NoSuchFieldException {
-
         char[] c = new char[0];
         //, new Class[]{c.getClass(), int.class, int.class}
 
@@ -45,6 +44,5 @@ public class ContextMapperProcess {
 
        // ContextMapper cm = new ContextMapper(SAMPLE_PDF, null);
        // System.out.println(cm.process());
-
     }
 }

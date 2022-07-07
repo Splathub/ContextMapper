@@ -5,26 +5,23 @@ import Identity.checker.IdentityChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Identity {
     private final Logger LOG = LoggerFactory.getLogger(Identity.class);
 
     private final String id;
-    private final IdentityChecker checker;
-    private final IdentityAction action;
     private final String attribute;
-    private final Map<String, Object> map;
+    private final IdentityAction action;
+    private final IdentityChecker checker;
+    private final Map<String, Object> args;
 
 
-    public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> map) {
+    public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> args) {
         this.id = id;
         this.checker = checker;
         this.action = action;
-        this.map = map;
-
-        map.put("keyword", "Super cheese");
+        this.args = args;
 
         if (action.getAttribute() != null) {
             attribute = String.format(" id=\"%s\" style=\"%s\"", id, action.getAttribute());
@@ -42,10 +39,7 @@ public class Identity {
     }
 
     public boolean check(char[] context, int start, int length) {
-
             return checker.check( context, start, length);
-
-
     }
 
     public String contextAdjustment(char[] context, int start, int length){
@@ -56,4 +50,8 @@ public class Identity {
         return attribute;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Identity %s (%s %s)", id, checker.getClass().getName(), action.getClass().getName());
+    }
 }
