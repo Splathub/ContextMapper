@@ -19,5 +19,4 @@ public class MatchingTextChecker implements IdentityChecker{
         return true;
     }
 
-
 }

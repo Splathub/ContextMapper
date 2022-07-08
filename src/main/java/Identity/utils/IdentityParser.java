@@ -2,7 +2,6 @@ package Identity.utils;
 
 import Identity.Identity;
 import Identity.action.Action;
-import Identity.checker.Checker;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
