@@ -1,11 +1,14 @@
 package Identity.checker;
 
-public class MatchingTextChecker implements IdentityChecker{
+import java.util.Map;
+
+public class MatchingTextChecker extends AbstractIdentityChecker {
 
     private final String text;
 
-    public MatchingTextChecker(String text) {
-        this.text=  text;
+    public MatchingTextChecker(Map<String, Object> data) {
+        super(data);
+        this.text = (String) data.get("text");
     }
 
     @Override

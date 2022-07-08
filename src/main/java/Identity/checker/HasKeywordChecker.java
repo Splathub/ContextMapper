@@ -1,11 +1,14 @@
 package Identity.checker;
 
-public class HasKeywordChecker implements IdentityChecker{
+import java.util.Map;
+
+public class HasKeywordChecker extends AbstractIdentityChecker {
 
     private final String keyword;
 
-    public HasKeywordChecker(String keyword) {
-        this.keyword=  keyword;
+    public HasKeywordChecker(Map<String, Object> data) {
+        super(data);
+        this.keyword = (String) data.get("keyword");
     }
 
     @Override
