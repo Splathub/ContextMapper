@@ -13,14 +13,13 @@ public class MatchingTextChecker extends AbstractIdentityChecker {
 
     @Override
     public boolean check(char[] context, int start, int length) {
-        int j=0;
-        for (int i=start; i<start+length; i++) {
-            if (context[i] != text.charAt(j++)) {
+        int offset = 0;
+        for (int wordStart = start; wordStart < start + length; wordStart++) {
+            if (context[wordStart] != text.charAt(offset++)) {
                 return false;
             }
         }
         return true;
     }
-
 
 }
