@@ -1,13 +1,12 @@
 package Identity.utils;
 
 import Identity.Identity;
-import Identity.action.Action;
-import Identity.checker.Checker;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  */
 public class IdentityParser {
 
-    public static Identity[] parse(String path) throws IOException {
+    public static Identity[] parse(String path) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Yaml yaml = new Yaml();
 
         File initialFile = new File(path);
@@ -29,14 +28,7 @@ public class IdentityParser {
 
         for ( int i = 0; i < identities.length ; i ++ ){
             Map<String, Object> identityData = identitiesData.get(i);
-
-
-            identities[i] = new Identity(
-                    new Checker((String) identityData.get("checker")),
-                    new Action((String) identityData.get("actions")),
-                    (String) identityData.get("name"),
-                    (Map<String, Object>) identityData.get("args")
-            );
+            identities[i] = IdentityFactory.createIdentity(identityData);
         }
 
         return identities;

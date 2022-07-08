@@ -1,19 +1,19 @@
 - checker: "first pattern"
-  actions: "bold italic"
+  action: "bold italic"
   name: "text"
   args:
     arg1 : val1
     arg2 : val1
 
 - checker: "second patter"
-  actions: "bold"
+  action: "bold"
   name: "text"
   args:
     arg1 : val1
     arg2 : val2
 
 - checker: "second pattern"
-  actions: "italic"
+  action: "italic"
   name: "text"
   args:
     arg1 : val1

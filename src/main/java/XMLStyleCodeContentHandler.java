@@ -54,24 +54,27 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     private void createIdentities(String identityFile) {
         try {
             identities = IdentityParser.parse(identityFile);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.error("Failed to parse identityFile, defaulting to regular XML!");
             identities = new Identity[0];
         }
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-       if(!absorb) { super.startElement(uri, localName, qName, atts); }
+        if (!absorb) {
+            super.startElement(uri, localName, qName, atts);
+        }
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(!absorb) { super.endElement(uri, localName, qName); }
+        if (!absorb) {
+            super.endElement(uri, localName, qName);
+        }
     }
 
     public void endDocument() throws SAXException {
         if (absorb) { // TODO: may not end element properly
-            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length()-1));
+            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length() - 1));
         }
         super.endDocument();
     }
@@ -85,8 +88,8 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                 for (int i = atIdentity; i < identityWindow && i < identities.length; i++) {
                     atts = identities[i].checkedProcess(ch, start, length);
                     if (atts != null) {
-                        if(absorb) {
-                            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length()-1));
+                        if (absorb) {
+                            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length() - 1));
                             absorb = false;
                         }
                         prevIdentity = atIdentity;
@@ -95,10 +98,9 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                     }
                 }
 
-                if(absorb) {
+                if (absorb) {
                     sb.append(ch);
-                }
-                else {
+                } else {
                     if (atts == null) {
                         atts = identities[atIdentity].getAttribute();
                     }
@@ -106,7 +108,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
 
                     switch (identities[atIdentity].getType()) {
                         case REPLACE:
-                            super.write(identities[atIdentity].contextAdjustment(ch, start, length);
+                            super.write(identities[atIdentity].contextAdjustment(ch, start, length));
                             break;
 
                         case ABSORB:
@@ -119,8 +121,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                     }
                 }
 
-            }
-            catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 LOG.error("Failed to identify context: " + e.getMessage());
                 throw new SAXException("Identify Error: " + e.getMessage());
             }
