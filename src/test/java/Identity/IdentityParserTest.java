@@ -15,5 +15,4 @@ class IdentityParserTest {
         assertEquals(3, identities.length);
     }
 
-
 }

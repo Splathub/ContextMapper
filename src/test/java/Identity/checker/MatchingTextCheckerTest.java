@@ -18,6 +18,12 @@ class MatchingTextCheckerTest {
     }
 
     @Test
+    public void shouldNotMatchIfKeywordIsNotAtIndex0(){
+        IdentityChecker identityChecker = new MatchingTextChecker("should read this pricing");
+        assertTrue(identityChecker.check(TEST_SAMPLE_1, 4, 20));
+    }
+
+    @Test
     public void shouldReturnFalseIfWordIsNotPresent(){
         IdentityChecker identityChecker = new MatchingTextChecker("should read this no pricing");
         assertFalse(identityChecker.check(TEST_SAMPLE_1, 0, 20));
@@ -27,12 +33,6 @@ class MatchingTextCheckerTest {
     public  void shouldDetectKeyWordAtStart(){
         IdentityChecker identityChecker = new MatchingTextChecker("You should read this pricing");
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
-    }
-
-    @Test
-    public  void shouldDetectKeyWordAtEnd(){
-        IdentityChecker identityChecker = new MatchingTextChecker("all other prior");
-        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
     }
 
 }
