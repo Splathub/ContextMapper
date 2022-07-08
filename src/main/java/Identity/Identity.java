@@ -1,6 +1,7 @@
 package Identity;
 
 import Identity.action.IdentityAction;
+import Identity.action.IdentityActionType;
 import Identity.checker.IdentityChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,8 @@ public class Identity {
         this.action = action;
         this.args = args;
 
-        if (action.getAttribute() != null) {
-            attribute = String.format(" id=\"%s\" style=\"%s\"", id, action.getAttribute());
+        if (action.getActionType() != IdentityActionType.NONE) {
+            attribute = String.format(" id=\"%s\" style=\"%s\"", id, action.getClass().getName());
         }
         else {
             attribute = String.format(" id=\"%s\"", id);
@@ -48,6 +49,10 @@ public class Identity {
 
     public String getAttribute(){
         return attribute;
+    }
+
+    public IdentityActionType getType() {
+        return action.getActionType();
     }
 
     @Override
