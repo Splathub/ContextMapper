@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class Identity {
     private final Logger LOG = LoggerFactory.getLogger(Identity.class);
-
     private final String id;
     private final String attribute;
     private final IdentityAction action;

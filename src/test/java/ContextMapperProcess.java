@@ -12,32 +12,32 @@ public class ContextMapperProcess {
         char[] c = new char[0];
         //, new Class[]{c.getClass(), int.class, int.class}
 
+//
+//        Identity identity = new Identity(
+//                IdentityCondition.tesCK,
+//                new IdentityAction() {
+//                    @Override
+//                    public String getAttribute() {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public String contextAdjustment(char[] ch, int start, int length) {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public String stylize(String context) {
+//                        return null;
+//                    }
+//                },
+//                "test",
+//                new HashMap<>()
+//        );
 
-        Identity identity = new Identity(
-                IdentityCondition.tesCK,
-                new IdentityAction() {
-                    @Override
-                    public String getAttribute() {
-                        return null;
-                    }
 
-                    @Override
-                    public String contextAdjustment(char[] ch, int start, int length) {
-                        return null;
-                    }
-
-                    @Override
-                    public String stylize(String context) {
-                        return null;
-                    }
-                },
-                "test",
-                new HashMap<>()
-        );
-
-
-        System.out.println(identity.check(null, 0, 0));
-
+//        System.out.println(identity.check(null, 0, 0));
+//
 
        // ContextMapper cm = new ContextMapper(SAMPLE_PDF, null);
        // System.out.println(cm.process());

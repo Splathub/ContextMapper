@@ -4,7 +4,7 @@ public class HashKeywordChecker implements IdentityChecker {
 
     private final String keyword;
 
-    public HashKeywordChecker(String keyword) {
+    protected HashKeywordChecker(String keyword) {
         this.keyword = keyword;
     }
 
@@ -17,7 +17,8 @@ public class HashKeywordChecker implements IdentityChecker {
             offset = 0;
 
             while (context[wordStart + offset] == keyword.charAt(offset)
-                    && wordStart + offset < context.length) {
+                    && wordStart + offset < context.length ) {
+
                 offset++;
 
                 if (offset == keyword.length()) {
@@ -26,6 +27,7 @@ public class HashKeywordChecker implements IdentityChecker {
             }
 
         }
+
         return false;
     }
 }
