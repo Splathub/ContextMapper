@@ -2,6 +2,8 @@ package Identity.checker;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatchingTextCheckerTest {
@@ -13,25 +15,25 @@ class MatchingTextCheckerTest {
 
     @Test
     public void shouldDetectWordWhenPresentInContext(){
-        IdentityChecker identityChecker = new MatchingTextChecker("should read this pricing");
+        IdentityChecker identityChecker = new MatchingTextChecker(Map.of("type", "should read this pricing"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 4, 20));
     }
 
     @Test
     public void shouldNotMatchIfKeywordIsNotAtIndex0(){
-        IdentityChecker identityChecker = new MatchingTextChecker("should read this pricing");
+        IdentityChecker identityChecker = new MatchingTextChecker(Map.of("type", "should read this pricing"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 4, 20));
     }
 
     @Test
     public void shouldReturnFalseIfWordIsNotPresent(){
-        IdentityChecker identityChecker = new MatchingTextChecker("should read this no pricing");
+        IdentityChecker identityChecker = new MatchingTextChecker(Map.of("type", "should read this no pricing"));
         assertFalse(identityChecker.check(TEST_SAMPLE_1, 0, 20));
     }
 
     @Test
     public  void shouldDetectKeyWordAtStart(){
-        IdentityChecker identityChecker = new MatchingTextChecker("You should read this pricing");
+        IdentityChecker identityChecker = new MatchingTextChecker(Map.of("type", "You should read this pricing"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
     }
 

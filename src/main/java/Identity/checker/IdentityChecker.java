@@ -1,5 +1,7 @@
 package Identity.checker;
 
+import java.util.Map;
+
 public interface IdentityChecker {
     /**
      * Checks if matches the
@@ -7,4 +9,5 @@ public interface IdentityChecker {
      */
 
     boolean check(char[] context, int start, int length);
+
 }

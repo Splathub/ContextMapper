@@ -1,6 +1,9 @@
 package Identity.checker;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class HashKeywordCheckerTest {
@@ -12,25 +15,25 @@ class HashKeywordCheckerTest {
 
     @Test
     public  void shouldDetectWordWhenPresentInContext(){
-        IdentityChecker identityChecker = new HashKeywordChecker("should read this pricing");
+        IdentityChecker identityChecker = new HashKeywordChecker(Map.of("type",  "should read this pricing"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
     }
 
     @Test
     public  void shouldReturnFalseIfWordIsNotPresent(){
-        IdentityChecker identityChecker = new HashKeywordChecker("should read this no pricing");
+        IdentityChecker identityChecker = new HashKeywordChecker(Map.of("type", "should read this no pricing"));
         assertFalse(identityChecker.check(TEST_SAMPLE_1, 0, 20));
     }
 
     @Test
     public  void shouldDetectKeyWordAtStart(){
-        IdentityChecker identityChecker = new HashKeywordChecker("You should read this pricing");
+        IdentityChecker identityChecker = new HashKeywordChecker(Map.of("type", "You should read this pricing"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
     }
 
     @Test
     public  void shouldDetectKeyWordAtEnd(){
-        IdentityChecker identityChecker = new HashKeywordChecker("all other prior");
+        IdentityChecker identityChecker = new HashKeywordChecker(Map.of("type", "all other prior"));
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
     }
 }

@@ -1,11 +1,16 @@
 package Identity.checker;
 
+import Identity.annotation.Checker;
+
+import java.util.Map;
+
+@Checker(name = "HASH-KEY")
 public class HashKeywordChecker implements IdentityChecker {
 
     private final String keyword;
 
-    protected HashKeywordChecker(String keyword) {
-        this.keyword = keyword;
+    protected HashKeywordChecker(Map<String, Object> config) {
+        this.keyword = (String) config.get("data");
     }
 
     @Override
