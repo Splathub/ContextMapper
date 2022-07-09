@@ -16,14 +16,14 @@ class MatchingTextCheckerTest {
     public void shouldMatchContext(){
         data.put("text", "This pricing supplement");
         IdentityChecker identityChecker = new MatchingTextChecker(data);
-        assertTrue(identityChecker.check(TEST_SAMPLE_1), TEST_SAMPLE_1);
+        assertTrue(identityChecker.check(TEST_SAMPLE_1));
     }
 
     @Test
     public void shouldNotMatchContext(){
         data.put("text", "This pricing supplement");
         IdentityChecker identityChecker = new MatchingTextChecker(data);
-        assertFalse(identityChecker.check(TEST_SAMPLE_1), TEST_SAMPLE_1 + "234");
+        assertFalse(identityChecker.check(TEST_SAMPLE_1+"123"));
     }
 
 }
