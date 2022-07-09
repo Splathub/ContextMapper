@@ -4,7 +4,7 @@ import Identity.annotation.Checker;
 
 import java.util.Map;
 
-@Checker(name = "MATCHING-TEXT")
+@Checker( name = "MATCHING-TEXT" )
 public class MatchingTextChecker implements IdentityChecker {
 
     private final String text;
