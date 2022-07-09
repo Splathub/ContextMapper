@@ -1,5 +1,6 @@
 package Identity;
 
+import Identity.action.AbstractIdentityAction;
 import Identity.action.IdentityAction;
 import Identity.action.IdentityActionType;
 import Identity.checker.IdentityChecker;
@@ -45,6 +46,10 @@ public class Identity {
 
     public String contextAdjustment(char[] context, int start, int length){
         return action.contextAdjustment(context, start, length);
+    }
+
+    public IdentityAction getAction() {
+        return action;
     }
 
     public String getAttribute(){
