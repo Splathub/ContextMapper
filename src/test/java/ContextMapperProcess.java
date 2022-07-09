@@ -1,10 +1,3 @@
-import Identity.Identity;
-import Identity.action.IdentityAction;
-import Identity.checker.IdentityCondition;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class ContextMapperProcess {
 
