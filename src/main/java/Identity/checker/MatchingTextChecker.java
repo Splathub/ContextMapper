@@ -1,13 +1,16 @@
 package Identity.checker;
 
-import Identity.annotation.Checker;
-
 import java.util.Map;
 
-@Checker( name = "MATCHING-TEXT" )
-public class MatchingTextChecker implements IdentityChecker {
+
+public class MatchingTextChecker extends AbstractIdentityChecker {
 
     private final String text;
+
+    public MatchingTextChecker(Map<String, Object> data) {
+        super(data);
+        this.text = (String) data.get("text");
+    }
 
     @Override
     public boolean check(char[] context, int start, int length) {
@@ -20,8 +23,10 @@ public class MatchingTextChecker implements IdentityChecker {
         return true;
     }
 
-    public  MatchingTextChecker(Map<String, Object> config) {
-        this.text = (String) config.get("data");
+    @Override
+    public boolean check(String str) {
+        return str.equals(text);
     }
 
 }
+
