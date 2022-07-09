@@ -13,38 +13,22 @@ class HasKeywordsCheckerTest {
             "a prospectus supplement relating to our Series A medium-term notes, of which these notes are a part, and the more detailed\n" +
             "information contained in the accompanying product supplement. This pricing supplement, together with the documents\n" +
             "listed below, contains the terms of the notes and supersedes all other prior").toCharArray();
-    public static String TEST_SAMPLE_2 = "This pricing supplement";
+    public static String TEST_SAMPLE_2 = "This pricing supplement should do stuff.";
     Map<String, Object> data = new HashMap<>();
 
 
     @Test
     void containsAllKeywords() {
         String[] str = new String[]{"should", "pricing sup"};
-        data.put("keyword", str);
+        data.put("keywords", str);
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
-    }
-
-    @Test
-    void containsDuplicateKeywordsWithOnlyOne() {
-        String[] str = new String[]{"should", "should", "price"};
-        data.put("keyword", str);
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
-    }
-
-    @Test
-    void containsDuplicateKeywordsWithMuti() {
-        String[] str = new String[]{"supple", "supplement", "supplement", "supplement", "supple"};
-        data.put("keyword", str);
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertTrue(checker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
     }
 
     @Test
     void containsSomeKeywords() {
         String[] str = new String[]{"should", "pricing", "fishing"};
-        data.put("keyword", str);
+        data.put("keywords", str);
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
     }
@@ -52,9 +36,26 @@ class HasKeywordsCheckerTest {
     @Test
     void containsNoKeywords() {
         String[] str = new String[]{"fishing", "poker tour", "and bay was filled"};
-        data.put("keyword", str);
+        data.put("keywords", str);
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+    }
+
+
+    @Test
+    void containsDuplicateKeywordsWithOnlyOne() {
+        String[] str = new String[]{"should", "should", "prici"};
+        data.put("keywords", str);
+        IdentityChecker checker = new HasKeywordsChecker(data);
+        assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+    }
+
+    @Test
+    void containsDuplicateKeywordsWithMuti() {
+        String[] str = new String[]{"supple", "supplement", "supplement", "supplement", "supple"};
+        data.put("keywords", str);
+        IdentityChecker checker = new HasKeywordsChecker(data);
+        assertTrue(checker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
     }
 
 }

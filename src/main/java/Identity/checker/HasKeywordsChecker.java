@@ -12,7 +12,14 @@ public class HasKeywordsChecker extends AbstractIdentityChecker {
   public HasKeywordsChecker(Map<String, Object> data) {
     super(data);
 
-    String regex = Arrays.stream((String[]) data.get("keywords"))
+    String[] keywords = (String[]) data.get("keywords");
+
+    if(keywords == null )
+      throw new RuntimeException(
+              new IllegalArgumentException("keywords key is absent from data map passed to HasKeywordChecker"));
+
+    String regex = Arrays.stream(keywords)
+            .distinct()
             .map(keyword -> String.format("(?=.*%s)", keyword))
             .collect(Collectors.joining());
 
