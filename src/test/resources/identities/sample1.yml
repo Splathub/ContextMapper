@@ -2,7 +2,7 @@
     type: "MATCHING_TEXT"
     data : "first pattern"
 
-  actions: "bold italic"
+  action: "bold italic"
   name: "text"
   args:
     arg1 : val1
@@ -12,7 +12,7 @@
     type: "HASH_KEYWORD"
     data: "second patter"
 
-  actions: "bold"
+  action: "bold"
   name: "text"
   args:
     arg1 : val1
@@ -21,7 +21,7 @@
 - checker:
     type: "HASH_KEYWORD"
     data: "third patter"
-  actions: "italic"
+  action: "italic"
   name: "text"
   args:
     arg1 : val1
