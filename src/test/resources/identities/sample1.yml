@@ -1,28 +1,20 @@
-- checker:
-    type: "MATCHING_TEXT"
-    data : "first pattern"
-
-  action: "bold italic"
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
   name: "text"
   args:
     arg1 : val1
     arg2 : val1
 
-- checker:
-    type: "HASH_KEYWORD"
-    data: "second patter"
-
-  action: "bold"
-  name: "text"
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
+  name: "textmore"
   args:
     arg1 : val1
     arg2 : val2
 
-- checker:
-    type: "HASH_KEYWORD"
-    data: "third patter"
-  action: "italic"
-  name: "text"
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
+  name: "textsuper"
   args:
     arg1 : val1
     arg2 : val1

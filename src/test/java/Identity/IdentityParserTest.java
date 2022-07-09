@@ -16,12 +16,4 @@ class IdentityParserTest {
         assertEquals(3, identities.length);
     }
 
-    @Test
-    public void parsingSample1FirstElementShouldBeCorrect() throws Exception {
-        Identity[] identities = IdentityParser.parse(
-                "src/test/resources/identities/sample1.yml");
-
-        assertEquals(identities[0].toString(), "text");
-    }
-
 }

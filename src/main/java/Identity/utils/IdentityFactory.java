@@ -42,7 +42,7 @@ public class IdentityFactory {
         IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(data);
 
         clazz = Class.forName("Identity.action." + data.get("action"));
-        IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor(Map.class).newInstance();
+        IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor().newInstance();
 
         return new Identity(
                 checker,
