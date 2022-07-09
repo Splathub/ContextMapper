@@ -21,28 +21,28 @@ class HasKeywordCheckerTest {
     public void shouldDetectWordWhenPresentInContext(){
         data.put("keyword", "should read this pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
-        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
+        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 50));
     }
 
     @Test
     public void shouldReturnFalseIfWordIsNotPresent(){
         data.put("keyword", "should read this no pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
-        assertFalse(identityChecker.check(TEST_SAMPLE_1, 0, 20));
+        assertFalse(identityChecker.check(TEST_SAMPLE_1, 7, 25));
     }
 
     @Test
     public void shouldDetectKeyWordAtStart(){
-        data.put("keyword", "\"You should read this pricing");
+        data.put("keyword", "You should read this pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
-        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 20));
+        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 50));
     }
 
     @Test
     public void shouldDetectKeyWordAtEnd(){
         data.put("keyword", "all other prior");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
-        assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
+        assertTrue(identityChecker.check(TEST_SAMPLE_1, 23, TEST_SAMPLE_1.length-1));
     }
 
 }

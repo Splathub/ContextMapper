@@ -27,4 +27,9 @@ public class HasKeywordChecker extends AbstractIdentityChecker {
         }
         return false;
     }
+
+    @Override
+    public boolean check(String str) {
+        return check(str.toCharArray(), 0, str.length()-1);
+    }
 }
