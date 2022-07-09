@@ -10,8 +10,4 @@ public abstract class AbstractIdentityChecker implements IdentityChecker{
         this.data = data;
     }
 
-    @Override
-    public boolean check(char[] context, int start, int length) {
-        return false;
-    }
 }

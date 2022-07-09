@@ -32,6 +32,11 @@ public class HasKeywordsChecker extends AbstractIdentityChecker {
         return false;
     }
 
+    @Override
+    public boolean check(String str) {
+        return false;
+    }
+
     private class Trie {
 
     }

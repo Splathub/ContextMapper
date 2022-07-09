@@ -22,4 +22,10 @@ public class MatchingTextChecker extends AbstractIdentityChecker {
         return true;
     }
 
+    @Override
+    public boolean check(String str) {
+        return str.equals(text);
+    }
+
 }
+
