@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import Identity.Identity;
 
+import Identity.action.JoinIdentityAction;
 import Identity.utils.IdentityParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     private int prevIdentity;
 
     private boolean absorb = false;
-    private StringBuffer sb;
+    private JoinIdentityAction joinAction;
 
     public XMLStyleCodeContentHandler(OutputStream stream, String encoding, String identityFile) throws UnsupportedEncodingException {
         super(stream, encoding);
@@ -74,7 +75,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
 
     public void endDocument() throws SAXException {
         if (absorb) { // TODO: may not end element properly
-            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length() - 1));
+            super.write( joinAction.process() );
         }
         super.endDocument();
     }
@@ -89,7 +90,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                     atts = identities[i].checkedProcess(ch, start, length);
                     if (atts != null) {
                         if (absorb) {
-                            super.write(identities[atIdentity].contextAdjustment(sb.toString().toCharArray(), 0, sb.length() - 1));
+                            super.write( joinAction.process() );
                             absorb = false;
                         }
                         prevIdentity = atIdentity;
@@ -99,7 +100,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                 }
 
                 if (absorb) {
-                    sb.append(ch);
+                    joinAction.append(ch, start, length);
                 } else {
                     if (atts == null) {
                         atts = identities[atIdentity].getAttribute();
@@ -113,7 +114,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
 
                         case ABSORB:
                             absorb = true;
-                            sb = new StringBuffer();
+                            joinAction = (JoinIdentityAction) identities[atIdentity].getAction();
                             break;
 
                         default:
