@@ -12,6 +12,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This singleton class is responsible for create all Identity objects and their IdentityChecker and IdentityAction objects.
+ * IdentityChecker and IdentityAction are both initialize through a given class String name that should match a current
+ * class. Each of these Classes should hold a constructor that takes a Map.class only. The setup for most of these
+ * classes will be defined through a Map<String, Object>.
+ */
 public class IdentityFactory {
 
     private static IdentityFactory factory;

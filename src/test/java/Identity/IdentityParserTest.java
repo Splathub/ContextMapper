@@ -3,7 +3,8 @@ package Identity;
 import Identity.utils.IdentityParser;
 import org.junit.jupiter.api.Test;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class IdentityParserTest {
 

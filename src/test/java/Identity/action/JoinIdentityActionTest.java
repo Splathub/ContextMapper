@@ -14,7 +14,7 @@ class JoinIdentityActionTest {
         for (String str : sentence.split(" ")) {
             action.append(str + " ");
         }
-        assertEquals(action.process(), sentence);
+        assertEquals(action.process(), sentence+" ");
     }
 
 }

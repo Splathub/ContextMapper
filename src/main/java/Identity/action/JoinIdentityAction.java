@@ -1,5 +1,8 @@
 package Identity.action;
 
+/**
+ * This class is a glorified StringBuffer.class that may treat each appending differently through inheritance.
+ */
 public class JoinIdentityAction extends AbstractIdentityAction {
 
     private StringBuffer sb;

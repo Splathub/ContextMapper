@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
- * Parses identities definition yaml files to Identity object;
+ * Parses identities definition yaml files to Identity object.
  */
 public class IdentityParser {
 
