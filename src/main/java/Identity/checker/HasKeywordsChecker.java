@@ -1,44 +1,32 @@
 package Identity.checker;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class HasKeywordsChecker extends AbstractIdentityChecker {
 
-    private final HashMap<String, Integer> keywords; // Use Trie
-    private final int longestWord;
+  private final Pattern pattern;
 
-    public HasKeywordsChecker(Map<String, Object> data) {
-        super(data);
-        for (String str : (String[]) data.get("keyword") ) {
+  public HasKeywordsChecker(Map<String, Object> data) {
+    super(data);
 
-        }
-    }
+    String regex = Arrays.stream((String[]) data.get("keywords"))
+            .map(keyword -> String.format("(?=.*%s)", keyword))
+            .collect(Collectors.joining());
 
-    @Override
-    public boolean check(char[] context, int start, int length) {
-        int j;
-        for (int i=start; i<start+length; i++) {
-            if (context[i] == keyword.charAt(0)) {
-                j=1;
-                while (context[i+j] == keyword.charAt(j) && j < keyword.length()) {
-                    j++;
-                    if (j == keyword.length()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    this.pattern = Pattern.compile(regex);
+  }
 
-    @Override
-    public boolean check(String str) {
-        return false;
-    }
+  @Override
+  public boolean check(char[] context, int start, int length) {
+    return pattern.matcher(new String(context, start, length)).find();
+  }
 
-    private class Trie {
-
-    }
+  @Override
+  public boolean check(String str) {
+    return pattern.matcher(str).find();
+  }
 
 }
