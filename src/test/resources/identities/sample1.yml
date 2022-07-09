@@ -1,18 +1,26 @@
-- checker: "first pattern"
+- checker:
+    type: "MATCHING_TEXT"
+    data : "first pattern"
+
   action: "bold italic"
   name: "text"
   args:
     arg1 : val1
     arg2 : val1
 
-- checker: "second patter"
+- checker:
+    type: "HASH_KEYWORD"
+    data: "second patter"
+
   action: "bold"
   name: "text"
   args:
     arg1 : val1
     arg2 : val2
 
-- checker: "second pattern"
+- checker:
+    type: "HASH_KEYWORD"
+    data: "third patter"
   action: "italic"
   name: "text"
   args:
