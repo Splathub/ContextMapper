@@ -1,5 +1,7 @@
 package Identity.checker;
 
+import Identity.exception.ParameterException;
+
 import java.util.Map;
 
 
@@ -10,6 +12,10 @@ public class MatchingTextChecker extends AbstractIdentityChecker {
     public MatchingTextChecker(Map<String, Object> data) {
         super(data);
         this.text = (String) data.get("text");
+
+        if (this.text == null) {
+            throw new ParameterException("MatchingTextChecker Key: 'text' is invalid");
+        }
     }
 
     @Override

@@ -1,0 +1,46 @@
+- checker: "XYnMatchingTextChecker"
+  action: "BaseIdentityAction"
+  name: "text1"
+  args:
+    text : "Super ends"
+
+- checker: "HasKeywordChecker"
+  action: "XynsReplaceIdentityAction"
+  name: "text2"
+  args:
+    keyword : "should make "
+
+- checker: "HasKeywordsChecker"
+  action: "JoinIdentityAction"
+  args:
+    keywords: ["should make ","Cheese cuts are "," went home."]
+
+- action: "XynsReplaceIdentityAction"
+  name: "text2"
+  args:
+    keyword : "should make "
+
+- action: "XynsReplaceIdentityAction"
+  name: "text2"
+  args:
+    keyword : "should make "
+
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
+  name: "text2"
+
+- checker: "HasKeywordsChecker"
+  action: "JoinIdentityAction"
+  args:
+    keywords: ["should make ","Cheese cuts are "," went home."]
+
+- checker: "HasKeywordsChecker"
+  action: "JoinIdentityAction"
+  args:
+    args:
+      funnal: ["should make ","Cheese cuts are "," went home."]
+
+- checker: "HasKeywordsChecker"
+  action: "JoinIdentityAction"
+  args:
+    keywords: "should make ","Cheese cuts are "," went home."]

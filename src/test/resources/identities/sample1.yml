@@ -1,20 +1,17 @@
-- checker: "HasKeywordChecker"
-  action: "JoinIdentityAction"
-  name: "text"
+- checker: "MatchingTextChecker"
+  action: "BaseIdentityAction"
+  name: "text1"
   args:
-    arg1 : val1
-    arg2 : val1
+    text : "Super ends"
 
 - checker: "HasKeywordChecker"
-  action: "JoinIdentityAction"
-  name: "textmore"
+  action: "ReplaceIdentityAction"
+  name: "text2"
   args:
-    arg1 : val1
-    arg2 : val2
+    keyword : "should make "
 
-- checker: "HasKeywordChecker"
+- checker: "HasKeywordsChecker"
   action: "JoinIdentityAction"
-  name: "textsuper"
+  name: "text3"
   args:
-    arg1 : val1
-    arg2 : val1
+    keywords: ["should make ","Cheese cuts are "," went home."]

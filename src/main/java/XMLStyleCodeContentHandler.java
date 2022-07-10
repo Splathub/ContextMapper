@@ -56,7 +56,8 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
         try {
             identities = IdentityParser.parse(identityFile);
         } catch (Exception e) {
-            LOG.error("Failed to parse identityFile, defaulting to regular XML!");
+            LOG.error("Failed to parse identityFile, defaulting to regular XML! " + e.getMessage());
+            e.printStackTrace();
             identities = new Identity[0];
         }
     }
@@ -74,6 +75,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     }
 
     public void endDocument() throws SAXException {
+        LOG.info("Ending Doc");
         if (absorb) { // TODO: may not end element properly
             super.write( joinAction.process() );
         }
@@ -123,7 +125,8 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                 }
 
             } catch (RuntimeException e) {
-                LOG.error("Failed to identify context: " + e.getMessage());
+                LOG.error("Failed to identify context: " + e.getCause());
+                e.printStackTrace();
                 throw new SAXException("Identify Error: " + e.getMessage());
             }
 

@@ -1,5 +1,7 @@
 package Identity.checker;
 
+import Identity.exception.ParameterException;
+
 import java.util.Map;
 
 public class HasKeywordChecker extends AbstractIdentityChecker {
@@ -9,6 +11,10 @@ public class HasKeywordChecker extends AbstractIdentityChecker {
     public HasKeywordChecker(Map<String, Object> data) {
         super(data);
         this.keyword = (String) data.get("keyword");
+
+        if (this.keyword == null) {
+            throw new ParameterException("HasKeywordChecker Key: 'keyword' is invalid");
+        }
     }
 
     @Override
@@ -17,7 +23,7 @@ public class HasKeywordChecker extends AbstractIdentityChecker {
         for (int i=start; i<start+length; i++) {
             if (context[i] == keyword.charAt(0)) {
                 j=1;
-                while (context[i+j] == keyword.charAt(j) && j < keyword.length()) {
+                while (context[i+j-1] == keyword.charAt(j) && j < keyword.length()) {
                     j++;
                     if (j == keyword.length()) {
                         return true;

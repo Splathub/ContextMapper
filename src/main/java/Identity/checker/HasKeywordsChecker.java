@@ -1,24 +1,29 @@
 package Identity.checker;
 
-import java.util.Arrays;
+import Identity.exception.ParameterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class HasKeywordsChecker extends AbstractIdentityChecker {
+  private final Logger LOG = LoggerFactory.getLogger(HasKeywordsChecker.class);
 
   private final Pattern pattern;
 
   public HasKeywordsChecker(Map<String, Object> data) {
     super(data);
 
-    String[] keywords = (String[]) data.get("keywords");
+    ArrayList keywords = (ArrayList<String>) data.get("keywords");
 
-    if(keywords == null )
-      throw new RuntimeException(
-              new IllegalArgumentException("keywords key is absent from data map passed to HasKeywordChecker"));
+    if (keywords == null) {
+      throw new ParameterException("HasKeywordsChecker Key: 'keywords' is invalid");
+    }
 
-    String regex = Arrays.stream(keywords)
+    String regex = (String) keywords.stream()
             .distinct()
             .map(keyword -> String.format("(?=.*%s)", keyword))
             .collect(Collectors.joining());

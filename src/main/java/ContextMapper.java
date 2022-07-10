@@ -3,6 +3,8 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -11,49 +13,46 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ContextMapper {
+    private static final Logger LOG = LoggerFactory.getLogger(ContextMapper.class);
 
     File pdf;
-    File identity;
-
-    //StringBuffer buffer; //OUTPUT Obj
-    //List<Identity> identities;
-    //List<PassiveAction> passiveActions;
-
+    String identity;
 
 
     public ContextMapper(String pdfPath, String identityPath) {
         pdf = new File(pdfPath);
-       //identity = new File(identityPath);
+       identity = identityPath;
     }
 
     public void loadIdentities(String identityPath) {
 
     }
 
-    public String process() {
+    public String process() throws IOException {
 
-        ContentHandler handler = new XMLStyleCodeContentHandler(null);
+        ContentHandler handler = new XMLStyleCodeContentHandler(identity);
         Metadata metadata = new Metadata();
         ParseContext pcontext = new ParseContext();
 
-        try ( FileInputStream inputstream = new FileInputStream(pdf) ){
+        try ( FileInputStream inputStream = new FileInputStream(pdf) ){
             //parsing the document using PDF parser
             PDFParser pdfparser = new PDFParser();
-            pdfparser.parse(inputstream, handler, metadata,pcontext);
+            pdfparser.parse(inputStream, handler, metadata,pcontext);
 
             //getting the content of the document
-            System.out.println("Contents of the PDF :" + handler.toString());
+            //System.out.println("Contents of the PDF :" + handler.toString());
 
             //getting metadata of the document
-            System.out.println("Metadata of the PDF:");
+            //System.out.println("Metadata of the PDF:");
             String[] metadataNames = metadata.names();
 
             for(String name : metadataNames) {
                 System.out.println(name+ " : " + metadata.get(name));
             }
-        } catch (IOException | TikaException | SAXException e) {
+        } catch (TikaException | SAXException e) {
             //e.printStackTrace();
             System.out.println("ERROR: Tika process: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return handler.toString();

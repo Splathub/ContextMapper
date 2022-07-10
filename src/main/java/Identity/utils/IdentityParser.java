@@ -1,36 +1,36 @@
 package Identity.utils;
 
 import Identity.Identity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
  * Parses identities definition yaml files to Identity object.
  */
 public class IdentityParser {
+    private static final Logger LOG = LoggerFactory.getLogger(IdentityParser.class);
 
-    public static Identity[] parse(String path) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        Yaml yaml = new Yaml();
+    public static Identity[] parse(String path) throws IOException {
+        Identity[] identities;
 
-        File initialFile = new File(path);
-        InputStream inputStream = Files.newInputStream(initialFile.toPath());
+        try (FileInputStream inputStream = new FileInputStream(path)) {
+            Yaml yaml = new Yaml();
+            ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
 
-        ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
+            identities = new Identity[identitiesData.size()];
 
-        Identity[] identities = new Identity[identitiesData.size()];
-
-        for ( int i = 0; i < identities.length ; i ++ ){
-            Map<String, Object> identityData = identitiesData.get(i);
-            identities[i] = IdentityFactory.createIdentity(identityData);
+            for (int i = 0; i < identities.length ; i++){
+                identities[i] = IdentityFactory.createIdentity(identitiesData.get(i));
+            }
         }
 
+        LOG.info("Successful Identity Parsing");
         return identities;
     }
 
