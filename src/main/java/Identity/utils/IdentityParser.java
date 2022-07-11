@@ -30,7 +30,7 @@ public class IdentityParser {
             }
         }
 
-        LOG.info("Successful Identity Parsing");
+        LOG.info("Successful Parsed Identity");
         return identities;
     }
 

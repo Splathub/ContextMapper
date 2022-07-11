@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import Identity.Identity;
 
 import Identity.action.JoinIdentityAction;
+import Identity.exception.IdentityCrisisException;
 import Identity.utils.IdentityParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
@@ -31,8 +32,10 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
 
     private Identity[] identities;
     private final int identityWindow = 3;
-    private int atIdentity;
+    private int atIdentity=0;
     private int prevIdentity;
+    private boolean defaultToXML;
+    private boolean inBody;
 
     private boolean absorb = false;
     private JoinIdentityAction joinAction;
@@ -52,17 +55,45 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
         createIdentities(identityFile);
     }
 
+    public XMLStyleCodeContentHandler(OutputStream stream, String encoding, String identityFile, boolean defaultToXML) throws UnsupportedEncodingException {
+        super(stream, encoding);
+        this.defaultToXML = defaultToXML;
+        createIdentities(identityFile);
+    }
+
+    public XMLStyleCodeContentHandler(String encoding, String identityFile, boolean defaultToXML) {
+        super(encoding);
+        this.defaultToXML = defaultToXML;
+        createIdentities(identityFile);
+    }
+
+    public XMLStyleCodeContentHandler(String identityFile, boolean defaultToXML) {
+        super(null);
+        this.defaultToXML = defaultToXML;
+        createIdentities(identityFile);
+    }
+
+
     private void createIdentities(String identityFile) {
         try {
             identities = IdentityParser.parse(identityFile);
         } catch (Exception e) {
-            LOG.error("Failed to parse identityFile, defaulting to regular XML! " + e.getMessage());
-            e.printStackTrace();
-            identities = new Identity[0];
+            if (defaultToXML) {
+                LOG.error("Failed to parse identityFile, defaulting to regular XML! " + e.getMessage());
+                identities = new Identity[0];
+            }
+            else {
+                LOG.error("Failed to parse identityFile! " + e.getMessage());
+                throw new IdentityCrisisException("Failed to parse identityFile!");
+            }
         }
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        if (localName.equals("body") ) {
+            inBody = true;
+        }
+
         if (!absorb) {
             super.startElement(uri, localName, qName, atts);
         }
@@ -83,14 +114,13 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        if (super.inStartElement && identities.length > 0) {
+        if (absorb || inBody && super.inStartElement && identities.length > 0) {
             try {
                 super.inStartElement = false;
-                String atts = null;
-
-                for (int i = atIdentity; i < identityWindow && i < identities.length; i++) {
-                    atts = identities[i].checkedProcess(ch, start, length);
-                    if (atts != null) {
+                for (int i = atIdentity; i < atIdentity+identityWindow && i < identities.length; i++) {
+                    LOG.info("On identitiy name: " + identities[i].getAttribute());
+                    if (identities[i].check(ch, start, length)) {
+                        LOG.info("true");
                         if (absorb) {
                             super.write( joinAction.process() );
                             absorb = false;
@@ -104,10 +134,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                 if (absorb) {
                     joinAction.append(ch, start, length);
                 } else {
-                    if (atts == null) {
-                        atts = identities[atIdentity].getAttribute();
-                    }
-                    super.write(atts);
+                    super.write(identities[atIdentity].getAttribute() +">");
 
                     switch (identities[atIdentity].getType()) {
                         case REPLACE:
@@ -117,6 +144,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                         case ABSORB:
                             absorb = true;
                             joinAction = (JoinIdentityAction) identities[atIdentity].getAction();
+                            joinAction.append(ch, start, length);
                             break;
 
                         default:

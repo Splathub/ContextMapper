@@ -29,8 +29,12 @@ public class ContextMapper {
     }
 
     public String process() throws IOException {
+        return process(false);
+    }
 
-        ContentHandler handler = new XMLStyleCodeContentHandler(identity);
+    public String process(boolean defaultToXML) throws IOException {
+
+        XMLStyleCodeContentHandler handler = new XMLStyleCodeContentHandler(identity, defaultToXML);
         Metadata metadata = new Metadata();
         ParseContext pcontext = new ParseContext();
 
