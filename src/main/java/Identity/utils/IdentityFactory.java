@@ -51,6 +51,13 @@ public class IdentityFactory {
             clazz = Class.forName("Identity.action." + data.get("action"));
             IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor().newInstance();
 
+            new Identity(
+                    checker,
+                    action,
+                    (String) data.get("name"),
+                    (Map<String, Object>) data.get("args")
+            );
+
             return new Identity(
                     checker,
                     action,
