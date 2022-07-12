@@ -5,7 +5,6 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 import java.io.File;
