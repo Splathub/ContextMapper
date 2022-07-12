@@ -20,6 +20,10 @@ public class MatchingTextChecker extends AbstractIdentityChecker {
 
     @Override
     public boolean check(char[] context, int start, int length) {
+        if(length != text.length()) {
+            return false;
+        }
+
         int offset = 0;
         for (int wordStart = start; wordStart < start + length; wordStart++) {
             if (context[wordStart] != text.charAt(offset++)) {

@@ -23,7 +23,7 @@ public class HasKeywordChecker extends AbstractIdentityChecker {
         for (int i=start; i<start+length; i++) {
             if (context[i] == keyword.charAt(0)) {
                 j=1;
-                while (context[i+j-1] == keyword.charAt(j) && j < keyword.length()) {
+                while (context[i+j] == keyword.charAt(j) && j < keyword.length() && i+j < context.length) {
                     j++;
                     if (j == keyword.length()) {
                         return true;
