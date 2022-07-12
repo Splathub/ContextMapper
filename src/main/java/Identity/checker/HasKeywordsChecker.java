@@ -17,13 +17,13 @@ public class HasKeywordsChecker extends AbstractIdentityChecker {
   public HasKeywordsChecker(Map<String, Object> data) {
     super(data);
 
-    ArrayList keywords = (ArrayList<String>) data.get("keywords");
+    ArrayList<String> keywords = (ArrayList<String>) data.get("keywords");
 
     if (keywords == null) {
       throw new ParameterException("HasKeywordsChecker Key: 'keywords' is invalid");
     }
 
-    String regex = (String) keywords.stream()
+    String regex = keywords.stream()
             .distinct()
             .map(keyword -> String.format("(?=.*%s)", keyword))
             .collect(Collectors.joining());

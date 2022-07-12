@@ -26,7 +26,7 @@ class HasKeywordCheckerTest {
 
     @Test
     public void shouldReturnFalseIfWordIsNotPresent(){
-        data.put("keyword", "should read this no pricing");
+        data.put("keyword", "You should read this pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
         assertFalse(identityChecker.check(TEST_SAMPLE_1, 7, 25));
     }
