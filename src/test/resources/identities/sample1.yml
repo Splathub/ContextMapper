@@ -44,7 +44,7 @@
   action: "BaseIdentityAction"
   name: "LinkTitle"
   args:
-    keywords : ["Links", "documents"]
+    keywords : ["links", "documents"]
 
 - checker: "HasKeywordsChecker"
   action: "BaseIdentityAction"

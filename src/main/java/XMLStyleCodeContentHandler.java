@@ -122,7 +122,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
                     if (identities[i].check(ch, start, length)) {
                         LOG.info("true");
                         if (absorb) {
-                            super.write( joinAction.process() );
+                            super.write( joinAction.process() + "</p> <p "); //TODO: Fix for last element handle!
                             absorb = false;
                         }
                         prevIdentity = atIdentity;
