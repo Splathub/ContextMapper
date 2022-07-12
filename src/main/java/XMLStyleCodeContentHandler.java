@@ -2,11 +2,11 @@
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import Identity.Identity;
+import identity.Identity;
 
-import Identity.action.JoinIdentityAction;
-import Identity.exception.IdentityCrisisException;
-import Identity.utils.IdentityParser;
+import identity.action.JoinIdentityAction;
+import identity.exception.IdentityCrisisException;
+import identity.utils.IdentityParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

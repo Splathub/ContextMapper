@@ -6,14 +6,18 @@
 
     <groupId>tk.crc</groupId>
     <artifactId>ContextMapperXML</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <tika-version>2.3.0</tika-version>
+        <snakeyaml-version>1.30</snakeyaml-version>
+        <slf4j-version>1.7.25</slf4j-version>
+
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
-        <junit-5.version>5.8.2</junit-5.version>
+        <junit-version>5.8.2</junit-version>
     </properties>
 
     <build>
@@ -31,51 +35,48 @@
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
                         <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${junit-5.version}</version>
+                        <version>${junit-version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
         </plugins>
     </build>
 
-
     <dependencies>
 
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>2.3.0</version>
+            <version>${tika-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers-standard-package</artifactId>
-            <version>2.3.0</version>
+            <version>${tika-version}</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.29</version>
+            <version>${snakeyaml-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit-5.version}</version>
-            <scope>compile</scope>
+            <version>${junit-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>${slf4j-version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
+            <version>${slf4j-version}</version>
         </dependency>
 
     </dependencies>
 
 </project>
-
