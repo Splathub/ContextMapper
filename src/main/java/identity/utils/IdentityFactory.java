@@ -45,10 +45,10 @@ public class IdentityFactory {
         String msgErr;
 
         try {
-            clazz = Class.forName("Identity.checker." + data.get("checker"));
+            clazz = Class.forName("identity.checker." + data.get("checker"));
             IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(data.get("args"));
 
-            clazz = Class.forName("Identity.action." + data.get("action"));
+            clazz = Class.forName("identity.action." + data.get("action"));
             IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor().newInstance();
 
             return new Identity(

@@ -18,7 +18,7 @@ class IdentityFactoryTest {
     @Test
     void findAllClassesUsingClassLoader() {
         IdentityFactory factory = IdentityFactory.getInstance();
-        Set<Class> checkers = factory.findAllClassesUsingClassLoader("Identity.checker");
+        Set<Class> checkers = factory.findAllClassesUsingClassLoader("identity.checker");
         assertEquals(checkers.size(), 3);
     }
 }
