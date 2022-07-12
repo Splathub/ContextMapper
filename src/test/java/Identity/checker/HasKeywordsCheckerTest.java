@@ -2,6 +2,8 @@ package Identity.checker;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ class HasKeywordsCheckerTest {
     @Test
     void containsAllKeywords() {
         String[] str = new String[]{"should", "pricing sup"};
-        data.put("keywords", str);
+        data.put("keywords", new ArrayList(Arrays.asList(str)));
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
     }
@@ -28,7 +30,7 @@ class HasKeywordsCheckerTest {
     @Test
     void containsSomeKeywords() {
         String[] str = new String[]{"should", "pricing", "fishing"};
-        data.put("keywords", str);
+        data.put("keywords", new ArrayList(Arrays.asList(str)));
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
     }
@@ -36,7 +38,7 @@ class HasKeywordsCheckerTest {
     @Test
     void containsNoKeywords() {
         String[] str = new String[]{"fishing", "poker tour", "and bay was filled"};
-        data.put("keywords", str);
+        data.put("keywords", new ArrayList(Arrays.asList(str)));
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
     }
@@ -45,7 +47,7 @@ class HasKeywordsCheckerTest {
     @Test
     void containsDuplicateKeywordsWithOnlyOne() {
         String[] str = new String[]{"should", "should", "prici"};
-        data.put("keywords", str);
+        data.put("keywords", new ArrayList(Arrays.asList(str)));
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
     }
@@ -53,7 +55,7 @@ class HasKeywordsCheckerTest {
     @Test
     void containsDuplicateKeywordsWithMuti() {
         String[] str = new String[]{"supple", "supplement", "supplement", "supplement", "supple"};
-        data.put("keywords", str);
+        data.put("keywords", new ArrayList(Arrays.asList(str)));
         IdentityChecker checker = new HasKeywordsChecker(data);
         assertTrue(checker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
     }

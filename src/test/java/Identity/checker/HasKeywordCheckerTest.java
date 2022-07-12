@@ -26,14 +26,14 @@ class HasKeywordCheckerTest {
 
     @Test
     public void shouldReturnFalseIfWordIsNotPresent(){
-        data.put("keyword", "should read this no pricing");
+        data.put("keyword", "You should read this pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
         assertFalse(identityChecker.check(TEST_SAMPLE_1, 7, 25));
     }
 
     @Test
     public void shouldDetectKeyWordAtStart(){
-        data.put("keyword", "You should read this pricing");
+        data.put("keyword", "pricing");
         IdentityChecker identityChecker = new HasKeywordChecker(data);
         assertTrue(identityChecker.check(TEST_SAMPLE_1, 0, 50));
     }
