@@ -1,7 +1,5 @@
 package Identity.checker;
 
-import java.util.Map;
-
 public interface IdentityChecker {
 
     /**
