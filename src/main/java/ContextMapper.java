@@ -35,26 +35,21 @@ public class ContextMapper {
 
         XMLStyleCodeContentHandler handler = new XMLStyleCodeContentHandler(identity, defaultToXML);
         Metadata metadata = new Metadata();
-        ParseContext pcontext = new ParseContext();
+        ParseContext context = new ParseContext();
 
         try ( FileInputStream inputStream = new FileInputStream(pdf) ){
             //parsing the document using PDF parser
             PDFParser pdfparser = new PDFParser();
-            pdfparser.parse(inputStream, handler, metadata,pcontext);
+            pdfparser.parse(inputStream, handler, metadata, context);
 
             //getting the content of the document
             //System.out.println("Contents of the PDF :" + handler.toString());
 
             //getting metadata of the document
             //System.out.println("Metadata of the PDF:");
-            String[] metadataNames = metadata.names();
 
-            for(String name : metadataNames) {
-                System.out.println(name+ " : " + metadata.get(name));
-            }
         } catch (TikaException | SAXException e) {
-            //e.printStackTrace();
-            System.out.println("ERROR: Tika process: " + e.getMessage());
+            LOG.error("Tika process: " + e.getMessage());
             e.printStackTrace();
         }
 
