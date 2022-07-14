@@ -49,9 +49,9 @@ public class ContextMapper {
             //System.out.println("Metadata of the PDF:");
             String[] metadataNames = metadata.names();
 
-            for(String name : metadataNames) {
-                System.out.println(name+ " : " + metadata.get(name));
-            }
+//            for(String name : metadataNames) {
+//                System.out.println(name+ " : " + metadata.get(name));
+//            }
         } catch (TikaException | SAXException e) {
             //e.printStackTrace();
             System.out.println("ERROR: Tika process: " + e.getMessage());

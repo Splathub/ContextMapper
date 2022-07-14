@@ -4,8 +4,7 @@ package identity.action;
  * This class is a glorified StringBuffer class that may treat each appending differently through inheritance.
  */
 public class JoinIdentityAction extends AbstractIdentityAction {
-
-    private StringBuffer sb;
+    protected StringBuffer sb;
 
     public JoinIdentityAction() {
         super(IdentityActionType.ABSORB);
@@ -32,6 +31,8 @@ public class JoinIdentityAction extends AbstractIdentityAction {
 
         String out = sb.toString();
         sb = null;
+
+        System.out.printf("\n\njoin \n\n\n\n\n\n%s\n\n\n\njoin\n\n",out);
         return out;
     }
 
