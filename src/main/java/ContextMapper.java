@@ -50,7 +50,6 @@ public class ContextMapper {
 
         } catch (TikaException | SAXException e) {
             LOG.error("Tika process: " + e.getMessage());
-            e.printStackTrace();
         }
 
         return handler.toString();
