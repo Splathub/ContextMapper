@@ -15,6 +15,7 @@
         <tika-version>2.3.0</tika-version>
         <snakeyaml-version>1.30</snakeyaml-version>
         <slf4j-version>1.7.25</slf4j-version>
+        <jsoup-version>1.15.2</jsoup-version>
 
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <junit-version>5.8.2</junit-version>
@@ -76,6 +77,20 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j-version}</version>
         </dependency>
+
+        <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bitbucket.cowwoc</groupId>
+            <artifactId>diff-match-patch</artifactId>
+            <version>1.2</version>
+        </dependency>
+
 
     </dependencies>
 
