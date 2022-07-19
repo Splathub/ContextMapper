@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body {
+            gap: 5px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .deleted {
+            color: rgb(249, 41, 41);
+        }
+
+        body>p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgb(41, 42, 48);
+            letter-spacing: 0.3em;
+            overflow-y: auto;
+            padding: 1em;
+            color: white;
+        }
+
+        * {
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        .appended {
+            color: rgb(53, 240, 53);
+        }
+
+        #diff-count {
+            background: white;
+            color: #404040;
+            position: absolute;
+            bottom: 2em;
+            left: 2em;
+        }
+    </style>
+</head>
+
+<body>
+
+<p id="first">%s</p>
+<p id="second">%s</p>
+
+<p id="diff-count">Difference Count : %s </p>
+
+<script src="index.js"></script>
+</body>
+
+</html>
