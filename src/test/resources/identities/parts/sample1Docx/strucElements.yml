@@ -1,0 +1,8 @@
+- checker: "HasKeywordChecker"
+  action: "BaseIdentityAction"
+  args:
+    keyword : "Structural Elements"
+
+#need to check for tag type
+- checker: "TrueChecker"
+  action: "BaseIdentityAction"

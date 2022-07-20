@@ -1,8 +1,11 @@
 
+import identity.entity.RootIdentityContentHandler;
+import identity.utils.IdentityParser;
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -16,6 +19,7 @@ public class ContextMapper {
 
     File pdf;
     String identity;
+    String partsPath = "src/java/resource/identity/parts/";
 
 
     public ContextMapper(String pdfPath, String identityPath) {
@@ -23,24 +27,44 @@ public class ContextMapper {
        identity = identityPath;
     }
 
-    public void loadIdentities(String identityPath) {
-
+    public void setPartPath(String path) {
+        partsPath = path;
     }
 
     public String process() throws IOException {
-        return process(false);
-    }
 
-    public String process(boolean defaultToXML) throws IOException {
-
-        XMLStyleCodeContentHandler handler = new XMLStyleCodeContentHandler(identity, defaultToXML);
+        RootIdentityContentHandler handler = IdentityParser.parseRoot(identity, partsPath);
         Metadata metadata = new Metadata();
         ParseContext context = new ParseContext();
 
         try ( FileInputStream inputStream = new FileInputStream(pdf) ){
             //parsing the document using PDF parser
-            PDFParser pdfparser = new PDFParser();
-            pdfparser.parse(inputStream, handler, metadata, context);
+            AutoDetectParser parser = new AutoDetectParser();
+            parser.parse(inputStream, handler, metadata, context);
+
+            //getting the content of the document
+            //System.out.println("Contents of the PDF :" + handler.toString());
+
+            //getting metadata of the document
+            //System.out.println("Metadata of the PDF:");
+
+        } catch (TikaException | SAXException e) {
+            LOG.error("Tika process: " + e.getMessage());
+        }
+
+        return handler.toString();
+    }
+
+    public String processToXML() throws IOException {
+
+        ToXMLContentHandler handler = new ToXMLContentHandler();
+        Metadata metadata = new Metadata();
+        ParseContext context = new ParseContext();
+
+        try ( FileInputStream inputStream = new FileInputStream(pdf) ){
+            //parsing the document using PDF parser
+            AutoDetectParser parser = new AutoDetectParser();
+            parser.parse(inputStream, handler, metadata, context);
 
             //getting the content of the document
             //System.out.println("Contents of the PDF :" + handler.toString());

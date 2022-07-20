@@ -1,9 +1,14 @@
 package identity.utils;
 
-import identity.Identity;
+import identity.entity.Identity;
+import identity.action.BaseIdentityAction;
+import identity.entity.RootIdentityContentHandler;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,7 +21,7 @@ import java.util.ArrayList;
 public class IdentityParser {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityParser.class);
 
-    public static Identity[] parse(String path) throws IOException {
+    public static Identity[] parseIdentities(String path) throws IOException {
         Identity[] identities;
 
         try (FileInputStream inputStream = new FileInputStream(path)) {
@@ -30,8 +35,28 @@ public class IdentityParser {
             }
         }
 
-        LOG.info("Successful Parsed Identity");
+        LOG.info("Successful Parsed Identities");
         return identities;
+    }
+
+    public static RootIdentityContentHandler parseRoot(String path, String partsPath) throws IOException {
+
+        RootIdentityContentHandler root = null;
+        try (FileInputStream inputStream = new FileInputStream(path)) {
+            Constructor constructor = new Constructor(RootIdentityContentHandler.class);
+
+            TypeDescription configDesc = new TypeDescription(Pair.class);
+            configDesc.addPropertyParameters("defaultAction", BaseIdentityAction.class);
+
+            constructor.addTypeDescription(configDesc);
+
+            Yaml yaml = new Yaml();
+            Map<String, Object> data = yaml.load(inputStream);
+            root = IdentityFactory.createRootIdentity(data, partsPath);
+        }
+
+        LOG.info("Successful Parsed RootIdentity");
+        return root;
     }
 
 }

@@ -1,0 +1,38 @@
+name: "sample1Docx"
+defaultAction: BaseIdentityAction
+parts:
+  - part: "coverPage"
+    checker: HasKeywordChecker
+    keyword: "Demonstration "
+
+  - part: "textFormatting"
+    checker: HasKeywordChecker
+    keyword: "Text Formatting"
+
+  - part: "tables"
+    checker: HasKeywordChecker
+    keyword: "Tables"
+
+  - part: "strucElements"
+    checker: HasKeywordChecker
+    keyword: "Structural Elements"
+
+  - part: "dummy"
+    checker: HasKeywordChecker
+    keyword: "Dummy Section"
+
+  - part: "images"
+    checker: HasKeywordChecker
+    keyword: "Images"
+
+  - part: "lists"
+    checker: HasKeywordChecker
+    keyword: "Lists"
+
+  - part: "Text Formatting"
+    checker: HasKeywordChecker
+    keyword: "Text Formatting"
+
+  - part: "dummy"
+    checker: HasKeywordChecker
+    keyword: "Dummy End Section"

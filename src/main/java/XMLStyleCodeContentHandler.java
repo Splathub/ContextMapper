@@ -2,7 +2,7 @@
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import identity.Identity;
+import identity.entity.Identity;
 
 import identity.action.JoinIdentityAction;
 import identity.exception.IdentityCrisisException;
@@ -27,7 +27,10 @@ import org.xml.sax.SAXException;
  * Identity's contextAdjustment's String instead, and ABSORB is to append all following char[] till the next TRUE
  * Identity check or end of document.</p>
  **/
+
+@Deprecated
 public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
+    /*
     private final Logger LOG = LoggerFactory.getLogger(XMLStyleCodeContentHandler.class);
 
     private Identity[] identities;
@@ -90,6 +93,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        LOG.info(String.format("start Name; %s, Q: %s, Atts: %d", localName, qName, atts.getLength()));
         if (localName.equals("body") ) {
             inBody = true;
         }
@@ -100,6 +104,7 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
+        LOG.info(String.format("End Name; %s, Q: %s", localName, qName));
         if (!absorb) {
             super.endElement(uri, localName, qName);
         }
@@ -162,5 +167,5 @@ public class XMLStyleCodeContentHandler extends ToXMLContentHandler {
             super.characters(ch, start, length);
         }
     }
-
+*/
 }

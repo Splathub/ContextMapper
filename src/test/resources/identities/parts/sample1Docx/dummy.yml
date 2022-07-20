@@ -1,0 +1,11 @@
+- checker: "HasKeywordChecker"
+  action: "BaseIdentityAction"
+  name: "title"
+  args:
+    keyword : "Sample Document"
+
+- checker: "HasKeywordChecker"
+  action: "BaseIdentityAction"
+  name: "parg1"
+  args:
+    keyword : "document"

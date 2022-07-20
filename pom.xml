@@ -6,7 +6,7 @@
 
     <groupId>tk.crc</groupId>
     <artifactId>ContextMapperXML</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -25,7 +25,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-                <!-- JUnit 5 Support -->
+                <!-- JUnit Support -->
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>

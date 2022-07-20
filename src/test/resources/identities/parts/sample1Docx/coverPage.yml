@@ -1,0 +1,8 @@
+- checker: "HasKeywordChecker"
+  action: "BaseIdentityAction"
+  args:
+    keyword : "Demonstration "
+
+- checker: "TrueChecker"
+  action: "BaseIdentityAction"
+

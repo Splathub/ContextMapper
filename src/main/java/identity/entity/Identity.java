@@ -1,4 +1,4 @@
-package identity;
+package identity.entity;
 
 import identity.action.IdentityAction;
 import identity.action.IdentityActionType;
@@ -16,32 +16,24 @@ import java.util.Map;
 public class Identity {
     private final Logger LOG = LoggerFactory.getLogger(Identity.class);
 
-    private final String id;
-    private final String attribute;
     private final IdentityAction action;
     private final IdentityChecker checker;
+    //private final String template;
     private final Map<String, Object> args;
 
 
-    public Identity(IdentityChecker checker, IdentityAction action, String id, Map<String, Object> args) {
-        this.id = id;
+    public Identity(IdentityChecker checker, IdentityAction action, Map<String, Object> args) {
         this.checker = checker;
         this.action = action;
         this.args = args;
-
-        if (action.getActionType() != IdentityActionType.NONE) {
-            attribute = String.format(" id=\"%s\" style=\"%s\"", id, action.getClass().getName());
-        }
-        else {
-            attribute = String.format(" id=\"%s\"", id);
-        }
     }
 
-    public String checkedProcess(char[] context, int start, int length) {
-        if (check(context, start, length)) {
-            return attribute;
-        }
-        return null;
+    public String process(String str, RootIdentityContentHandler root) {
+        return action.process(str, this);
+    }
+
+    public boolean check(String str) {
+        return checker.check(str);
     }
 
     public boolean check(char[] context, int start, int length) {
@@ -56,16 +48,12 @@ public class Identity {
         return action;
     }
 
-    public String getAttribute(){
-        return attribute;
-    }
-
     public IdentityActionType getType() {
         return action.getActionType();
     }
 
     @Override
     public String toString() {
-        return String.format("Identity %s (%s %s)", id, checker.getClass().getName(), action.getClass().getName());
+        return String.format("Identity %s (%s %s)", checker.getClass().getName(), action.getClass().getName());
     }
 }

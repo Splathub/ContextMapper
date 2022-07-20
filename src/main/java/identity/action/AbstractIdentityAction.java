@@ -1,5 +1,7 @@
 package identity.action;
 
+import identity.entity.Identity;
+
 public abstract class AbstractIdentityAction implements IdentityAction {
 
     private final IdentityActionType type;
@@ -21,6 +23,16 @@ public abstract class AbstractIdentityAction implements IdentityAction {
     @Override
     public IdentityActionType getActionType() {
         return type;
+    }
+
+    @Override
+    public String process(String context, Identity identity) {
+        return "<p>" + context + "</p>";
+    }
+
+    @Override
+    public String process(String context) {
+        return "<p>" + context + "</p>";
     }
 
 }

@@ -6,12 +6,21 @@ import java.util.Map;
 
 public class HasKeywordChecker extends AbstractIdentityChecker {
 
-    private final String keyword;
+    private String keyword;
 
     public HasKeywordChecker(Map<String, Object> data) {
         super(data);
         this.keyword = (String) data.get("keyword");
 
+        if (this.keyword == null) {
+            throw new ParameterException("HasKeywordChecker Key: 'keyword' is invalid");
+        }
+    }
+
+    public HasKeywordChecker(String keyword) {
+        super(null);
+
+        this.keyword = keyword;
         if (this.keyword == null) {
             throw new ParameterException("HasKeywordChecker Key: 'keyword' is invalid");
         }
