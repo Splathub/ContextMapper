@@ -1,10 +1,10 @@
 package identity.entity;
 
 import identity.action.IdentityAction;
-import identity.action.IdentityActionType;
 import identity.checker.IdentityChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import java.util.Map;
 
@@ -18,42 +18,82 @@ public class Identity {
 
     private final IdentityAction action;
     private final IdentityChecker checker;
-    //private final String template;
+    private final String template;
+    private final String[] templateSegments;
+    private int segIndex = 0;
     private final Map<String, Object> args;
 
+    private int push;
+    private int include;
+    private int range;
+    private String trim;
 
-    public Identity(IdentityChecker checker, IdentityAction action, Map<String, Object> args) {
+
+    public Identity(IdentityChecker checker, IdentityAction action, String template, Map<String, Object> args, int push, int include, int range, String trim) {
         this.checker = checker;
         this.action = action;
         this.args = args;
+        this.template = template; //TODO: cover before as selected  or one time and cycle, graph
+        templateSegments = template.split("%s");
+
+        this.push = push;
+        this.include = include;
+        this.range = range;
+        this.trim = trim;
     }
 
-    public String process(String str, RootIdentityContentHandler root) {
-        return action.process(str, this);
+    public boolean check(StringBuffer sb, RootIdentityContentHandler root) {
+        return checker.check(sb, root);
     }
 
-    public boolean check(String str) {
-        return checker.check(str);
+    public void process(StringBuffer sb, Part part, RootIdentityContentHandler root) throws SAXException {
+        // Pre-processes for Part effects
+        if (push != 0) {
+            part.pushPoint(push);
+        }
+
+        if (range != part.getDefaultWindow()) {
+            part.adjustedRange(range);
+        }
+
+        if(!trim.isEmpty()) {
+            int index = sb.indexOf(trim);
+            if (index > 0) {
+                sb.delete(index, trim.length());
+            }
+        }
+
+        action.process(sb, this, root );
+
+        if (include != 0) {
+            part.includedProcess(include, sb, root);
+        }
     }
 
-    public boolean check(char[] context, int start, int length) {
-            return checker.check( context, start, length);
-    }
-
-    public String contextAdjustment(char[] context, int start, int length){
-        return action.contextAdjustment(context, start, length);
+    public void finalProcess(RootIdentityContentHandler root) throws SAXException {
+        action.endProcess(this, root);
     }
 
     public IdentityAction getAction() {
         return action;
     }
 
-    public IdentityActionType getType() {
-        return action.getActionType();
+    public String getTemplate() {
+        return template;
+    }
+
+    public String[] getTemplateSegments() {
+        return templateSegments;
+    }
+
+
+    public Object getData(String key) {
+        return args.get(key);
     }
 
     @Override
     public String toString() {
         return String.format("Identity %s (%s %s)", checker.getClass().getName(), action.getClass().getName());
     }
+
 }

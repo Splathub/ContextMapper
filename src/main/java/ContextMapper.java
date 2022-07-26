@@ -19,7 +19,7 @@ public class ContextMapper {
 
     File pdf;
     String identity;
-    String partsPath = "src/java/resource/identity/parts/";
+    String partsPath = "src/main/resources/identity/parts/";
 
 
     public ContextMapper(String pdfPath, String identityPath) {
@@ -50,6 +50,7 @@ public class ContextMapper {
 
         } catch (TikaException | SAXException e) {
             LOG.error("Tika process: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return handler.toString();
@@ -73,7 +74,7 @@ public class ContextMapper {
             //System.out.println("Metadata of the PDF:");
 
         } catch (TikaException | SAXException e) {
-            LOG.error("Tika process: " + e.getMessage());
+            LOG.error("Tika XML process: " + e.getMessage());
         }
 
         return handler.toString();

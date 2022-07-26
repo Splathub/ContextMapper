@@ -1,0 +1,34 @@
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0; color: #404040">&nbsp;</P>
+			<P STYLE="color: #4E8ABE; font: bold 10pt Arial, Helvetica, Sans-Serif; margin: 8pt 0 0; border-bottom: #54301A 0.5pt solid">%s</P>'
+  args:
+    keyword : "The Index"
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 1pt Arial, Helvetica, Sans-Serif; margin: 0; color: #404040">
+                <B>&nbsp;</B>
+            </P>
+            <P STYLE="color: #54301A; font: bold 9pt Arial, Helvetica, Sans-Serif; margin: 6pt 0 2pt">%s</P>'
+
+- checker: "TagChecker"
+  push: 1
+  template: '<P STYLE="color: #54301A; font: bold 9pt Arial, Helvetica, Sans-Serif; margin: 6pt 0 2pt">%s</P>'
+  args:
+    tag: "h5"
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'
+
+- checker: "ToggleChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 12pt; color: #404040">%s</P>'
+
+- checker: "TagChecker"
+  push: -2
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 6pt 0 12pt; text-align: center">
+              <FONT STYLE="color: #404040">
+                  <IMG SRC="image_004.jpg" ALT="" STYLE="height: 284px; width: 488px"></FONT>
+              </P>'
+  args:
+    tag: "IMG"

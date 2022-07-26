@@ -1,0 +1,8 @@
+- checker: "HasKeywordChecker"
+  push: 1
+  template: '<P STYLE="color: #4E8ABE; font: bold 10pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; border-bottom: #54301A 0.5pt solid">%s</P>'
+  args:
+    keyword : "The Estimated Value of the Notes"
+
+- checker: "TrueChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 6pt; color: #404040">%s</P>'

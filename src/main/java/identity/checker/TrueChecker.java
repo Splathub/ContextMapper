@@ -1,5 +1,7 @@
 package identity.checker;
 
+import identity.entity.RootIdentityContentHandler;
+
 import java.util.Map;
 
 public class TrueChecker extends AbstractIdentityChecker {
@@ -9,12 +11,7 @@ public class TrueChecker extends AbstractIdentityChecker {
     }
 
     @Override
-    public boolean check(char[] context, int start, int length) {
-        return true;
-    }
-
-    @Override
-    public boolean check(String str) {
+    public boolean check(StringBuffer sb, RootIdentityContentHandler root) {
         return true;
     }
 }

@@ -1,38 +1,29 @@
 package identity.action;
 
+import identity.entity.Identity;
+import identity.entity.RootIdentityContentHandler;
+import org.xml.sax.SAXException;
+
 /**
  * This class is a glorified StringBuffer class that may treat each appending differently through inheritance.
  */
 public class JoinIdentityAction extends AbstractIdentityAction {
 
-    private StringBuffer sb;
+    protected StringBuffer sb;
 
-    public JoinIdentityAction() {
-        super(IdentityActionType.ABSORB);
-    }
-
-    public void append(char[] ch, int start, int length) {
+    @Override
+    public void process(StringBuffer context, Identity identity, RootIdentityContentHandler root) throws SAXException {
         if (sb == null) {
             sb = new StringBuffer();
         }
-        sb.append(ch, start, length);
+        sb.append(context);
     }
 
-    public void append(String str) {
-        if (sb == null) {
-            sb = new StringBuffer();
+    @Override
+    public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
+        if (sb != null) {
+            root.write(sb.toString());
+            sb = null;
         }
-        sb.append(str);
     }
-
-    public String process() {
-        if (sb == null) {
-            return "";
-        }
-
-        String out = sb.toString();
-        sb = null;
-        return out;
-    }
-
 }

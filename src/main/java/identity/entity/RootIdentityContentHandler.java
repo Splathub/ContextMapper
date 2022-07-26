@@ -20,6 +20,7 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
     private String name;
     //private String globalStyle;
     private IdentityAction defaultAction;
+    private final char[] ends = new char[]{'\n'};
     private final int window = 3;
     private Pair<IdentityChecker, String>[] parts;
     private final String partsPath;
@@ -42,7 +43,12 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
         this.partsPath = partsPath + name + "/";
     }
 
-    public void startDocument() throws SAXException {
+    /**
+    * Constructs as HTML with pre-defined head, no value, could eb moved to the Root file to define.
+     */
+    public void startDocument() throws SAXException
+    {
+        this.write("<HTML>\n<HEAD>\n<TITLE></TITLE>\n</HEAD>\n<BODY>\n");
         /*
 
         if (this.encoding != null) {
@@ -83,11 +89,13 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
     }
 
     public void endDocument() throws SAXException {
-
+        this.write("\n</BODY>\n</HTML>");
     }
 
     public void write(String str) throws SAXException {
         super.characters(str.toCharArray(), 0, str.length());
+        super.characters(ends, 0, 1);
+
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
@@ -96,23 +104,30 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
     }
 
     private void identify() throws SAXException {
-        for(int i=onPoint; i < parts.length && i < parts.length + window; i++) {
-            if (parts[onPoint].getKey().check(sbText.toString()) ) {
-                onPoint = i;
-                String path = partsPath + parts[onPoint].getValue() + ".yml";
-                try {
-                    part = new Part( IdentityParser.parseIdentities(path) );
+        for(int i=onPoint; i < parts.length && i < onPoint + window; i++) {
+            if (parts[i].getKey().check(sbText, this) ) {
+                if (i != onPoint || part == null) {
+                    if (part != null) {
+                        part.finalProcess(this);
+                    }
+
+                    onPoint = i;
+                    String path = partsPath + parts[onPoint].getValue() + ".yml";
+                    try {
+                        part = new Part(IdentityParser.parseIdentities(path));
+                    } catch (IOException e) { //TODO: May not stop process
+                        LOG.error("Part location not found, or bad parse: " + path);
+                        throw new SAXException("Part invalid: " + path);
+                    }
                 }
-                catch (IOException e) { //TODO: May not stop process
-                    LOG.error("Part location not found, or bad parse: " + path);
-                    throw new SAXException("Part invalid: " + path);
-                }
+                break;
             }
         }
-        String result = part.process(sbOriginal.toString(), this);
-        if(result!= null) {
-            super.characters(result.toCharArray(), 0, result.length());
-        }
+        part.process(sbOriginal, this);
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public void setMergeElements(boolean mergeElements) {

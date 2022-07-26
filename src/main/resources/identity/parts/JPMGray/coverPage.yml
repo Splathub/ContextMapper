@@ -1,0 +1,95 @@
+- checker: "HasKeywordChecker"
+  template: '<DIV STYLE="background-color: #DDDDDD; border-bottom: #54301a 2pt solid; padding: 6pt 12pt 6pt 6pt; width: 100%">\n\t
+    <P STYLE="font: 14pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'
+  args:
+    keyword : "JPMorgan Chase "
+
+# may fail due to thus and next merged, add in with above with replace
+- checker: "HasKeywordChecker"
+  template: '<BR>%s'
+  args:
+    keyword: "Structured Investments "
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 19pt Arial, Helvetica, Sans-Serif; margin: 6pt 0; color: #54301A">%s</P>'
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 14pt Arial, Helvetica, Sans-Serif; margin: 6pt 0; color: #54301A">%s</P>'
+
+- checker: "HasKeywordChecker"
+  action: "TableIdentityAction"
+  template: '<TABLE CELLPADDING="0" CELLSPACING="0" WIDTH="100%" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin-top: 6pt; margin-bottom: 6pt; color: #262626">%s</TABLE>'
+  args:
+    keyword: "· "
+    row: '<TR STYLE="vertical-align: top">
+            <TD STYLE="width: 0.25in"/>
+            <TD STYLE="width: 0.25in">
+                <FONT STYLE="font-family: Symbol">&#183;</FONT>
+            </TD>
+            <TD>%s</TD>
+        </TR>'
+
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 15pt 0 0; margin-top: 9pt">%s</P>'
+  args:
+    keyword: "Investing in the notes "
+
+# may be issue with header
+- checker: "HasKeywordChecker"
+  action: "TableIdentityAction"
+  template: '<TABLE ALIGN="CENTER" CELLSPACING="0" CELLPADDING="0" STYLE="font: 8pt Arial, Helvetica, Sans-Serif; width: 91.64%; border-collapse: collapse">%s</TABLE>'
+  args:
+    keyword: "Price to Public"
+    head: '<TR STYLE="background-color: #BFBFBF">
+              <TD STYLE="width: 16.92%">&nbsp;%s</TD>
+              <TD STYLE="width: 29.72%">
+                  <FONT STYLE="font-size: 9pt">%s</FONT>
+              </TD>
+              <TD STYLE="width: 30.86%">
+                  <FONT STYLE="font-size: 9pt">%s</FONT>
+              </TD>
+              <TD STYLE="width: 22.5%">
+                  <FONT STYLE="font-size: 9pt">%s</FONT>
+              </TD>
+          </TR>'
+    row: '<TR>
+              <TD STYLE="padding-left: 2pt; text-indent: 2pt">
+                  <FONT STYLE="font-size: 9pt; color: #404040">%s</FONT>
+              </TD>
+              <TD>
+                  <FONT STYLE="font-size: 9pt; color: #404040">%s</FONT>
+              </TD>
+              <TD>
+                  <FONT STYLE="font-size: 9pt; color: #404040">%s</FONT>
+              </TD>
+              <TD>
+                  <FONT STYLE="font-size: 9pt; color: #404040">%s</FONT>
+              </TD>
+          </TR>'
+    foot: '<TR STYLE="vertical-align: top">
+            <TD COLSPAN="4" STYLE="padding-top: 4.3pt">
+              <P STYLE="font: 8pt Arial, Helvetica, Sans-Serif; margin: 3pt 14.5pt 3pt 0; color: #404040">%s</P>
+              <P STYLE="font: 8pt Arial, Helvetica, Sans-Serif; margin: 3pt 0; color: #404040">%s</P>
+						</TD>
+					</TR>'
+
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 2pt 0 0">%s</P>'
+  args:
+    keyword: "If the notes priced today"
+
+#wher header may be
+- checker: "HasKeywordChecker"
+  action: "IgnoreIdentityAction"
+  args:
+    keyword: "The information in this "
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; margin-bottom: 9pt">%s</P>'
+
+#wher footer may be
+- checker: "TrueChecker"
+  action: "IgnoreIdentityAction"

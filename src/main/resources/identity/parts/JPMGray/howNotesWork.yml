@@ -1,0 +1,48 @@
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="color: #4E8ABE; font: bold 10pt Arial, Helvetica, Sans-Serif; margin: 8pt 0 0; border-bottom: #54301A 0.5pt solid">%s</P>'
+  args:
+    keyword : "How the Notes Work"
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 2pt 0; color: #54301A">
+                %s
+            </P>
+            <P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0; text-align: center">
+                    <IMG SRC="image_001.jpg" ALT="" STYLE="height: 309px; width: 622px">
+                </P>'
+
+
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="color: #54301A; font: bold 9pt Arial, Helvetica, Sans-Serif; margin: 2pt 0">%s</P>'
+  args:
+    keyword: "Total Contingent Interest "
+
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0 0 4pt; color: #404040">%s</P>'
+  args:
+    keyword: "table below "
+
+- checker: "HasKeywordChecker"
+  action: "TableIdentityAction"
+  template: '<TABLE ALIGN="CENTER" CELLSPACING="0" CELLPADDING="0" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; width: 40%; border-collapse: collapse">%s</TABLE>'
+  args:
+    keyword : "Number of Contingent"
+    head: '<TR STYLE="vertical-align: top; background-color: #BFBFBF">
+            <TD STYLE="width: 111.95pt; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #333333">Number of Contingent<BR>
+                        Interest Payments</FONT>
+                </TD>
+                <TD STYLE="width: 111.95pt; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                    <FONT STYLE="color: #333333">Total Contingent Interest<BR>
+                            Payments</FONT>
+                    </TD>
+                </TR>'
+    row: '<TR STYLE="vertical-align: top">
+            <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #404040">%s</FONT>
+            </TD>
+            <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #404040">%s</FONT>
+            </TD>
+        </TR>'

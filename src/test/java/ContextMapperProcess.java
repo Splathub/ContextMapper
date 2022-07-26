@@ -9,7 +9,9 @@ public class ContextMapperProcess {
     final static String SAMPLE_YAML = "src/test/resources/identities/sample1.yml";
     final static String BROKEN_YAML = "src/test/resources/identities/BrokenSample1.yml";
 
-    final static String SAMPLE_DOCX = "src/test/resources/samples/sample1.docx";
+    final static String SAMPLE_DOCX = "src/test/resources/samples/sample18.docx";
+    final static String ROOT_DOCX_GRAY = "src/main/resources/identity/root/JPMGray.yml";
+
     final static String ROOT_IDENTITY = "src/test/resources/identities/root/Sample1Docx.yml";
 
     public static void main (String[] args) throws IOException {
@@ -21,13 +23,13 @@ public class ContextMapperProcess {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            cm = new ContextMapper(chooser.getSelectedFile().getAbsolutePath(), ROOT_IDENTITY);
+            cm = new ContextMapper(chooser.getSelectedFile().getAbsolutePath(), ROOT_DOCX_GRAY);
         }
         else {
-            cm = new ContextMapper(SAMPLE_DOCX, ROOT_IDENTITY);
+            cm = new ContextMapper(SAMPLE_DOCX, ROOT_DOCX_GRAY);
         }
 
-        cm.setPartPath("src/test/resources/identities/parts/");
+        //cm.setPartPath("src/test/resources/identities/parts/");
         System.out.println("XML:\n"+cm.processToXML() + "\n---------------------------------------\n");
         System.out.println(cm.process());
     }

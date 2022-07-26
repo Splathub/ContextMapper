@@ -1,0 +1,8 @@
+- checker: "HasKeywordChecker"
+  push: 1
+  template: '<P STYLE="font: 10pt Arial, Helvetica, Sans-Serif; margin: 8pt 0 0; color: #4E8ABE; border-bottom: #54301A 0.5pt solid">%s</P>'
+  args:
+    keyword : "Supplemental Information About the Form of the Notes"
+
+- checker: "TrueChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'

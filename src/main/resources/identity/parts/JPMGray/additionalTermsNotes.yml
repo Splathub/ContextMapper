@@ -1,0 +1,31 @@
+- checker: "HasKeywordChecker"
+  push: 1
+  template: '<P STYLE="color: #4E8ABE; font: bold 10pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; border-bottom: #54301A 0.5pt solid">%s</P>'
+  args:
+    keyword : "Additional Terms Specific to the Notes"
+
+- checker: "TrueChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'
+
+- checker: "ToggleChecker"
+  action: "TableIdentityAction"
+  range: 1
+  template: '<TABLE CELLPADDING="0" CELLSPACING="0" WIDTH="100%" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin-top: 6pt; margin-bottom: 4pt">%s</TABLE>'
+  args:
+    keyword: "· "
+    row: '<TR STYLE="vertical-align: top">
+            <TD STYLE="width: 0"/>
+            <TD STYLE="width: 0.25in">
+                <FONT STYLE="font-family: Symbol; color: #404040">&#183;</FONT>
+            </TD>
+            <TD>
+                <FONT STYLE="color: #404040">%s<BR>
+                    </FONT>
+                    %s
+                </TD>
+            </TR>'
+
+- checker: "HasKeywordChecker"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'
+  args:
+    keyword: "Our Central Index Key"

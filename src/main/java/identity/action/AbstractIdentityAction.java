@@ -1,38 +1,24 @@
 package identity.action;
 
 import identity.entity.Identity;
+import identity.entity.RootIdentityContentHandler;
+import org.xml.sax.SAXException;
 
 public abstract class AbstractIdentityAction implements IdentityAction {
 
-    private final IdentityActionType type;
-
-    public AbstractIdentityAction(IdentityActionType type){
-        this.type = type;
+    @Override
+    public void process(StringBuffer context, Identity identity, RootIdentityContentHandler root) throws SAXException {
+        root.write( context.insert(0, '>')
+                .insert(0, root.getTag())
+                .insert(0, '<')
+                .append("</")
+                .append(root.getTag())
+                .append('>')
+                .toString());
     }
 
     @Override
-    public String contextAdjustment(char[] ch, int start, int length) {
-        return new String(ch);
-    }
+    public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
 
-    @Override
-    public String stylize(String context) {
-        return context;
     }
-
-    @Override
-    public IdentityActionType getActionType() {
-        return type;
-    }
-
-    @Override
-    public String process(String context, Identity identity) {
-        return "<p>" + context + "</p>";
-    }
-
-    @Override
-    public String process(String context) {
-        return "<p>" + context + "</p>";
-    }
-
 }

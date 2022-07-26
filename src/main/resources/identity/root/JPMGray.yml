@@ -1,0 +1,54 @@
+name: "JPMGray"
+style: ""
+default:
+parts:
+  - part: "coverPage"
+    checker: HasKeywordChecker
+    keyword: "JPMorgan Chase "
+
+  - part: "keyTerms"
+    checker: ToggleChecker
+
+  - part: "howNotesWork"
+    checker: HasKeywordChecker
+    keyword: "How the Notes Work"
+
+  - part: "hypoPayoutEx"
+    checker: HasKeywordChecker
+    keyword: "Hypothetical Payout Examples "
+
+  - part: "selectedRiskConsider"
+    checker: HasKeywordChecker
+    keyword: "Selected Risk Considerations"
+
+  - part: "index"
+    checker: HasKeywordChecker
+    keyword: "The Index"
+
+  - part: "taxTreatment"
+    checker: HasKeywordChecker
+    keyword: "Tax Treatment"
+
+  - part: "estimateValueNotes"
+    checker: HasKeywordChecker
+    keyword: "The Estimated Value of the Notes"
+
+  - part: "secondaryMarketPricesNotes"
+    checker: HasKeywordChecker
+    keyword: "The Estimated Value of the Notes"
+
+  - part: "supplementProceeds"
+    checker: HasKeywordChecker
+    keyword: "Supplemental Use of Proceeds"
+
+  - part: "supplementDistribution"
+    checker: HasKeywordChecker
+    keyword: "Supplemental Plan of Distribution"
+
+  - part: "supplementInfoForNotes"
+    checker: HasKeywordChecker
+    keyword: "Supplemental Information About the Form of the Notes"
+
+  - part: "additionalTermsNotes"
+    checker: HasKeywordChecker
+    keyword: "Additional Terms Specific to the Notes"

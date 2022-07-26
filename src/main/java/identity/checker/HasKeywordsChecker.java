@@ -1,5 +1,6 @@
 package identity.checker;
 
+import identity.entity.RootIdentityContentHandler;
 import identity.exception.ParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +33,7 @@ public class HasKeywordsChecker extends AbstractIdentityChecker {
   }
 
   @Override
-  public boolean check(char[] context, int start, int length) {
-    return pattern.matcher(new String(context, start, length)).find();
+  public boolean check(StringBuffer sb, RootIdentityContentHandler root) {
+    return pattern.matcher(sb.toString()).find();
   }
-
-  @Override
-  public boolean check(String str) {
-    return pattern.matcher(str).find();
-  }
-
 }

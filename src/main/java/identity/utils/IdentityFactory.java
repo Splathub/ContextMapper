@@ -51,13 +51,18 @@ public class IdentityFactory {
             clazz = Class.forName("identity.checker." + data.get("checker"));
             IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(data.get("args"));
 
-            clazz = Class.forName("identity.action." + data.get("action"));
+            clazz = Class.forName("identity.action." + data.getOrDefault("action", "BaseIdentityAction"));
             IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor().newInstance();
 
             return new Identity(
                     checker,
                     action,
-                    (Map<String, Object>) data.get("args")
+                    (String) data.getOrDefault("template", ""),
+                    (Map<String, Object>) data.get("args"),
+                    (int) data.getOrDefault("push", 0),
+                    (int) data.getOrDefault("include", 0),
+                    (int) data.getOrDefault("range", 3),
+                    (String) data.getOrDefault("trim", "")
             );
         } catch (ClassNotFoundException e) {
             if (clazz == null) {
@@ -93,8 +98,8 @@ public class IdentityFactory {
             for(Map<String, String> partInfo: map) {
                 String part = partInfo.getOrDefault("part", null);
                 if (part != null) {
-                    clazz = Class.forName("identity.checker." + partInfo.getOrDefault("checker", "HasKeywordChecker.class"));
-                    IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(String.class).newInstance(partInfo.getOrDefault("keyword", part));
+                    clazz = Class.forName("identity.checker." + partInfo.getOrDefault("checker", "HasKeywordChecker"));
+                    IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(partInfo);
 
                     parts[i++] = new Pair<>(checker, part);
                 }
