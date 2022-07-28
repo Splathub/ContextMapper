@@ -1,0 +1,12 @@
+- checker: "MatchingTextChecker"
+  action: "BaseIdentityAction"
+  args:
+    text : "Super ends"
+
+- checker: "HasKeywordChecker"
+  action: "IgnoreIdentityAction"
+
+- checker: "HasKeywordsChecker"
+  action: "JoinIdentityAction"
+  args:
+    keywords: ["should make ","Cheese cuts are "," went home."]

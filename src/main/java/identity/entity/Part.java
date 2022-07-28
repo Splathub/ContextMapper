@@ -10,7 +10,7 @@ public class Part {
 
     private Identity[] identities;
     private Identity identity;
-    private final int defaultWindow = 3;
+    private static final int defaultWindow = 3;
     private int window = 3;
     private int onPoint=0;
 
@@ -26,12 +26,14 @@ public class Part {
                     if (identity != null) {
                         finalProcess(root);
                     }
+                    LOG.info("Identity change");
+                    onPoint = i;
                     identity = identities[onPoint];
                 }
-                onPoint = i;
                 break;
             }
         }
+        LOG.info("process identity " + onPoint + " : " + identity + "\n\t\t" + sb);
         identity.process(sb, this, root);
     }
 
@@ -49,6 +51,7 @@ public class Part {
         else if (onPoint < 0) {
             onPoint = 0;
         }
+        identity = identities[onPoint];
     }
 
     /**
@@ -59,6 +62,9 @@ public class Part {
         if (range < 0) {
             onPoint += range;
             window = range * -1;
+            if (onPoint < 0) {
+                onPoint = 0;
+            }
         }
         else {
             window = range;
@@ -67,12 +73,19 @@ public class Part {
 
     public void includedProcess(int include, StringBuffer sb, RootIdentityContentHandler root) throws SAXException {
         pushPoint(include);
-        identity = identities[onPoint];
         identity.process(sb, this, root);
     }
 
-    public int getDefaultWindow() {
+    public static int getDefaultWindow() {
         return defaultWindow;
+    }
+
+    public int getRange(){
+        return window;
+    }
+
+    public int getOnPoint() {
+        return onPoint;
     }
 
 }

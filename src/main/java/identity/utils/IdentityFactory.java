@@ -3,6 +3,7 @@ package identity.utils;
 import identity.entity.Identity;
 import identity.action.IdentityAction;
 import identity.checker.IdentityChecker;
+import identity.entity.Part;
 import identity.entity.RootIdentityContentHandler;
 import identity.exception.IdentityCrisisException;
 import javafx.util.Pair;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,8 +49,12 @@ public class IdentityFactory {
         Class clazz = null;
         String msgErr;
 
+        if (data == null) {
+            data = new HashMap<>();
+        }
+
         try {
-            clazz = Class.forName("identity.checker." + data.get("checker"));
+            clazz = Class.forName("identity.checker." + data.getOrDefault("checker", "ToggleChecker"));
             IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(data.get("args"));
 
             clazz = Class.forName("identity.action." + data.getOrDefault("action", "BaseIdentityAction"));
@@ -61,7 +67,7 @@ public class IdentityFactory {
                     (Map<String, Object>) data.get("args"),
                     (int) data.getOrDefault("push", 0),
                     (int) data.getOrDefault("include", 0),
-                    (int) data.getOrDefault("range", 3),
+                    (int) data.getOrDefault("range", Part.getDefaultWindow()),
                     (String) data.getOrDefault("trim", "")
             );
         } catch (ClassNotFoundException e) {
@@ -83,6 +89,15 @@ public class IdentityFactory {
     public static RootIdentityContentHandler createRootIdentity(Map<String, Object> data, String partsPath) {
         Class clazz = null;
         String msgErr;
+
+        if (partsPath == null) {
+            throw new IdentityCrisisException("Invalid part path");
+        }
+
+        if (data == null) {
+            data = new HashMap<>();
+        }
+
         try {
             String name = (String) data.get("name");
             if (name == null) {
@@ -93,18 +108,23 @@ public class IdentityFactory {
           //  IdentityAction defaultAction = (IdentityAction) clazz.getDeclaredConstructor(Map.class).newInstance(data.getOrDefault("args", null)); //no args
 
             ArrayList<Map<String, String>> map = (ArrayList<Map<String, String>>) data.get("parts");
-            Pair<IdentityChecker, String>[] parts = new Pair[map.size()];
-            int i =0;
-            for(Map<String, String> partInfo: map) {
-                String part = partInfo.getOrDefault("part", null);
-                if (part != null) {
-                    clazz = Class.forName("identity.checker." + partInfo.getOrDefault("checker", "HasKeywordChecker"));
-                    IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(partInfo);
+            Pair<IdentityChecker, String>[] parts;
+            if (map == null) {
+                parts = new Pair[0];
+            }
+            else {
+                parts = new Pair[map.size()];
+                int i = 0;
+                for (Map<String, String> partInfo : map) {
+                    String part = partInfo.getOrDefault("part", null);
+                    if (part != null) {
+                        clazz = Class.forName("identity.checker." + partInfo.getOrDefault("checker", "HasKeywordChecker"));
+                        IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(partInfo);
 
-                    parts[i++] = new Pair<>(checker, part);
-                }
-                else {
-                    throw new IdentityCrisisException("Missing 'part'");
+                        parts[i++] = new Pair<>(checker, part);
+                    } else {
+                        throw new IdentityCrisisException("Missing 'part'");
+                    }
                 }
             }
 

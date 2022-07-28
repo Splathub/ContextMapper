@@ -93,7 +93,7 @@ public class Identity {
 
     @Override
     public String toString() {
-        return String.format("Identity %s (%s %s)", checker.getClass().getName(), action.getClass().getName());
+        return String.format("Identity (%s %s)", checker.getClass().getName(), action.getClass().getName());
     }
 
 }

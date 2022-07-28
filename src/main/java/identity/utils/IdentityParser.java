@@ -23,7 +23,7 @@ public class IdentityParser {
 
     public static Identity[] parseIdentities(String path) throws IOException {
         Identity[] identities;
-
+        LOG.info("Parsing " + path);
         try (FileInputStream inputStream = new FileInputStream(path)) {
             Yaml yaml = new Yaml();
             ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
@@ -42,6 +42,7 @@ public class IdentityParser {
     public static RootIdentityContentHandler parseRoot(String path, String partsPath) throws IOException {
 
         RootIdentityContentHandler root = null;
+        LOG.info("Parsing " + path);
         try (FileInputStream inputStream = new FileInputStream(path)) {
             Constructor constructor = new Constructor(RootIdentityContentHandler.class);
 

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class IdentityParserTest {
 
     @Test
-    public void parsingSample1ShouldHaveCorrectLength() throws Exception {
+    public void parsingIdentities() throws Exception {
         Identity[] identities = IdentityParser.parseIdentities(
                 "src/test/resources/identities/sampleTest.yml");
 

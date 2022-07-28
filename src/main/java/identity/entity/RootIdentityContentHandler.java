@@ -48,7 +48,7 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
      */
     public void startDocument() throws SAXException
     {
-        this.write("<HTML>\n<HEAD>\n<TITLE></TITLE>\n</HEAD>\n<BODY>\n");
+        this.write("<HTML>\n<HEAD>\n<TITLE> </TITLE>\n</HEAD>\n<BODY>\n");
         /*
 
         if (this.encoding != null) {
@@ -77,7 +77,7 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(inBody) {
-            if (tag.equals(localName) && level == 0) {
+            if ( tag != null && tag.equals(localName) && level == 0) {
                 identify();
                 tag = null;
             } else if (passiveTag.contains(localName)) {
@@ -128,6 +128,10 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
 
     public String getTag() {
         return tag;
+    }
+
+    public int getOnPoint() {
+        return onPoint;
     }
 
     public void setMergeElements(boolean mergeElements) {
