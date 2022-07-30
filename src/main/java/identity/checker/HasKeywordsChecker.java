@@ -34,6 +34,9 @@ public class HasKeywordsChecker extends AbstractIdentityChecker {
 
   @Override
   public boolean check(StringBuffer sb, RootIdentityContentHandler root) {
+    System.out.println(sb.toString());
+    System.out.println(pattern.toString());
+    System.out.println();
     return pattern.matcher(sb.toString()).find();
   }
 }
