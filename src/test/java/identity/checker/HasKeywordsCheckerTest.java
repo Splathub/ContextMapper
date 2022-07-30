@@ -4,59 +4,45 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HasKeywordsCheckerTest {
+class HasKeywordsCheckerTest extends CheckerTest {
 
-    public static  char[] TEST_SAMPLE_1 = ("You should read this pricing supplement together with the accompanying prospectus, as supplemented by the accompanying\n" +
-            "a prospectus supplement relating to our Series A medium-term notes, of which these notes are a part, and the more detailed\n" +
-            "information contained in the accompanying product supplement. This pricing supplement, together with the documents\n" +
-            "listed below, contains the terms of the notes and supersedes all other prior").toCharArray();
-    public static String TEST_SAMPLE_2 = "This pricing supplement should do stuff.";
-    Map<String, Object> data = new HashMap<>();
+    private HasKeywordsChecker newHasKeyWordsChecker(String[] keywords){
+        emptyData.put("keywords", new ArrayList<>(Arrays.asList(keywords)));
 
+        return new HasKeywordsChecker(emptyData);
+    }
 
     @Test
     void containsAllKeywords() {
-        String[] str = new String[]{"should", "pricing sup"};
-        data.put("keywords", new ArrayList(Arrays.asList(str)));
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+        IdentityChecker checker = newHasKeyWordsChecker(new String[]{"should"});
+        assertTrue(checker.check(TEST_SAMPLE_2, root));
     }
 
     @Test
     void containsSomeKeywords() {
-        String[] str = new String[]{"should", "pricing", "fishing"};
-        data.put("keywords", new ArrayList(Arrays.asList(str)));
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+        IdentityChecker checker =  newHasKeyWordsChecker(new String[]{"should", "pricing", "fishing"});
+        assertFalse(checker.check(TEST_SAMPLE_2, root ));
     }
 
     @Test
     void containsNoKeywords() {
-        String[] str = new String[]{"fishing", "poker tour", "and bay was filled"};
-        data.put("keywords", new ArrayList(Arrays.asList(str)));
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertFalse(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+        IdentityChecker checker = newHasKeyWordsChecker(new String[]{"fishing", "poker tour", "and bay was filled"});
+        assertFalse(checker.check(TEST_SAMPLE_2, root));
     }
 
     @Test
     void containsDuplicateKeywordsWithOnlyOne() {
-        String[] str = new String[]{"should", "should", "prici"};
-        data.put("keywords", new ArrayList(Arrays.asList(str)));
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertTrue(checker.check(TEST_SAMPLE_2.toCharArray(), 0, TEST_SAMPLE_2.length()));
+        IdentityChecker checker = newHasKeyWordsChecker(new String[]{"should", "should", "prici"});
+        assertTrue(checker.check(TEST_SAMPLE_2, root ));
     }
 
     @Test
-    void containsDuplicateKeywordsWithMuti() {
-        String[] str = new String[]{"supple", "supplement", "supplement", "supplement", "supple"};
-        data.put("keywords", new ArrayList(Arrays.asList(str)));
-        IdentityChecker checker = new HasKeywordsChecker(data);
-        assertTrue(checker.check(TEST_SAMPLE_1, 0, TEST_SAMPLE_1.length));
+    void containsDuplicateKeywordsWithMultipleDuplicates() {
+        IdentityChecker checker = newHasKeyWordsChecker(new String[]{"supple", "supplement", "supplement", "supplement", "supple"});
+        assertTrue(checker.check(TEST_SAMPLE_1, root));
     }
 
 }
