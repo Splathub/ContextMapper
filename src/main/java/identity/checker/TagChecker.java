@@ -13,7 +13,6 @@ public class TagChecker extends AbstractIdentityChecker {
 
     @Override
     public boolean check(StringBuffer sb, RootIdentityContentHandler root) {
-        System.out.println(root.getTag());
        return root.getTag().equalsIgnoreCase( (String) getData("tag"));
     }
 }
