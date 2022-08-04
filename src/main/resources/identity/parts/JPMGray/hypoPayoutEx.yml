@@ -28,35 +28,35 @@
   args:
     keyword: "The hypothetical Initial "
 
-  - checker: "HasKeywordChecker"
-    action: "TableIdentityAction"
-    template: '<TABLE ALIGN="CENTER" CELLSPACING="0" CELLPADDING="0" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; width: 93%; border-collapse: collapse">%s</TABLE>'
-    args:
-      keyword: "Example "
-      head: '<TR STYLE="vertical-align: top; background-color: #BFBFBF">
-                <TD STYLE="width: 25%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
-                    <FONT STYLE="color: #404040">%s</FONT>
-                </TD>
-                <TD STYLE="width: 30%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
-                    <FONT STYLE="color: #404040">%s</FONT>
-                </TD>
-                <TD STYLE="width: 45%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
-                    <FONT STYLE="color: #404040">%s</FONT>
-                </TD>
-            </TR>'
-      row: '<TR STYLE="vertical-align: top">
-              <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+- checker: "HasKeywordChecker"
+  action: "TableIdentityAction"
+  template: '<TABLE ALIGN="CENTER" CELLSPACING="0" CELLPADDING="0" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; width: 93%; border-collapse: collapse">%s</TABLE>'
+  args:
+    keyword: "Example "
+    head: '<TR STYLE="vertical-align: top; background-color: #BFBFBF">
+              <TD STYLE="width: 25%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
                   <FONT STYLE="color: #404040">%s</FONT>
               </TD>
-              <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+              <TD STYLE="width: 30%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
                   <FONT STYLE="color: #404040">%s</FONT>
               </TD>
-              <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+              <TD STYLE="width: 45%; border-bottom: #6D6E71 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
                   <FONT STYLE="color: #404040">%s</FONT>
               </TD>
           </TR>'
+    row: '<TR STYLE="vertical-align: top">
+            <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #404040">%s</FONT>
+            </TD>
+            <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #404040">%s</FONT>
+            </TD>
+            <TD STYLE="border-bottom: gray 1pt solid; padding-top: 4pt; padding-right: 5.4pt; padding-left: 5.4pt">
+                <FONT STYLE="color: #404040">%s</FONT>
+            </TD>
+        </TR>'
 
-  - checker: "TagChecker"
-    include: -2
-    args:
-      tag: "table"
+- checker: "TagChecker"
+  include: -2
+  args:
+    tag: "table"

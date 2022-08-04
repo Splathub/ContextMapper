@@ -7,7 +7,8 @@ parts:
     keyword: "JPMorgan Chase "
 
   - part: "keyTerms"
-    checker: ToggleChecker
+    checker: HasKeywordChecker
+    keyword: "Key Terms"
 
   - part: "howNotesWork"
     checker: HasKeywordChecker

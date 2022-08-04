@@ -6,9 +6,12 @@
 
 - checker: "HasKeywordChecker"
   template: '<P STYLE="color: #4E8ABE; font: bold 10pt Arial, Helvetica, Sans-Serif; margin: 8pt 0 0; border-bottom: #54301A 0.5pt solid">Key Terms</P>'
-  include: 1
+  include: 2
   args:
     keyword : "Issuer"
+
+- checker: "FalseChecker"
+  action: "IgnoreIdentityAction"
 
 #New action, ues TR or TS as section, looks a tags action: "ColumnsIdentityAction"
 - checker: "HasKeywordChecker"
@@ -20,16 +23,20 @@
     keyword : "Issuer"
 
 #not readyy needed but there
-- checker: "FalseChecker"
-  range: 1
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
   template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; color: #404040; margin: 0pt 0pt 2pt">
-									<FONT STYLE="font-family: Arial, Helvetica, Sans-Serif; color: #54301A">
-										%s
-									</FONT>
-									<FONT STYLE="color: windowtext">%s</FONT>
-								</P>'
+                <FONT STYLE="font-family: Arial, Helvetica, Sans-Serif; color: #54301A; font-weight: bold">
+                    %s
+                </FONT>
+                <FONT STYLE="color: windowtext">%s</FONT>
+            </P>'
+  args:
+    keyword : ":"
+    split: ":"  # for first occurses
 
 - checker: "HasKeywordChecker"
+  push: 2
   template: '<P STYLE="font: 8pt Arial, Helvetica, Sans-Serif; margin: 3pt 14.5pt 2pt 0">%s</P>
               </TD>
               <TD STYLE="padding: 2.9pt 5.75pt 2.9pt 8.65pt; width: 50%;">'
@@ -37,11 +44,57 @@
     keyword: "* "
 
 - checker: "TrueChecker"
-  template: '<P STYLE="font: bold 9pt Arial, Helvetica, Sans-Serif; color: #54301A; margin: 0pt 0pt 2pt">%s</P>
-								<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0">%s</P>'
+  push: -2
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 3pt 0pt -8pt 0">%s</P>'
 
-- checker: "TagChecker"
-  template: '   </TR>
-			</TABLE>'
+- checker: "ToggleChecker"
+  action: "JoinIdentityAction"
+  ramge: 1
+  template: '<P STYLE="font: bold 9pt Arial, Helvetica, Sans-Serif; color: #54301A; margin: 0pt 0pt 2pt">%s</P>
+          <P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0">%s</P>'
+
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
+  push: 1
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0">%s</P>
+          <P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0; text-align: center">%s</P>'
   args:
-    tag: "table"
+    keyword: "calculated as follows:"
+
+- checker: "TrueChecker"
+  push: 1
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 3pt 0pt -8pt 0">%s</P>'
+
+- checker: "HasKeywordChecker"
+  push: 1
+  template: '<P STYLE="color: #54301A; font: bold 9pt Arial, Helvetica, Sans-Serif; margin: 2pt 0">Index Return:</P>
+              <P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 0; text-align: center">
+                  <U>(Final Value &ndash; Initial Value)</U>
+                  <BR>
+                      Initial Value</P>
+              <P STYLE="color: #404040; font: 9pt Arial, Helvetica, Sans-Serif; margin: 0">
+                  <FONT STYLE="font-family: Arial, Helvetica, Sans-Serif; color: #54301A">
+                      <B>Initial Value:</B>
+                  </FONT>
+                  <FONT STYLE="color: windowtext">The closing level of the Index on the Pricing Date</FONT>
+              </P>'
+  args:
+    keyword: "Index Return:"
+#heavy assume text
+
+
+- checker: "ToggleChecker"
+  action: "IgnoreIdentityAction"
+
+- checker: "HasKeywordChecker"
+  action: "JoinIdentityAction"
+  template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; color: #404040; margin: 0pt 0pt 2pt">
+                 <FONT STYLE="font-family: Arial, Helvetica, Sans-Serif; color: #54301A; font-weight: bold">
+                     %s
+                 </FONT>
+                 <FONT STYLE="color: windowtext">%s</FONT>
+             </P>'
+  args:
+    endWith: '   </TR></TABLE>'
+    split: ":"  # for first occurses
+    keyword: 'Final Value'

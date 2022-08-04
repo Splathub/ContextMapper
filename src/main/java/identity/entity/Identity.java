@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -32,7 +33,13 @@ public class Identity {
     public Identity(IdentityChecker checker, IdentityAction action, String template, Map<String, Object> args, int push, int include, int range, String trim) {
         this.checker = checker;
         this.action = action;
-        this.args = args;
+        if (args == null) {
+            this.args = Collections.emptyMap();
+        }
+        else {
+            this.args = args;
+        }
+
         this.template = template; //TODO: cover before as selected  or one time and cycle, graph
         templateSegments = template.split("%s");
 
@@ -58,12 +65,29 @@ public class Identity {
 
         if(!trim.isEmpty()) {
             int index = sb.indexOf(trim);
-            if (index > 0) {
+            if (index >= 0) {
                 sb.delete(index, trim.length());
             }
         }
 
-        action.process(sb, this, root );
+        if (args.containsKey("split")) {
+            //TODO: improve split feature preformance
+           // String delimiter = "((?<="+ args.get("split") +"))";
+            int idx = sb.indexOf((String) args.get("split"));
+            if (idx >= 0) {
+                action.process(sb.substring(0, idx+1), this, root);
+                action.process(sb.substring(idx+1), this, root);
+            }
+            else {
+                action.process(sb, this, root);
+            }
+
+            //for (String str: sb.toString().split(delimiter)) {
+          //      action.process(str, this, root);
+          //  }
+        } else {
+            action.process(sb, this, root);
+        }
 
         if (include != 0) {
             part.includedProcess(include, sb, root);
@@ -72,6 +96,9 @@ public class Identity {
 
     public void finalProcess(RootIdentityContentHandler root) throws SAXException {
         action.endProcess(this, root);
+        if (args.containsKey("endWith")) {
+            root.write((String) args.get("endWith"));
+        }
     }
 
     public IdentityAction getAction() {

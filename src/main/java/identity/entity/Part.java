@@ -51,7 +51,7 @@ public class Part {
         else if (onPoint < 0) {
             onPoint = 0;
         }
-        identity = identities[onPoint];
+        identity = identities[onPoint]; //TODO: rework, shouldn't set till checked
     }
 
     /**

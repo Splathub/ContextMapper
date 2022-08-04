@@ -1,5 +1,5 @@
 - checker: "HasKeywordChecker"
-  template: '<DIV STYLE="background-color: #DDDDDD; border-bottom: #54301a 2pt solid; padding: 6pt 12pt 6pt 6pt; width: 100%">\n\t
+  template: '<DIV STYLE="background-color: #DDDDDD; border-bottom: #54301a 2pt solid; padding: 6pt 12pt 6pt 6pt; width: 100%">
     <P STYLE="font: 14pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040">%s</P>'
   args:
     keyword : "JPMorgan Chase "
@@ -20,15 +20,16 @@
 
 - checker: "HasKeywordChecker"
   action: "TableIdentityAction"
-  template: '<TABLE CELLPADDING="0" CELLSPACING="0" WIDTH="100%" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin-top: 6pt; margin-bottom: 6pt; color: #262626">%s</TABLE>'
+  template: '<TABLE CELLPADDING="0" CELLSPACING="0" WIDTH="100%" STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 3pt 0 3pt; color: #262626">%s</TABLE></DIV>'
+  trim: "· "
   args:
     keyword: "· "
     row: '<TR STYLE="vertical-align: top">
-            <TD STYLE="width: 0.25in"/>
-            <TD STYLE="width: 0.25in">
+            <TD STYLE="width: 0.25in; padding: 3pt 0 3pt 0;"/>
+            <TD STYLE="width: 0.25in; padding: 3pt 0 3pt 0;">
                 <FONT STYLE="font-family: Symbol">&#183;</FONT>
             </TD>
-            <TD>%s</TD>
+            <TD STYLE="padding: 3pt 0 3pt 0;">%s</TD>
         </TR>'
 
 - checker: "HasKeywordChecker"
@@ -37,11 +38,12 @@
     keyword: "Investing in the notes "
 
 # may be issue with header
-- checker: "HasKeywordChecker"
+- checker: "TagChecker"
   action: "TableIdentityAction"
+  range: 1
   template: '<TABLE ALIGN="CENTER" CELLSPACING="0" CELLPADDING="0" STYLE="font: 8pt Arial, Helvetica, Sans-Serif; width: 91.64%; border-collapse: collapse">%s</TABLE>'
   args:
-    keyword: "Price to Public"
+    tag: "table"
     head: '<TR STYLE="background-color: #BFBFBF">
               <TD STYLE="width: 16.92%">&nbsp;%s</TD>
               <TD STYLE="width: 29.72%">
@@ -86,9 +88,10 @@
   args:
     keyword: "The information in this "
 
-- checker: "TrueChecker"
-  push: 1
+- checker: "HasKeywordChecker"
   template: '<P STYLE="font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; margin-bottom: 9pt">%s</P>'
+  args:
+    keyword: "The notes are not bank "
 
 #wher footer may be
 - checker: "TrueChecker"

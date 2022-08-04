@@ -7,22 +7,20 @@ import org.xml.sax.SAXException;
 
 public class TableIdentityAction extends JoinIdentityAction {
 
-    private boolean initChecked;
-    private boolean emptyTemplate;
-    private final String filler = "&nbsp;";
+    private boolean hasFooter;
     private boolean inHead;
     private String row;
 
-    private String[] segments;
-    private int segIndex = 0;
 
     @Override
     public void process(StringBuffer sb, Identity identity, RootIdentityContentHandler root) throws SAXException {
 
         if (emptyTemplate) {
             root.write(sb.toString());
+            return;
         }
-        else if (!initChecked) {
+
+        if (!initChecked) {
             initChecked = true;
 
             if (identity.getTemplateSegments().length != 2) {
@@ -53,27 +51,25 @@ public class TableIdentityAction extends JoinIdentityAction {
                 createSegment(row);
             }
         }
-        else {
 
-            if (segIndex == segments.length - 1) {
-                root.write(segments[segIndex++]);
-                segIndex = 0;
+         if (segIndex == segments.length - 1) {
+            root.write(segments[segIndex++]);
+            segIndex = 0;
 
-                if (inHead) {
-                    createSegment(row);
-                    inHead = false;
-                }
+            if (inHead) {
+                createSegment(row);
+                inHead = false;
             }
-            else {
-                root.write(segments[segIndex++]);
-                root.write(sb.toString());
-            }
-
         }
+
+        root.write(segments[segIndex++]);
+        root.write(sb.toString());
+
     }
 
     @Override
     public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
+        //TODO: implement footer and postpone insertion to identify a footer
         while(segIndex < segments.length-1) {
             root.write(segments[segIndex++]);
             root.write(filler);
@@ -82,9 +78,5 @@ public class TableIdentityAction extends JoinIdentityAction {
         root.write(identity.getTemplateSegments()[1]);
     }
 
-    private void createSegment(String template) {
-        segments = template.split("%s");
-        segIndex = 0;
-    }
 
 }

@@ -1,6 +1,8 @@
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ContextMapperProcess {
@@ -16,7 +18,7 @@ public class ContextMapperProcess {
 
     public static void main (String[] args) throws IOException {
         ContextMapper cm;
-
+/*
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "PDF/DOCX files (only docx now)", "pdf", "docx");
@@ -26,12 +28,23 @@ public class ContextMapperProcess {
             cm = new ContextMapper(chooser.getSelectedFile().getAbsolutePath(), ROOT_DOCX_GRAY);
         }
         else {
-            cm = new ContextMapper(SAMPLE_DOCX, ROOT_DOCX_GRAY);
-        }
 
+        }*/
+        cm = new ContextMapper(SAMPLE_DOCX, ROOT_DOCX_GRAY);
         //cm.setPartPath("src/test/resources/identities/parts/");
         System.out.println("XML:\n"+cm.processToXML() + "\n---------------------------------------\n");
-        System.out.println(cm.process());
+        //System.out.println(cm.process());
+
+        String myPath = "C:\\Users\\holyg\\Desktop\\grayTest.html";
+        try {
+            FileWriter myWriter = new FileWriter(myPath);
+            myWriter.write(cm.process());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
 }

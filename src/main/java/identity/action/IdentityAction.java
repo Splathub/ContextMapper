@@ -8,6 +8,8 @@ public interface IdentityAction {
 
     void process(StringBuffer context, Identity identity, RootIdentityContentHandler root) throws SAXException;
 
+    void process(String str, Identity identity, RootIdentityContentHandler root) throws SAXException;
+
     void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException;
 
 }

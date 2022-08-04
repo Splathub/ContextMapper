@@ -18,6 +18,11 @@ public abstract class AbstractIdentityAction implements IdentityAction {
     }
 
     @Override
+    public void process(String str, Identity identity, RootIdentityContentHandler root) throws SAXException {
+        process(new StringBuffer(str), identity, root);
+    }
+
+    @Override
     public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
 
     }
