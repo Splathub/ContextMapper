@@ -10,44 +10,44 @@ import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class IdentityTest {
+class CheckedIdentityTest {
 
     RootIdentityContentHandler root = new RootIdentityContentHandler("test", null, null);
     StringBuffer sb = new StringBuffer();
-    Identity[] identities;
+    CheckedIdentity[] identities;
 
     @BeforeEach
     void setUp() {
-        identities = new Identity[5];
-        identities[0] = new Identity(
+        identities = new CheckedIdentity[5];
+        identities[0] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0, Part.getDefaultWindow(),"");
 
-        identities[1] = new Identity(
+        identities[1] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,3,"");
 
-        identities[2] = new Identity(
+        identities[2] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,0,"");
 
-        identities[3] = new Identity(
+        identities[3] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,0,"");
 
-        identities[4] = new Identity(
+        identities[4] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
@@ -57,13 +57,13 @@ class IdentityTest {
 
     @Test
     void identityPushPoint() throws SAXException {
-        identities[0] = new Identity(
+        identities[0] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 4,0,0,"");
-        identities[4] = new Identity(
+        identities[4] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
@@ -79,31 +79,31 @@ class IdentityTest {
 
     @Test
     void identityAdjustedRange() throws SAXException {
-        identities[0] = new Identity(
+        identities[0] = new CheckedIdentity(
                 new TrueChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 1,0,5,"");
-        identities[1] = new Identity(
+        identities[1] = new CheckedIdentity(
                 new FalseChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 0,0,0,"");
-        identities[2] = new Identity(
+        identities[2] = new CheckedIdentity(
                 new FalseChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 0,0,0,"");
-        identities[3] = new Identity(
+        identities[3] = new CheckedIdentity(
                 new FalseChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 0,0,0,"");
-        identities[4] = new Identity(
+        identities[4] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
@@ -121,13 +121,13 @@ class IdentityTest {
 
     @Test
     void identityIncludedProcess() throws SAXException {
-        identities[0] = new Identity(
+        identities[0] = new CheckedIdentity(
                 new TrueChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",
                 null,
                 0,3,Part.getDefaultWindow(),"");
-        identities[3] = new Identity(
+        identities[3] = new CheckedIdentity(
                 new FalseChecker(null),
                 new BaseIdentityAction(),
                 "Jump Away",

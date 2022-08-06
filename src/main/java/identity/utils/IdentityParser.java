@@ -1,6 +1,6 @@
 package identity.utils;
 
-import identity.entity.Identity;
+import identity.entity.CheckedIdentity;
 import identity.action.BaseIdentityAction;
 import identity.entity.RootIdentityContentHandler;
 import javafx.util.Pair;
@@ -21,14 +21,14 @@ import java.util.ArrayList;
 public class IdentityParser {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityParser.class);
 
-    public static Identity[] parseIdentities(String path) throws IOException {
-        Identity[] identities;
+    public static CheckedIdentity[] parseIdentities(String path) throws IOException {
+        CheckedIdentity[] identities;
         LOG.info("Parsing " + path);
         try (FileInputStream inputStream = new FileInputStream(path)) {
             Yaml yaml = new Yaml();
             ArrayList<Map<String, Object>> identitiesData = yaml.load(inputStream);
 
-            identities = new Identity[identitiesData.size()];
+            identities = new CheckedIdentity[identitiesData.size()];
 
             for (int i = 0; i < identities.length ; i++){
                 identities[i] = IdentityFactory.createIdentity(identitiesData.get(i));

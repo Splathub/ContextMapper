@@ -1,6 +1,6 @@
 package identity.utils;
 
-import identity.entity.Identity;
+import identity.entity.CheckedIdentity;
 import identity.entity.RootIdentityContentHandler;
 import identity.exception.IdentityCrisisException;
 import org.junit.jupiter.api.Test;
@@ -11,21 +11,21 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class IdentityFactoryTest {
+class CheckedIdentityFactoryTest {
 
     @Test
     void createIdentityJustMinimal() {
         Map<String, Object> data = new HashMap<>();
         data.put("template", "Some text");
-        Identity identity = IdentityFactory.createIdentity(data);
+        CheckedIdentity checkedIdentity = IdentityFactory.createIdentity(data);
 
-        assertNotNull(identity);
+        assertNotNull(checkedIdentity);
     }
 
     @Test
     void createIdentityNull() {
-        Identity identity = IdentityFactory.createIdentity(null);
-        assertNotNull(identity);
+        CheckedIdentity checkedIdentity = IdentityFactory.createIdentity(null);
+        assertNotNull(checkedIdentity);
     }
 
     @Test

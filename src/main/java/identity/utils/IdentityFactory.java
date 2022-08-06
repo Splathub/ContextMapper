@@ -1,9 +1,8 @@
 package identity.utils;
 
-import identity.entity.Identity;
+import identity.entity.CheckedIdentity;
 import identity.action.IdentityAction;
 import identity.checker.IdentityChecker;
-import identity.entity.Part;
 import identity.entity.RootIdentityContentHandler;
 import identity.exception.IdentityCrisisException;
 import javafx.util.Pair;
@@ -45,7 +44,7 @@ public class IdentityFactory {
         return factory;
     }
 
-    public static Identity createIdentity(Map<String, Object> data) {
+    public static CheckedIdentity createIdentity(Map<String, Object> data) {
         Class clazz = null;
         String msgErr;
 
@@ -60,16 +59,19 @@ public class IdentityFactory {
             clazz = Class.forName("identity.action." + data.getOrDefault("action", "BaseIdentityAction"));
             IdentityAction action = (IdentityAction) clazz.getDeclaredConstructor().newInstance();
 
-            return new Identity(
+            return new CheckedIdentity(
                     checker,
                     action,
                     (String) data.getOrDefault("template", ""),
-                    (Map<String, Object>) data.get("args"),
-                    (int) data.getOrDefault("push", 0),
+                    (Map<String, Object>) data.get("args"));
+
+            //TODO: old idenity needs to move features in args
+
+/*                    (int) data.getOrDefault("push", 0),
                     (int) data.getOrDefault("include", 0),
                     (int) data.getOrDefault("range", Part.getDefaultWindow()),
-                    (String) data.getOrDefault("trim", "")
-            );
+                    (String) data.getOrDefault("trim", "")*/
+
         } catch (ClassNotFoundException e) {
             if (clazz == null) {
                 msgErr = "Missing 'checker' or 'action' for Identity";

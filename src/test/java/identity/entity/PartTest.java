@@ -1,10 +1,7 @@
 package identity.entity;
 
 import identity.action.BaseIdentityAction;
-import identity.checker.FalseChecker;
 import identity.checker.ToggleChecker;
-import identity.checker.TrueChecker;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -15,40 +12,40 @@ class PartTest {
 
     RootIdentityContentHandler root = new RootIdentityContentHandler("test", null, null);
     StringBuffer sb = new StringBuffer();
-    Identity[] identities;
+    CheckedIdentity[] identities;
 
     @BeforeEach
     void setUp() {
-        identities = new Identity[5];
-        identities[0] = new Identity(
+        identities = new CheckedIdentity[5];
+        identities[0] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0, Part.getDefaultWindow(),"");
 
-        identities[1] = new Identity(
+        identities[1] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,3,"");
 
-        identities[2] = new Identity(
+        identities[2] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,0,"");
 
-        identities[3] = new Identity(
+        identities[3] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",
                 null,
                 0,0,0,"");
 
-        identities[4] = new Identity(
+        identities[4] = new CheckedIdentity(
                 new ToggleChecker(null),
                 new BaseIdentityAction(),
                 "<P STYLE=\"font: 9pt Arial, Helvetica, Sans-Serif; margin: 4pt 0 0; color: #404040\">%s</P>",

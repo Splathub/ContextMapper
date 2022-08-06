@@ -1,6 +1,6 @@
 package identity.utils;
 
-import identity.entity.Identity;
+import identity.entity.CheckedIdentity;
 import identity.entity.RootIdentityContentHandler;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
-class IdentityParserTest {
+class CheckedIdentityParserTest {
 
     @Test
     public void parsingIdentities() throws Exception {
-        Identity[] identities = IdentityParser.parseIdentities(
+        CheckedIdentity[] identities = IdentityParser.parseIdentities(
                 "src/test/resources/identities/sampleTest.yml");
 
         assertEquals(3, identities.length);

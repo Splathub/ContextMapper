@@ -5,6 +5,8 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,9 @@ public class ContextMapper {
         try ( FileInputStream inputStream = new FileInputStream(pdf) ){
             //parsing the document using PDF parser
             AutoDetectParser parser = new AutoDetectParser();
+            PDFParser;
+            HtmlParser;
+
             parser.parse(inputStream, handler, metadata, context);
 
             //getting the content of the document

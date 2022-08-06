@@ -8,38 +8,38 @@ import org.xml.sax.SAXException;
 public class Part {
     private final Logger LOG = LoggerFactory.getLogger(Part.class);
 
-    private Identity[] identities;
-    private Identity identity;
+    private CheckedIdentity[] identities;
+    private CheckedIdentity checkedIdentity;
     private static final int defaultWindow = 3;
     private int window = 3;
     private int onPoint=0;
 
-    public Part(Identity[] identities) {
+    public Part(CheckedIdentity[] identities) {
         this.identities = identities;
-        identity = identities[onPoint];
+        checkedIdentity = identities[onPoint];
     }
 
     public void process(StringBuffer sb, RootIdentityContentHandler root) throws SAXException {
         for(int i=onPoint; i < identities.length && i <= onPoint + window; i++) {
             if (identities[i].check(sb, root)) {
-                if (onPoint != i || identity == null) {
-                    if (identity != null) {
+                if (onPoint != i || checkedIdentity == null) {
+                    if (checkedIdentity != null) {
                         finalProcess(root);
                     }
                     LOG.info("Identity change");
                     onPoint = i;
-                    identity = identities[onPoint];
+                    checkedIdentity = identities[onPoint];
                 }
                 break;
             }
         }
-        LOG.info("process identity " + onPoint + " : " + identity + "\n\t\t" + sb);
-        identity.process(sb, this, root);
+        LOG.info("process identity " + onPoint + " : " + checkedIdentity + "\n\t\t" + sb);
+        checkedIdentity.process(sb, this, root);
     }
 
     public void finalProcess(RootIdentityContentHandler root) throws SAXException {
-        if (identity != null) {
-            identity.finalProcess(root);
+        if (checkedIdentity != null) {
+            checkedIdentity.finalProcess(root);
         }
     }
 
@@ -51,7 +51,7 @@ public class Part {
         else if (onPoint < 0) {
             onPoint = 0;
         }
-        identity = identities[onPoint]; //TODO: rework, shouldn't set till checked
+        checkedIdentity = identities[onPoint]; //TODO: rework, shouldn't set till checked
     }
 
     /**
@@ -73,7 +73,7 @@ public class Part {
 
     public void includedProcess(int include, StringBuffer sb, RootIdentityContentHandler root) throws SAXException {
         pushPoint(include);
-        identity.process(sb, this, root);
+        checkedIdentity.process(sb, this, root);
     }
 
     public static int getDefaultWindow() {
