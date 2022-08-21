@@ -5,7 +5,7 @@ import identity.action.IdentityAction;
 import identity.checker.IdentityChecker;
 import identity.entity.RootIdentityContentHandler;
 import identity.exception.IdentityCrisisException;
-import javafx.util.Pair;
+import java.util.AbstractMap.SimpleEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,12 +110,12 @@ public class IdentityFactory {
           //  IdentityAction defaultAction = (IdentityAction) clazz.getDeclaredConstructor(Map.class).newInstance(data.getOrDefault("args", null)); //no args
 
             ArrayList<Map<String, String>> map = (ArrayList<Map<String, String>>) data.get("parts");
-            Pair<IdentityChecker, String>[] parts;
+            SimpleEntry<IdentityChecker, String>[] parts;
             if (map == null) {
-                parts = new Pair[0];
+                parts = new SimpleEntry[0];
             }
             else {
-                parts = new Pair[map.size()];
+                parts = new SimpleEntry[map.size()];
                 int i = 0;
                 for (Map<String, String> partInfo : map) {
                     String part = partInfo.getOrDefault("part", null);
@@ -123,7 +123,7 @@ public class IdentityFactory {
                         clazz = Class.forName("identity.checker." + partInfo.getOrDefault("checker", "HasKeywordChecker"));
                         IdentityChecker checker = (IdentityChecker) clazz.getDeclaredConstructor(Map.class).newInstance(partInfo);
 
-                        parts[i++] = new Pair<>(checker, part);
+                        parts[i++] = new SimpleEntry<>(checker, part);
                     } else {
                         throw new IdentityCrisisException("Missing 'part'");
                     }

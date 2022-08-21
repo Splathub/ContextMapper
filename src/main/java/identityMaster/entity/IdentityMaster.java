@@ -13,7 +13,7 @@ import java.util.List;
 public class IdentityMaster implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityKeeper.class);
 
-    private final String identityMasterPath = "identity/rootMaps";
+    private final String identityMasterPath = "identity/rootMaps/";
     private String name;
 
     private KeyGenerator keyGenerator;

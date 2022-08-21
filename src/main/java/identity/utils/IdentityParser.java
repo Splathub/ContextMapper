@@ -3,7 +3,7 @@ package identity.utils;
 import identity.entity.CheckedIdentity;
 import identity.action.BaseIdentityAction;
 import identity.entity.RootIdentityContentHandler;
-import javafx.util.Pair;
+import java.util.AbstractMap.SimpleEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.TypeDescription;
@@ -46,7 +46,7 @@ public class IdentityParser {
         try (FileInputStream inputStream = new FileInputStream(path)) {
             Constructor constructor = new Constructor(RootIdentityContentHandler.class);
 
-            TypeDescription configDesc = new TypeDescription(Pair.class);
+            TypeDescription configDesc = new TypeDescription(SimpleEntry.class);
             configDesc.addPropertyParameters("defaultAction", BaseIdentityAction.class);
 
             constructor.addTypeDescription(configDesc);

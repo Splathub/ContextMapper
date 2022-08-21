@@ -40,9 +40,10 @@ public class ContextMapper {
 
 
         //TODO: pre made here, wrong palce below
-        RootIdentityBuilder rib = new RootIdentityBuilder(master);
-        rib.buildRootIdentityMap();
+       // RootIdentityBuilder rib = new RootIdentityBuilder(master);
+       // rib.buildRootIdentityMap();
         //serialize map
+        return "";
     }
 
     public String process() throws IOException {

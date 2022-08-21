@@ -4,7 +4,7 @@ import identity.action.*;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityKeeper;
 import identityMaster.entity.IdentityMaster;
-import javafx.util.Pair;
+import java.util.AbstractMap.SimpleEntry;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class IdentityMasterBuilder {
     private final IdentityMaster identityMaster;
     private HeaderFooterBuilder hfBuilder;
 
-    private Queue<Pair<String, org.jsoup.nodes.Element>> newRoots = new LinkedList<>();
+    private Queue<SimpleEntry<String, org.jsoup.nodes.Element>> newRoots = new LinkedList<>();
     private List<String> textSlugs = new LinkedList<>();
 
     public static final String SPECIAL_NOTE_PREFIX = "#%";
@@ -109,10 +109,10 @@ public class IdentityMasterBuilder {
         LOG.info("IdentityMaster HTML parsing successful");
 
         for (org.jsoup.nodes.Element e : doc.body().children()) {
-            newRoots.add(new Pair<>(new String(), e));
+            newRoots.add(new SimpleEntry<>(new String(), e));
         }
         //TODO: update to every root element is a IK and child (qith text) but connected through proxyID
-        Pair<String, org.jsoup.nodes.Element> pair;
+        SimpleEntry<String, org.jsoup.nodes.Element> pair;
         Element rootParent;
 
         while(!newRoots.isEmpty()) {
@@ -184,8 +184,8 @@ public class IdentityMasterBuilder {
     }
 
     private void createChildren(Element rootParentChildren, org.jsoup.nodes.Element parent) {
-        Stack<Pair<Element, org.jsoup.nodes.Element>> stack = new Stack<>();
-        Pair<Element, org.jsoup.nodes.Element> current = new Pair<>(rootParentChildren, parent);
+        Stack<SimpleEntry<Element, org.jsoup.nodes.Element>> stack = new Stack<>();
+        SimpleEntry<Element, org.jsoup.nodes.Element> current = new SimpleEntry<>(rootParentChildren, parent);
         stack.push(current);
 
         //LOG.info(parent.getAllElements().stream().map(org.jsoup.nodes.Element::tagName).reduce("", (oldV, newV) -> oldV + ","+newV));
@@ -205,7 +205,7 @@ public class IdentityMasterBuilder {
             for (org.jsoup.nodes.Element c : current.getValue().children()) {
                 Element child = new Element();
                 children.add(child);
-                stack.push(new Pair<>(child, c));
+                stack.push(new SimpleEntry<>(child, c));
             }
             element.setChildren(children);
         }
@@ -267,11 +267,11 @@ public class IdentityMasterBuilder {
                         ele.setIdentityName(TableIdentityAction.class.getName());
                         processTable(ele, e);
                         //TODO: process info for tr, td, .. proxy
-                        //newRoots.add(new Pair<>(getProxy(ele), e));
+                        //newRoots.add(new SimpleEntry<>(getProxy(ele), e));
 
                     } else { // A Join/Wrap type
                         ele.setIdentityName(JoinIdentityAction.class.getName());
-                        newRoots.add(new Pair<>(getProxy(ele), e));
+                        newRoots.add(new SimpleEntry<>(getProxy(ele), e));
                     }
                 }
             }
@@ -320,7 +320,7 @@ public class IdentityMasterBuilder {
                                 //textSlugs.add(t.text());
                                 LOG.warn("Table TD has off-placed Text, not processed");
                             } else if (n instanceof org.jsoup.nodes.Element) {
-                                newRoots.add(new Pair<>(getProxy(ele), (org.jsoup.nodes.Element)n));
+                                newRoots.add(new SimpleEntry<>(getProxy(ele), (org.jsoup.nodes.Element)n));
                             }
                         }
                     }
@@ -340,7 +340,7 @@ public class IdentityMasterBuilder {
             }
             else {
                LOG.warn("TR else ignored: " + e.tagName());
-               //newRoots.add(new Pair<>(proxy, e));
+               //newRoots.add(new SimpleEntry<>(proxy, e));
                 //identitySelectionAndText(temp, e);
             }
         }

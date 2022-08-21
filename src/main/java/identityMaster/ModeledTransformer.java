@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ModeledTransformer {
 
-    private final String MODEL_PATH = "identity/models";
+    private final String MODEL_PATH = "identity/models/";
     private DoccatModel model;
 
 
@@ -31,7 +31,7 @@ public class ModeledTransformer {
     }
 
     public File train(File trainFile) {
-        File modelFile = new File(MODEL_PATH + trainFile.getName() + ".model");
+        File modelFile = new File(MODEL_PATH + trainFile.getName().split("\\.")[0] + ".model");
 
         try(ObjectStream<String> lineStream = new PlainTextByLineStream(
                 new MarkableFileInputStreamFactory(trainFile), StandardCharsets.UTF_8)) {

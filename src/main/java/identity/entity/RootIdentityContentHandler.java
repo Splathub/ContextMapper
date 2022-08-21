@@ -3,7 +3,7 @@ package identity.entity;
 import identity.action.IdentityAction;
 import identity.checker.IdentityChecker;
 import identity.utils.IdentityParser;
-import javafx.util.Pair;
+import java.util.AbstractMap.SimpleEntry;
 import org.apache.tika.sax.ToTextContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
     private IdentityAction defaultAction;
     private final char[] ends = new char[]{'\n'};
     private final int window = 3;
-    private Pair<IdentityChecker, String>[] parts;
+    private SimpleEntry<IdentityChecker, String>[] parts;
     private final String partsPath;
     private Part part;
     private int onPoint = 0;
@@ -43,7 +43,7 @@ public class RootIdentityContentHandler extends ToTextContentHandler {
 
     private boolean inBody;
 
-    public RootIdentityContentHandler(String name, String partsPath, Pair<IdentityChecker, String>[] parts) {
+    public RootIdentityContentHandler(String name, String partsPath, SimpleEntry<IdentityChecker, String>[] parts) {
         this.name = name;
         //this.defaultAction = defaultAction;
         this.parts = parts;

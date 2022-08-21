@@ -1,11 +1,12 @@
 package identityMaster;
 
 import identity.action.IdentityAction;
-import identity.checker.IdentityChecker;
 import identity.entity.Identity;
 import identityMaster.entity.IdentityKeeper;
 import identityMaster.entity.IdentityMaster;
 import identityMaster.entity.RootIdentity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 public class RootIdentityBuilder {
+    private static final Logger LOG = LoggerFactory.getLogger(RootIdentityBuilder.class);
 
-    private final String identityModelPath = "identity/models";
+    private final String identityModelPath = "identity/models/";
     private final IdentityMaster master;
 
     private RootIdentity root;
@@ -35,12 +37,18 @@ public class RootIdentityBuilder {
         try {
             for (IdentityKeeper keeper : master.getsKHash().values()) {
                 if (!keeper.getTag().equalsIgnoreCase("table")) {   //TODO: tables and similar need special text/styleStruc containment
-                    clazz = Class.forName(keeper.getIdentityName());
-                    action = (IdentityAction) clazz.newInstance();
 
-                    identity = new Identity(action, TemplateUtil.mkTemplate(keeper), keeper.getArgs());
+                    if (keeper.getIdentityName() == null) {
+                        LOG.warn("Null class Action :" + keeper.getTag());
+                    } else {
 
-                    map.put(String.valueOf(i), identity);
+                        clazz = Class.forName(keeper.getIdentityName());
+                        action = (IdentityAction) clazz.newInstance();
+
+                        identity = new Identity(action, TemplateUtil.mkTemplate(keeper), keeper.getArgs());
+
+                        map.put(String.valueOf(i), identity);
+                    }
                 }
                 i++;
             }
@@ -63,11 +71,12 @@ public class RootIdentityBuilder {
 
 
     public File writeCatFile() {
-        File trainFile = new File(master.getName()+".tain");
+        File trainFile = new File(identityModelPath+master.getName()+".train");
 
         try {
             FileWriter myWriter = new FileWriter(trainFile);
             int i = 0;
+            StringBuilder sb;
             for(Map.Entry<String, IdentityKeeper> entry : master.getsKHash().entrySet()) {
                 String cat = entry.getKey();
 
@@ -75,19 +84,21 @@ public class RootIdentityBuilder {
 
                     if (!entry.getValue().getTag().equalsIgnoreCase("table")) {
 
-                        myWriter.write(i + " ");
+                        sb = new StringBuilder();
                         for (String text : chunk) {
-                            myWriter.write(text.toLowerCase().replaceAll("^#%(.*?):|\\.|,|\"|\\(|\\)|:", "").trim());
+                            sb.append(text.toLowerCase().replaceAll("^#%(.*?):|\\.|,|\"|\\(|\\)|:", "").trim());
                         }
-                        myWriter.write("\n");
 
+                        if (sb.length() != 0) {
+                            myWriter.write(++i + " ");
+                            myWriter.write(sb.toString());
+                            myWriter.write("\n");
+                        }
                     }
                 }
-                i++;
             }
-
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the file ids: " + i);
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
