@@ -28,7 +28,20 @@ public class Identity {
         templateSegments = template.split("%s");
     }
 
-    //TODO: overhead from casting from args
+    public Identity(IdentityAction action, String[] template, Map<String, Object> args) {
+        this.action = action;
+        if (args == null) {
+            this.args = Collections.emptyMap();
+        }
+        else {
+            this.args = args;
+        }
+
+        this.templateSegments = template; //TODO: cover before as selected  or one time and cycle, graph
+        this.template = "";
+    }
+
+    //TODO: overhead from casting from args;;;; FOWARDS/push
     public void process(StringBuffer sb, Part part, RootIdentityContentHandler root) throws SAXException {
         Object value;
         // Pre-processes for Part effects

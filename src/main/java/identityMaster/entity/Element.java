@@ -1,16 +1,66 @@
 package identityMaster.entity;
 
-import java.util.Map;
+import identity.action.IdentityAction;
+import identity.entity.Identity;
 
-public class Element {
+import java.io.Serializable;
+import java.util.*;
+
+public class Element implements Serializable {
 
     private String tag;
-    private Map<String, String> style;
-    private Map<String, String> attributes;
-    private String text;
-    private Element[] children;
+    private SortedMap<String, String> style = new TreeMap<>();
+    private SortedMap<String, String> attributes = new TreeMap<>();
+    private List<String> textSlugs = new LinkedList<>();
+    private List<Element> children = new LinkedList<>();
+
+    private String identityName;
+    private Map<String, Object> args = new HashMap<>();
+
+    private String selfProxy;
+
+    public String getSSKeyInfo() {
+        StringBuilder sb = new StringBuilder()
+                .append(tag)
+                .append(style)
+                .append(attributes);
+        return sb.toString();
+    }
+
+    public void addToStyle(String key, String value) {
+        if (style == null) {
+            style = new TreeMap<>();
+        }
+        style.put(key, value);
+    }
+
+    public void addToAttributes(String key, String value) {
+        if (attributes == null) {
+            attributes = new TreeMap<>();
+        }
+        attributes.put(key, value);
+    }
+
+    public String getText() {
+        return textSlugs.stream().reduce("", (tot, str) -> tot + str);
+    }
 
 
+    public Map<String, Object> getArgs() {
+        return args;
+    }
+
+    public void setArgs(Map<String, Object> args) {
+        this.args = args;
+    }
+
+    public String getIdentityName() {
+        return identityName;
+    }
+
+    public void setIdentityName(String identityName) {
+        this.identityName = identityName;
+    }
 
     public String getTag() {
         return tag;
@@ -20,35 +70,43 @@ public class Element {
         this.tag = tag;
     }
 
-    public Map<String, String> getStyle() {
+    public SortedMap<String, String> getStyle() {
         return style;
     }
 
-    public void setStyle(Map<String, String> style) {
+    public void setStyle(SortedMap<String, String> style) {
         this.style = style;
     }
 
-    public Map<String, String> getAttributes() {
+    public SortedMap<String, String> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(SortedMap<String, String> attributes) {
         this.attributes = attributes;
     }
 
-    public String getText() {
-        return text;
+    public List<String> getTextSlugs() {
+        return textSlugs;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTextSlugs(List<String> textSlugs) {
+        this.textSlugs = textSlugs;
     }
 
-    public Element[] getChildren() {
+    public String getSelfProxy() {
+        return selfProxy;
+    }
+
+    public void setSelfProxy(String selfProxy) {
+        this.selfProxy = selfProxy;
+    }
+
+    public List<Element> getChildren() {
         return children;
     }
 
-    public void setChildren(Element[] children) {
+    public void setChildren(List<Element> children) {
         this.children = children;
     }
 }
