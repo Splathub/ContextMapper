@@ -41,6 +41,18 @@ public class Identity {
         this.template = "";
     }
 
+
+
+
+    public void process(StringBuilder sb, GeneralContentHandler handler) {
+        //TODO:
+    }
+
+    public void finalProcess(StringBuilder sb, GeneralContentHandler handler) {
+        //TODO:
+    }
+
+
     //TODO: overhead from casting from args;;;; FOWARDS/push
     public void process(StringBuffer sb, Part part, RootIdentityContentHandler root) throws SAXException {
         Object value;

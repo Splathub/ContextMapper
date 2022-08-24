@@ -12,4 +12,8 @@ public class RootIdentity implements Serializable {
     private Map<String, String> contentMapping;
     private Map<String, Identity> identityMapping;
 
+    public Identity identify(StringBuilder sb) {
+        return null; //TODO
+    }
+
 }
