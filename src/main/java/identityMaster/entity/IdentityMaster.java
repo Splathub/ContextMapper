@@ -17,6 +17,7 @@ public class IdentityMaster implements Serializable {
     private String name;
 
     private KeyGenerator keyGenerator;
+    private HashMap<String, String> proxyToIK;
     private HashMap<String, IdentityKeeper> sKHash;
     private HashMap<String, String> tKToSKHash;
 
@@ -27,6 +28,7 @@ public class IdentityMaster implements Serializable {
 
         // temp
         keyGenerator = new KeyGenerator();
+        proxyToIK = new HashMap<>();
         sKHash = new HashMap<>();
         tKToSKHash = new HashMap<>();
     }
@@ -37,9 +39,9 @@ public class IdentityMaster implements Serializable {
         }
     }
 
-    public IdentityKeeper getOrDefaultIdentityKeeper(String key) {
-        return sKHash.getOrDefault(key, new IdentityKeeper());
-    }
+   // public IdentityKeeper getOrDefaultIdentityKeeper(String key) {
+   //     return sKHash.getOrDefault(key, new IdentityKeeper());
+   // }
 
 
     public void setIdentityKeeper(IdentityKeeper identityKeeper) {
@@ -70,7 +72,7 @@ public class IdentityMaster implements Serializable {
         element.getTextSlugs().removeAll(remove);
 
         if (element.getTextSlugs().isEmpty() || element.getText().trim().isEmpty()) {
-            LOG.warn("Empty text Element, ignored");
+            //LOG.warn("Empty text Element, ignored"); TODO: handle?
             return;
         }
 
@@ -90,6 +92,18 @@ public class IdentityMaster implements Serializable {
                 (value == null)?
                         new IdentityKeeper(this, element)
                         : value.addElement(element));*/
+    }
+
+    public String getProxy(Element element) {
+        String ssKey = keyGenerator.generateStyleStrucKey(element);
+        IdentityKeeper keeper = sKHash.get(ssKey);
+        if (keeper == null) {
+            return keyGenerator.getProxy();
+        }
+        else if (keeper.getProxy() == null) {
+            LOG.warn("matching keeper but wants proxy.., force new? "+ssKey+"\n"+ element.getText());
+        }
+        return keeper.getProxy();
     }
 
 

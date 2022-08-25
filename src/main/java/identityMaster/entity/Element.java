@@ -23,7 +23,8 @@ public class Element implements Serializable {
         StringBuilder sb = new StringBuilder()
                 .append(tag)
                 .append(style)
-                .append(attributes);
+                .append(attributes)
+                .append(identityName);
         return sb.toString();
     }
 

@@ -13,8 +13,8 @@ public class IdentityKeeper implements Serializable {
     private String instructionalID;
     private List<Element> elements = new LinkedList<>();
 
-    private String proxy;
-    private Set<String> allowedProxies = new HashSet<>();
+    private String proxy;   // proxy owner
+    private Set<String> allowedProxies; //
     private String StyleStrucKey;
     private String textKey;
 
@@ -46,22 +46,22 @@ public class IdentityKeeper implements Serializable {
         }
 
         proxy = myProxy;
-        allowedProxies.add(allowedProxy);
+        includeProxy(allowedProxy);
     }
 
-    public IdentityKeeper() { }
+   // public IdentityKeeper() { }
 
 
     public void addElement(Element element) {
         if (element != null) {
-            if (includeElement(element)) {
+            if (canIncludeElement(element)) {
                 elements.add(element);
                 textProcess(element);
 
-               // if (proxy == null && element.getSelfProxy() != null ||
-               //         proxy != null && !proxy.equalsIgnoreCase(element.getSelfProxy())) {
-               //     LOG.warn("Add element to IdentityKeeper with different self-proxies");
-              //  }
+                if (proxy == null && element.getSelfProxy() != null ||
+                        proxy != null && !proxy.equalsIgnoreCase(element.getSelfProxy())) {
+                    LOG.warn("Add element to IdentityKeeper with different self-proxies"+proxy+"\n"+ element.getSelfProxy() + "\t"+element.getText());
+                }
 
                // identitySelection(element);
             }
@@ -87,7 +87,7 @@ public class IdentityKeeper implements Serializable {
      * @param element
      * @return
      */
-    private boolean includeElement(Element element) {
+    private boolean canIncludeElement(Element element) {
         if (element.getTag().equalsIgnoreCase(tag) &&
                 element.getStyle().equals(style) &&
                 element.getAttributes().equals(attributes)) {
@@ -96,7 +96,14 @@ public class IdentityKeeper implements Serializable {
         return false;
     }
 
-
+    private void includeProxy(String proxy) {
+        if (proxy != null && !proxy.isEmpty()) {
+            if (allowedProxies == null) {
+                allowedProxies = new HashSet<>();
+            }
+            allowedProxies.add(proxy);
+        }
+    }
 
 
 

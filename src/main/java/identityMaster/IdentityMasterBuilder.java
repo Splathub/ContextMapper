@@ -26,7 +26,7 @@ public class IdentityMasterBuilder {
     private List<String> textSlugs = new LinkedList<>();
 
     public static final String SPECIAL_NOTE_PREFIX = "#%";
-    public static final Set<String> EMBEDDABLE = new HashSet(Arrays.asList("b", "u", "i", "sup", "em", "strong"));
+    public static final Set<String> EMBEDDABLE = new HashSet(Arrays.asList("b", "u", "i", "sup", "sub", "em", "strong"));
     public static final Set<String> FONTS = new HashSet(Arrays.asList("font", "span"));
 
     public IdentityMasterBuilder() throws IOException {
@@ -111,7 +111,7 @@ public class IdentityMasterBuilder {
         for (org.jsoup.nodes.Element e : doc.body().children()) {
             newRoots.add(new SimpleEntry<>(new String(), e));
         }
-        //TODO: update to every root element is a IK and child (qith text) but connected through proxyID
+
         SimpleEntry<String, org.jsoup.nodes.Element> pair;
         Element rootParent;
 
@@ -214,7 +214,6 @@ public class IdentityMasterBuilder {
     public void identitySelectionAndText(Element ele, org.jsoup.nodes.Element element) {
 
         if (element.children().size() != 0) {
-
             for ( Node n : element.childNodes()) {
 
                 if (n instanceof TextNode) {
@@ -224,7 +223,8 @@ public class IdentityMasterBuilder {
                 else if (n instanceof org.jsoup.nodes.Element) {
                     org.jsoup.nodes.Element e = (org.jsoup.nodes.Element) n;
 
-                    if (EMBEDDABLE.contains(e.tagName()) || FONTS.contains(element.tagName())) {
+                    if (EMBEDDABLE.contains(e.tagName()) || FONTS.contains(e.tagName())) {
+
                         if (element.hasText() && !textSlugs.isEmpty()) {
                             ele.setIdentityName(ConjoinedIdentityAction.class.getName());
                             textSlugs.add(SPECIAL_NOTE_PREFIX+e.tagName()+":"+e.text()); //TODO: Assumes no inner text/nodes
@@ -241,6 +241,12 @@ public class IdentityMasterBuilder {
                                 case "u":
                                     ele.addToStyle("text-decoration", "underline");
                                     break;
+                                case "sup":
+                                    ele.addToStyle("vertical-align", "super");
+                                    break;
+                                case "sub":
+                                    ele.addToStyle("vertical-align", "sub");
+                                    break;
                                 case "font":
                                 case "span":
                                     for (Attribute a : e.attributes().asList()) {
@@ -256,6 +262,9 @@ public class IdentityMasterBuilder {
                                             ele.addToAttributes(a.getKey().trim(), a.getValue().trim());
                                         }
                                     }
+                                    break;
+                                default:
+                                    LOG.warn("Tag without process for whole text process: " + e.tagName() + "\n" + e.textNodes());
                             }
                         }
 
@@ -285,6 +294,10 @@ public class IdentityMasterBuilder {
                 default:
                     ele.setIdentityName(BaseIdentityAction.class.getName());
             }
+        }
+
+        if (ele.getIdentityName() == null) {
+            ele.setIdentityName(BaseIdentityAction.class.getName()); // watch out, should be fine
         }
 
         ele.setTextSlugs(textSlugs);    // TODO: no text in a wrap needs to take first text and forward/push text with proxy~
@@ -318,7 +331,7 @@ public class IdentityMasterBuilder {
                             if (n instanceof TextNode) {
                                 //TextNode t = (TextNode) n;
                                 //textSlugs.add(t.text());
-                                LOG.warn("Table TD has off-placed Text, not processed");
+                                //LOG.warn("Table TD has off-placed Text, not processed"); TODO: handle
                             } else if (n instanceof org.jsoup.nodes.Element) {
                                 newRoots.add(new SimpleEntry<>(getProxy(ele), (org.jsoup.nodes.Element)n));
                             }
@@ -336,7 +349,7 @@ public class IdentityMasterBuilder {
                 tempSet = tableMapSS.getOrDefault("tbody", new LinkedHashSet<>());
                 tempSet.add(TemplateUtil.styleAttributesHTML(temp));
                 tableMapSS.put("tbody", tempSet);*/
-                LOG.warn("Ignored tbody element");
+                //LOG.warn("Ignored tbody element"); TODO: handle?
             }
             else {
                LOG.warn("TR else ignored: " + e.tagName());
@@ -407,7 +420,7 @@ public class IdentityMasterBuilder {
     private String getProxy(Element e) {
         String proxy = e.getSelfProxy();
         if (proxy == null) {
-            proxy = identityMaster.getKeyGenerator().getProxy();
+            proxy = identityMaster.getProxy(e);
             e.setSelfProxy(proxy);
         }
         return proxy;

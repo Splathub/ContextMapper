@@ -17,7 +17,7 @@ public class KeyGenerator implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(KeyGenerator.class);
     private final List<String> STOP_WORDS;
 
-    private int proxy = 0;
+    private int nextProxy = 0;
     private String algorithm;
 
 
@@ -109,10 +109,16 @@ public class KeyGenerator implements Serializable {
     }
 
     public String getProxy() {
-        return String.format("%04d", proxy++);
+        return String.format("%04d", nextProxy++);
     }
 
+    public int getNextProxy() {
+        return nextProxy;
+    }
 
+    public void setNextProxy(int nextProxy) {
+        this.nextProxy = nextProxy;
+    }
 
     public String getAlgorithm() {
         return algorithm;
