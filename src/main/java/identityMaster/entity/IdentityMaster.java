@@ -14,6 +14,8 @@ public class IdentityMaster implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityKeeper.class);
 
     private final String identityMasterPath = "identity/rootMaps/";
+    private final List<String> remove = new LinkedList<>();
+
     private String name;
 
     private KeyGenerator keyGenerator;
@@ -31,6 +33,9 @@ public class IdentityMaster implements Serializable {
         proxyToIK = new HashMap<>();
         sKHash = new HashMap<>();
         tKToSKHash = new HashMap<>();
+
+        remove.add("");
+        remove.add(" ");
     }
 
     public void generateAllTextKeys() {
@@ -65,10 +70,6 @@ public class IdentityMaster implements Serializable {
     }
 
     public void mergeElement(Element element, String ownProxy, String allowedProxy) {
-        List<String> remove = new LinkedList<>();
-        remove.add("");
-        remove.add(" ");
-
         element.getTextSlugs().removeAll(remove);
 
         if (element.getTextSlugs().isEmpty() || element.getText().trim().isEmpty()) {
@@ -78,32 +79,42 @@ public class IdentityMaster implements Serializable {
 
 
         String ssKey = keyGenerator.generateStyleStrucKey(element);
-        IdentityKeeper keeper = sKHash.get(ssKey);
-        if (keeper == null) {
-            keeper = new IdentityKeeper(element, ownProxy, allowedProxy);
-        }
-        else {
-            keeper.addElement(element);
-        }
-        sKHash.put(ssKey, keeper);
+        if (ssKey != null) {
+            IdentityKeeper keeper = sKHash.get(ssKey);
+            if (keeper == null) {
+                keeper = new IdentityKeeper(element, ownProxy, allowedProxy);
+                sKHash.put(ssKey, keeper);
+            } else {
+                keeper.addElement(element);
+            }
 
         /*
         sKHash.compute(ssKey, (key, value) ->
                 (value == null)?
                         new IdentityKeeper(this, element)
                         : value.addElement(element));*/
+        }
+        else {
+            LOG.warn("Null ssKey for builder");
+        }
     }
 
+    //TODO: doesn't hadnle nulls
     public String getProxy(Element element) {
         String ssKey = keyGenerator.generateStyleStrucKey(element);
-        IdentityKeeper keeper = sKHash.get(ssKey);
-        if (keeper == null) {
-            return keyGenerator.getProxy();
+        if (ssKey != null) {
+            IdentityKeeper keeper = sKHash.get(ssKey);
+            if (keeper == null) {
+                return keyGenerator.getProxy();
+            } else if (keeper.getProxy() == null) {
+                LOG.warn("matching keeper but wants proxy.., force new? " + ssKey + "\n" + element.getText());
+            }
+            return keeper.getProxy();
         }
-        else if (keeper.getProxy() == null) {
-            LOG.warn("matching keeper but wants proxy.., force new? "+ssKey+"\n"+ element.getText());
+        else {
+            LOG.warn("Null ssKey for proxy E");
+            return null;
         }
-        return keeper.getProxy();
     }
 
 

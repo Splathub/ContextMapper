@@ -1,23 +1,45 @@
 package identity.entity;
 
-import identityMaster.entity.RootIdentity;
+import identityMaster.KeyGenerator;
 
-import java.io.File;
-import java.util.Stack;
+import java.io.Serializable;
+import java.util.Map;
 
-public class HashedTextToAction implements TextToAction {
+public class HashedTextToAction implements TextToAction, Serializable {
 
-    private final RootIdentity rootIdentity;
-
-
-    public HashedTextToAction(File rootMap) {
-        this.rootIdentity = null; //TODO, parse from file YAML?
-    }
+    private KeyGenerator keyGenerator;
+    private Map<String, String> contentMap; // txKey to ID
+    private Map<String, Identity> identityMap;  // ID to Identity
 
 
     @Override
     public Identity identify(StringBuilder sb) {
-        return rootIdentity.identify(sb);
+        String key = keyGenerator.generateContextKey(sb);
+        String ssKey = contentMap.get(key);
+        return identityMap.get(ssKey);
     }
 
+    public KeyGenerator getKeyGenerator() {
+        return keyGenerator;
+    }
+
+    public void setKeyGenerator(KeyGenerator keyGenerator) {
+        this.keyGenerator = keyGenerator;
+    }
+
+    public Map<String, String> getContentMap() {
+        return contentMap;
+    }
+
+    public void setContentMap(Map<String, String> contentMap) {
+        this.contentMap = contentMap;
+    }
+
+    public Map<String, Identity> getIdentityMap() {
+        return identityMap;
+    }
+
+    public void setIdentityMap(Map<String, Identity> identityMap) {
+        this.identityMap = identityMap;
+    }
 }

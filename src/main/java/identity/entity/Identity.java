@@ -8,11 +8,10 @@ import java.util.Map;
 
 public class Identity {
 
-    private final IdentityAction action;
-    private final String template;
-    private final String[] templateSegments;
-    private int segIndex = 0;
-    private final Map<String, Object> args;
+    private  IdentityAction action;
+    private  String template;
+    private  String[] templateSegments;
+    private  Map<String, Object> args;
 
 
     public Identity(IdentityAction action, String template, Map<String, Object> args) {
@@ -41,15 +40,17 @@ public class Identity {
         this.template = "";
     }
 
+    public Identity(){}
 
 
 
-    public void process(StringBuilder sb, GeneralContentHandler handler) {
-        //TODO:
+
+    public void process(StringBuilder sb, GeneralContentHandler handler) throws SAXException {
+        action.process(sb, this, handler);
     }
 
-    public void finalProcess(StringBuilder sb, GeneralContentHandler handler) {
-        //TODO:
+    public void finalProcess(StringBuilder sb, GeneralContentHandler handler) throws SAXException {
+        action.endProcess(sb, this, handler);
     }
 
 
@@ -118,12 +119,32 @@ public class Identity {
         return template;
     }
 
+    public Map<String, Object> getArgs() {
+        return args;
+    }
+
+    public void setAction(IdentityAction action) {
+        this.action = action;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public void setTemplateSegments(String[] templateSegments) {
+        this.templateSegments = templateSegments;
+    }
+
+    public void setArgs(Map<String, Object> args) {
+        this.args = args;
+    }
+
     public String[] getTemplateSegments() {
         return templateSegments;
     }
 
 
-    public Object getData(String key) {
+    public Object getArgs(String key) {
         return args.get(key);
     }
 

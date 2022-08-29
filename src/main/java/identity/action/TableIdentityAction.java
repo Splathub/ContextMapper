@@ -30,7 +30,7 @@ public class TableIdentityAction extends JoinIdentityAction {
             root.write(identity.getTemplateSegments()[0]);
 
             //TODO: special parse for template types to each insert no format for speed
-            String head = (String) identity.getData("head");
+            String head = (String) identity.getArgs("head");
             if (head != null) {
                 createSegment(head);
                 // template doesn't have any values to insert, All values are expected to be wrapped
@@ -42,7 +42,7 @@ public class TableIdentityAction extends JoinIdentityAction {
                 }
             }
 
-            row = (String) identity.getData("row");
+            row = (String) identity.getArgs("row");
             if (row == null) {
                 emptyTemplate = true;
             }

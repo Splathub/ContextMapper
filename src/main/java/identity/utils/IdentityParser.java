@@ -2,8 +2,16 @@ package identity.utils;
 
 import identity.entity.CheckedIdentity;
 import identity.action.BaseIdentityAction;
+import identity.entity.HashedTextToAction;
+import identity.entity.ModeledTextToAction;
 import identity.entity.RootIdentityContentHandler;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.AbstractMap.SimpleEntry;
+
+import identity.entity.TextToAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.TypeDescription;
@@ -58,6 +66,35 @@ public class IdentityParser {
 
         LOG.info("Successful Parsed RootIdentity");
         return root;
+    }
+
+    public static TextToAction parseTTA(File file) {
+        String type = file.getName().split("\\.")[1];
+        Yaml yaml = new Yaml();
+
+        if (type.equalsIgnoreCase("modeled")) {
+            ModeledTextToAction textToAction = null;
+            try (FileInputStream inputStream = new FileInputStream(file)) {
+                textToAction = yaml.load(inputStream);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return textToAction;
+        }
+        else if (type.equalsIgnoreCase("hashed")) {
+            HashedTextToAction textToAction = null;
+            try (FileInputStream inputStream = new FileInputStream(file)) {
+                textToAction = yaml.load(inputStream);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return textToAction;
+        }
+        else {
+            throw new RuntimeException("Invalid file name");
+        }
     }
 
 }

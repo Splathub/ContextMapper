@@ -6,7 +6,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.LinkedList;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Stack;
 
 public class GeneralContentHandler extends DefaultHandler {
@@ -19,18 +20,21 @@ public class GeneralContentHandler extends DefaultHandler {
     private final TextToAction toa;
     private StringBuilder sb;
 
+    private final Writer writer;
 
-    public GeneralContentHandler(TextToAction toa) {
+
+    public GeneralContentHandler(TextToAction toa, Writer writer) {
         this.toa = toa;
+        this.writer = writer;
     }
 
     @Override
-    public void startDocument() throws SAXException {
+    public void startDocument() {
         this.write("<HTML>\n<HEAD>\n<TITLE> </TITLE>\n</HEAD>\n<BODY>\n");
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) {
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (inBody) {
             if (currentIdentity != null) {
                 currentIdentity.process(sb, this);
@@ -45,7 +49,7 @@ public class GeneralContentHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         if (inBody) {
             if (currentIdentity == null) {
                 currentIdentity = toa.identify(sb); //TODO: may move to handle return of set and select for proxy
@@ -65,26 +69,41 @@ public class GeneralContentHandler extends DefaultHandler {
     @Override
     public void endDocument() throws SAXException {
         if (inBody) {
-            if (sb != null) {
-                //processText(); TODO: close all exisiting identitys
+            if (sb != null && currentIdentity != null) {
+                currentIdentity.finalProcess(sb, this);
+                sb = new StringBuilder();
             }
+
+            while (!identityStack.isEmpty()) {
+                currentIdentity = identityStack.pop();
+                currentIdentity.finalProcess(sb, this);
+            }
+
             this.write("\n</BODY>\n</HTML>");
         }
     }
 
-    public void write(String str) throws SAXException {
-        super.characters(str.toCharArray(), 0, str.length());
-        super.characters(ENDS, 0, 1);
+    public void write(String str)  {
+        try {
+            writer.write(str.toCharArray(), 0, str.length());
+            writer.write(ENDS, 0, 1);
+        }
+        catch (IOException e) {
+            LOG.error("Failed to write to file :" + str);
+        }
     }
 
     public void characters(char[] ch, int start, int length) {
-        sb.append(ch, start, length);
+        if (inBody && sb != null) {
+            sb.append(ch, start, length);
+        }
+        else {
+            //this.write(ch.toString());
+        }
     }
 
-    private void processText() {
-        currentIdentity = toa.identify(sb);
-        //currentIdentity.process(...);
+    public String toString() {
+        return writer.toString();
     }
-
 
 }

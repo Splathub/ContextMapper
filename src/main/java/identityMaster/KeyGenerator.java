@@ -28,11 +28,14 @@ public class KeyGenerator implements Serializable {
 
     public String generateStyleStrucKey(Element element) {
         if (element == null) {
-            return "";
+            return null;
         }
-        return element.getSSKeyInfo().replaceAll(" ", "").toLowerCase();
+        String ssKey = element.getSSKeyInfo().replaceAll(" ", "").toLowerCase();
+        if (ssKey.isEmpty()) {
+            return null;
+        }
+        return ssKey;
     }
-
 
     public String generateStyleStrucKey(String[] style, String[] action, String tag) {
         return "";
@@ -42,7 +45,7 @@ public class KeyGenerator implements Serializable {
         return "";
     }
 
-    public String generateContextKey(String[] text) {
+    public String generateContextKey(StringBuilder text) {
         return "";
     }
 
@@ -90,6 +93,8 @@ public class KeyGenerator implements Serializable {
         */
         return keys;
     }
+
+
 
     public Set<String> cleanText(List<String> textChunks) {
         Set<String> tokens = textChunks.stream()

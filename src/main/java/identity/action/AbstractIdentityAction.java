@@ -6,6 +6,8 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractIdentityAction implements IdentityAction {
 
+    private int segIndex=0;
+
     @Override
     public void process(StringBuffer context, Identity identity, RootIdentityContentHandler root) throws SAXException {
         root.write( context.insert(0, '>')

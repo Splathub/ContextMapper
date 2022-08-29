@@ -1,5 +1,6 @@
 package identity.action;
 
+import identity.entity.GeneralContentHandler;
 import identity.entity.Identity;
 import identity.entity.RootIdentityContentHandler;
 import org.xml.sax.SAXException;
@@ -14,6 +15,11 @@ public class JoinIdentityAction extends AbstractIdentityAction {
     protected boolean initChecked;
     protected String[] segments;
     protected int segIndex = 0;
+
+    @Override
+    public void process(StringBuilder sb, Identity identity, GeneralContentHandler handler) throws SAXException {
+        //TODO: implement JOIN / table action
+    }
 
     @Override
     public void process(StringBuffer sb, Identity identity, RootIdentityContentHandler root) throws SAXException {
@@ -49,6 +55,11 @@ public class JoinIdentityAction extends AbstractIdentityAction {
             root.write(segments[segIndex]);
             root.write(identity.getTemplateSegments()[1]);
         }
+    }
+
+    @Override
+    public void endProcess(StringBuilder sb, Identity identity, GeneralContentHandler handler) throws SAXException {
+
     }
 
     protected void createSegment(String template) {

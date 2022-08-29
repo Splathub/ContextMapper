@@ -20,7 +20,7 @@ public class IdentityMasterBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityMasterBuilder.class);
 
     private final IdentityMaster identityMaster;
-    private HeaderFooterBuilder hfBuilder;
+    //private HeaderFooterBuilder hfBuilder;
 
     private Queue<SimpleEntry<String, org.jsoup.nodes.Element>> newRoots = new LinkedList<>();
     private List<String> textSlugs = new LinkedList<>();
@@ -31,18 +31,18 @@ public class IdentityMasterBuilder {
 
     public IdentityMasterBuilder() throws IOException {
         identityMaster = new IdentityMaster("tempIdentityMaster");
-        hfBuilder = new HeaderFooterBuilder();
+        //hfBuilder = new HeaderFooterBuilder();
     }
 
     public IdentityMasterBuilder(String name) throws IOException {
         identityMaster = new IdentityMaster(name);
-        hfBuilder = new HeaderFooterBuilder();
+        //hfBuilder = new HeaderFooterBuilder();
     }
 
     public IdentityMaster buildFromDirectory(File directory) throws IOException {
         if (directory.isDirectory()) {
             int i = 1;
-            for(File file : directory.listFiles()) {
+            for(File file : Objects.requireNonNull(directory.listFiles())) {
                 LOG.info("Start building file " + i);
                 process(file);
                 LOG.info("Finished building file " + i);
@@ -424,6 +424,10 @@ public class IdentityMasterBuilder {
             e.setSelfProxy(proxy);
         }
         return proxy;
+    }
+
+    public IdentityMaster getIdentityMaster() {
+        return identityMaster;
     }
 
     private void serializeYAML() throws IOException {

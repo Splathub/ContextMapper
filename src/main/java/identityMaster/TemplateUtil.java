@@ -3,6 +3,8 @@ package identityMaster;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityKeeper;
 
+import java.util.Map;
+
 public class TemplateUtil {
 
     public static String singleHeadTemplate(Element element) {
@@ -42,7 +44,7 @@ public class TemplateUtil {
 
     public static String[] mkTemplate(IdentityKeeper keeper) {
         switch (keeper.getIdentityName()) {
-            case "TableIdentityAction":
+            case "TableIdentityAction": //TODO: table tempalte segs
                 return mkTableTemplate(keeper);
             default:
                 return mkBaseWrapTemplate(keeper);
@@ -56,11 +58,24 @@ public class TemplateUtil {
                 .append("<").append(keeper.getTag());
 
         if (!keeper.getStyle().isEmpty()) {
-            sb.append(keeper.getStyle());
+            sb.append(" STYLE=\"");
+            for(Map.Entry<String, String> e : keeper.getStyle().entrySet()) {
+                sb.append(e.getKey())
+                        .append(": ")
+                        .append(e.getValue())
+                        .append("; ");
+            }
+            sb.append('"');
         }
 
         if (!keeper.getAttributes().isEmpty()) {
-            sb.append(keeper.getAttributes());
+            for(Map.Entry<String, String> e : keeper.getAttributes().entrySet()) {
+                sb.append(' ')
+                        .append(e.getKey())
+                        .append("=\"")
+                        .append(e.getValue())
+                        .append('"');
+            }
         }
 
         sb.append(">");
@@ -68,13 +83,14 @@ public class TemplateUtil {
 
         sb = new StringBuilder();
         sb.append("</").append(keeper.getTag()).append(">\n");
+        template[1] = sb.toString();
 
         return template;
     }
 
     public static String[] mkTableTemplate(IdentityKeeper keeper) {
         String[] template = new String[2];
-        //TODO:
+        //TODO: table tempalte cration segs
         return template;
     }
 }
