@@ -1,8 +1,6 @@
 package identity.utils;
 
-import identity.entity.CheckedIdentity;
-import identity.entity.RootIdentityContentHandler;
-import identity.exception.IdentityCrisisException;
+import identity.entity.Identity;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -17,34 +15,15 @@ class CheckedIdentityFactoryTest {
     void createIdentityJustMinimal() {
         Map<String, Object> data = new HashMap<>();
         data.put("template", "Some text");
-        CheckedIdentity checkedIdentity = IdentityFactory.createIdentity(data);
+        Identity checkedIdentity = IdentityFactory.createIdentity(data);
 
         assertNotNull(checkedIdentity);
     }
 
     @Test
     void createIdentityNull() {
-        CheckedIdentity checkedIdentity = IdentityFactory.createIdentity(null);
+        Identity checkedIdentity = IdentityFactory.createIdentity(null);
         assertNotNull(checkedIdentity);
-    }
-
-    @Test
-    void createRootIdentityNull() {
-        Map<String, Object> data = new HashMap<>();
-        Exception exception = assertThrows(IdentityCrisisException.class, () -> {
-            IdentityFactory.createRootIdentity(null, null);
-        });
-        assertTrue(exception.getMessage() != null);
-    }
-
-    @Test
-    void createRootIdentityMinimal() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", "Some text");
-        RootIdentityContentHandler root =
-                IdentityFactory.createRootIdentity(data, "src/test/resources/identities/parts/");
-
-        assertNotNull(root);
     }
 
     @Test

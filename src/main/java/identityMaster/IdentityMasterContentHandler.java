@@ -1,8 +1,5 @@
 package identityMaster;
 
-import identity.action.IdentityAction;
-import identity.entity.RootIdentityContentHandler;
-import identity.utils.IdentityParser;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityMaster;
 import org.apache.tika.exception.TikaException;
@@ -10,7 +7,9 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.sax.*;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.ToHTMLContentHandler;
+import org.apache.tika.sax.XHTMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -21,8 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 
+@Deprecated
 public class IdentityMasterContentHandler {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityMasterContentHandler.class);
 

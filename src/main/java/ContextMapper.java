@@ -1,17 +1,10 @@
-
 import identity.entity.GeneralContentHandler;
-import identity.entity.RootIdentityContentHandler;
 import identity.entity.TextToAction;
-import identity.utils.IdentityParser;
-import identityMaster.RootIdentityBuilder;
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.ToXMLContentHandler;
-import org.apache.tika.sax.XHTMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
@@ -32,10 +25,9 @@ public class ContextMapper {
 
     File pdf;
     String identity;
-    String partsPath = "src/main/resources/identity/parts/";
 
 
-    public static String transformFileByTTA(String inputFile, String outputFile, String ttaPath) throws IOException {
+    public static void transformFileByTTA(String inputFile, String outputFile, String ttaPath) {
         File ttaFile = new File(ttaPath);
         if (!ttaFile.isFile() || !ttaFile.canRead()) {
             throw new RuntimeException("Can find or read TTA file " + ttaPath);
@@ -59,42 +51,15 @@ public class ContextMapper {
             }
 
             LOG.info("Finished transforming file to: " + outputFile);
-            return generalContentHandler.toString();
         }
         catch (Exception e) {
             LOG.error("Failed to write output: " + e.getMessage());
         }
-        return "";
     }
 
     public ContextMapper(String pdfPath, String identityPath) {
         pdf = new File(pdfPath);
        identity = identityPath;
-    }
-
-    public String process() throws IOException {
-
-        RootIdentityContentHandler handler = IdentityParser.parseRoot(identity, partsPath);
-        Metadata metadata = new Metadata();
-        ParseContext context = new ParseContext();
-
-        try ( FileInputStream inputStream = new FileInputStream(pdf) ){
-            //parsing the document using PDF parser
-            AutoDetectParser parser = new AutoDetectParser();
-            parser.parse(inputStream, handler, metadata, context);
-
-            //getting the content of the document
-            //System.out.println("Contents of the PDF :" + handler.toString());
-
-            //getting metadata of the document
-            //System.out.println("Metadata of the PDF:");
-
-        } catch (TikaException | SAXException e) {
-            LOG.error("Tika process: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return handler.toString();
     }
 
     public String processToXML() throws IOException {

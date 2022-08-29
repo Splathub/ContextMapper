@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Deprecated
 public class ContextMapperProcess {
 
     final static String SAMPLE_PDF = "src/test/resources/samples/sample2.pdf";
@@ -38,7 +39,7 @@ public class ContextMapperProcess {
         String myPath = "C:\\Users\\holyg\\Desktop\\grayTest.html";
         try {
             FileWriter myWriter = new FileWriter(myPath);
-            myWriter.write(cm.process());
+            //myWriter.write(cm.process());
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {

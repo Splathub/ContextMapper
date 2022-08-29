@@ -3,15 +3,21 @@ package identity.entity;
 import identity.action.IdentityAction;
 import org.xml.sax.SAXException;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Identity {
 
-    private  IdentityAction action;
-    private  String template;
-    private  String[] templateSegments;
-    private  Map<String, Object> args;
+    private IdentityAction action;
+    private String template;
+    private String[] templateSegments; // Only always two start and end tag (the wrap
+    private boolean started = false;
+    private Map<String, Object> args;
+
+    public static final Set<String> REMOVE_CHECK = new HashSet(Arrays.asList("\t", "\n", " "));
 
 
     public Identity(IdentityAction action, String template, Map<String, Object> args) {
@@ -43,16 +49,39 @@ public class Identity {
     public Identity(){}
 
 
-
-
-    public void process(StringBuilder sb, GeneralContentHandler handler) throws SAXException {
-        action.process(sb, this, handler);
+    public void process(StringBuilder sb, GeneralContentHandler handler) {
+        if (isValidString(sb)) {
+            if (!started) {
+                handler.write(templateSegments[0]);
+                started = true;
+            }
+            action.process(sb, this, handler);
+        }
     }
 
-    public void finalProcess(StringBuilder sb, GeneralContentHandler handler) throws SAXException {
-        action.endProcess(sb, this, handler);
+    public void finalProcess(StringBuilder sb, GeneralContentHandler handler) {
+       if (isValidString(sb)) {
+           if (!started) {
+               handler.write(templateSegments[0]);
+           }
+           action.endProcess(sb, this, handler);
+           handler.write(templateSegments[1]);
+           started = false;
+       }
+       else if (started) {
+           handler.write(templateSegments[1]);
+           started = false;
+       }
     }
 
+    private boolean isValidString(StringBuilder sb) {
+        if (sb.length() == 0) { //TODO: remove blank lines.. maybe
+            return false;
+        }
+        return true;
+    }
+
+/*
 
     //TODO: overhead from casting from args;;;; FOWARDS/push
     public void process(StringBuffer sb, Part part, RootIdentityContentHandler root) throws SAXException {
@@ -110,6 +139,9 @@ public class Identity {
             root.write((String) args.get("endWith"));
         }
     }
+
+    */
+
 
     public IdentityAction getAction() {
         return action;

@@ -1,9 +1,8 @@
 package identity.action;
 
+import identity.entity.GeneralContentHandler;
 import identity.entity.Identity;
-import identity.entity.RootIdentityContentHandler;
 import identity.exception.ParameterException;
-import org.xml.sax.SAXException;
 
 public class TableIdentityAction extends JoinIdentityAction {
 
@@ -11,12 +10,12 @@ public class TableIdentityAction extends JoinIdentityAction {
     private boolean inHead;
     private String row;
 
-
+    //TODO: correct segments for get from args of Identity for head, foot and row, col ..
     @Override
-    public void process(StringBuffer sb, Identity identity, RootIdentityContentHandler root) throws SAXException {
+    public void process(StringBuilder sb, Identity identity, GeneralContentHandler handler) {
 
         if (emptyTemplate) {
-            root.write(sb.toString());
+            handler.write(sb.toString());
             return;
         }
 
@@ -27,15 +26,15 @@ public class TableIdentityAction extends JoinIdentityAction {
                 throw new ParameterException("TableIdentityAction 'template' only accepts 1 value wraps of only table tags");
             }
 
-            root.write(identity.getTemplateSegments()[0]);
+            handler.write(identity.getTemplateSegments()[0]);
 
             //TODO: special parse for template types to each insert no format for speed
             String head = (String) identity.getArgs("head");
             if (head != null) {
-                createSegment(head);
+                //createSegment(head);
                 // template doesn't have any values to insert, All values are expected to be wrapped
                 if (segments.length == 1) {
-                    root.write(segments[0]);
+                    handler.write(segments[0]);
                 }
                 else {
                     inHead = true;
@@ -48,35 +47,33 @@ public class TableIdentityAction extends JoinIdentityAction {
             }
 
             if (segments == null || !inHead) {
-                createSegment(row);
+                //createSegment(row);
             }
         }
 
          if (segIndex == segments.length - 1) {
-            root.write(segments[segIndex++]);
+             handler.write(segments[segIndex++]);
             segIndex = 0;
 
             if (inHead) {
-                createSegment(row);
+               // createSegment(row);
                 inHead = false;
             }
         }
 
-        root.write(segments[segIndex++]);
-        root.write(sb.toString());
-
+        handler.write(segments[segIndex++]);
+        handler.write(sb.toString());
     }
 
     @Override
-    public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
+    public void endProcess(StringBuilder sb, Identity identity, GeneralContentHandler handler) {
         //TODO: implement footer and postpone insertion to identify a footer
         while(segIndex < segments.length-1) {
-            root.write(segments[segIndex++]);
-            root.write(filler);
+            handler.write(segments[segIndex++]);
+            handler.write(filler);
         }
-        root.write(segments[segIndex]);
-        root.write(identity.getTemplateSegments()[1]);
+        handler.write(segments[segIndex]);
+        handler.write(identity.getTemplateSegments()[1]);
     }
-
 
 }

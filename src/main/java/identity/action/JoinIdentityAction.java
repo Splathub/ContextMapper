@@ -2,13 +2,11 @@ package identity.action;
 
 import identity.entity.GeneralContentHandler;
 import identity.entity.Identity;
-import identity.entity.RootIdentityContentHandler;
-import org.xml.sax.SAXException;
 
 /**
  * This class is a glorified StringBuffer class that may treat each appending differently through inheritance.
  */
-public class JoinIdentityAction extends AbstractIdentityAction {
+public class JoinIdentityAction implements IdentityAction {
 
     public final String filler = "&nbsp;";
     protected boolean emptyTemplate;
@@ -17,15 +15,11 @@ public class JoinIdentityAction extends AbstractIdentityAction {
     protected int segIndex = 0;
 
     @Override
-    public void process(StringBuilder sb, Identity identity, GeneralContentHandler handler) throws SAXException {
+    public void process(StringBuilder sb, Identity identity, GeneralContentHandler handler) {
         //TODO: implement JOIN / table action
-    }
-
-    @Override
-    public void process(StringBuffer sb, Identity identity, RootIdentityContentHandler root) throws SAXException {
 
         if (emptyTemplate) {
-            root.write(segments[0]);
+            handler.write(segments[0]);
         }
         else if (!initChecked) {
             initChecked = true;
@@ -37,34 +31,24 @@ public class JoinIdentityAction extends AbstractIdentityAction {
         }
 
         if (segIndex == segments.length - 1) {
-            root.write(segments[segIndex++]);
+            handler.write(segments[segIndex++]);
             segIndex = 0;
         }
 
-        root.write(segments[segIndex++]);
-        root.write(sb.toString());
+        handler.write(segments[segIndex++]);
+        handler.write(sb.toString());
     }
 
     @Override
-    public void endProcess(Identity identity, RootIdentityContentHandler root) throws SAXException {
+    public void endProcess(StringBuilder sb, Identity identity, GeneralContentHandler handler) {
         if (segments != null) {
             while (segIndex < segments.length - 1) {
-                root.write(segments[segIndex++]);
-                root.write(filler);
+                handler.write(segments[segIndex++]);
+                handler.write(filler);
             }
-            root.write(segments[segIndex]);
-            root.write(identity.getTemplateSegments()[1]);
+            handler.write(segments[segIndex]);
+            handler.write(identity.getTemplateSegments()[1]);
         }
-    }
-
-    @Override
-    public void endProcess(StringBuilder sb, Identity identity, GeneralContentHandler handler) throws SAXException {
-
-    }
-
-    protected void createSegment(String template) {
-        segments = template.split("%s");
-        segIndex = 0;
     }
 
 }

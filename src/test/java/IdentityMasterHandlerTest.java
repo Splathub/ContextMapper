@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+@Deprecated
 public class IdentityMasterHandlerTest {
 
     static private Metadata metadata = new Metadata();

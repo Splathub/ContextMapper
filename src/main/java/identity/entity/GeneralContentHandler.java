@@ -67,7 +67,7 @@ public class GeneralContentHandler extends DefaultHandler {
     }
 
     @Override
-    public void endDocument() throws SAXException {
+    public void endDocument() {
         if (inBody) {
             if (sb != null && currentIdentity != null) {
                 currentIdentity.finalProcess(sb, this);
