@@ -1,7 +1,6 @@
 package identity.entity;
 
 import identity.action.IdentityAction;
-import org.xml.sax.SAXException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Identity {
+public class Identity implements Cloneable {
 
     private IdentityAction action;
     private String template;
@@ -178,6 +177,10 @@ public class Identity {
 
     public Object getArgs(String key) {
         return args.get(key);
+    }
+
+    public Object clone()throws CloneNotSupportedException{
+        return super.clone();
     }
 
     @Override

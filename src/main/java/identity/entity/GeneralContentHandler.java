@@ -52,7 +52,11 @@ public class GeneralContentHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (inBody) {
             if (currentIdentity == null) {
-                currentIdentity = toa.identify(sb); //TODO: may move to handle return of set and select for proxy
+                try {
+                    currentIdentity = toa.identify(sb); //TODO: may move to handle return of set and select for proxy
+                } catch (CloneNotSupportedException e) {
+                    throw new SAXException("Identity clone failed");
+                }
             }
             currentIdentity.finalProcess(sb, this);
 

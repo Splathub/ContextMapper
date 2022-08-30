@@ -2,6 +2,6 @@ package identity.entity;
 
 public interface TextToAction {
 
-    Identity identify(StringBuilder sb);
+    Identity identify(StringBuilder sb) throws CloneNotSupportedException;
 
 }

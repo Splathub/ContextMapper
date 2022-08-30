@@ -17,13 +17,13 @@ public class ModeledTextToAction implements TextToAction, Serializable {
 
 
     @Override
-    public Identity identify(StringBuilder sb) {
+    public Identity identify(StringBuilder sb) throws CloneNotSupportedException {
         // TODO: assumes loaded path
         String[] cleanText = sb.toString().toLowerCase().split(" ");
         double[] outcomes = categorizer.categorize(cleanText);
         String category = categorizer.getBestCategory(outcomes);
 
-        return identityMap.get(category);
+        return (Identity) identityMap.get(category).clone();
     }
 
 

@@ -1,11 +1,14 @@
 package identity.entity;
 
 import identityMaster.KeyGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Map;
 
 public class HashedTextToAction implements TextToAction, Serializable {
+    private static final Logger LOG = LoggerFactory.getLogger(HashedTextToAction.class);
 
     private KeyGenerator keyGenerator;
     private Map<String, String> contentMap; // txKey to ID
@@ -13,10 +16,11 @@ public class HashedTextToAction implements TextToAction, Serializable {
 
 
     @Override
-    public Identity identify(StringBuilder sb) {
+    public Identity identify(StringBuilder sb) throws CloneNotSupportedException {
         String key = keyGenerator.generateContextKey(sb);
         String ssKey = contentMap.get(key);
-        return identityMap.get(ssKey);
+        Identity identity = identityMap.get(ssKey);
+        return (Identity) identity.clone();
     }
 
     public KeyGenerator getKeyGenerator() {

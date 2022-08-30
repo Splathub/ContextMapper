@@ -1,7 +1,5 @@
 package identityMaster.entity;
 
-import identity.action.IdentityAction;
-import identity.entity.Identity;
 
 import java.io.Serializable;
 import java.util.*;

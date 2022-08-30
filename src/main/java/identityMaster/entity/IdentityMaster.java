@@ -84,9 +84,12 @@ public class IdentityMaster implements Serializable {
             if (keeper == null) {
                 keeper = new IdentityKeeper(element, ownProxy, allowedProxy);
                 sKHash.put(ssKey, keeper);
+                proxyToIK.put(ownProxy, ssKey);
             } else {
                 keeper.addElement(element);
             }
+
+
 
         /*
         sKHash.compute(ssKey, (key, value) ->

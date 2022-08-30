@@ -278,7 +278,7 @@ public class IdentityMasterBuilder {
                         //TODO: process info for tr, td, .. proxy
                         //newRoots.add(new SimpleEntry<>(getProxy(ele), e));
 
-                    } else { // A Join/Wrap type
+                    } else { // A Join/Wrap type; Div
                         ele.setIdentityName(JoinIdentityAction.class.getName());
                         newRoots.add(new SimpleEntry<>(getProxy(ele), e));
                     }

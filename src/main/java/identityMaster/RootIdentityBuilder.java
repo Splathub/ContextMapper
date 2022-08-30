@@ -44,7 +44,12 @@ public class RootIdentityBuilder {
             Identity identity;
             IdentityAction action;
             myWriter = new FileWriter(trainFile);
+            
             for(IdentityKeeper keeper : master.getsKHash().values()) {
+
+                if (keeper.getAllowedProxies() != null && keeper.getAllowedProxies().size() > 1) {
+                    LOG.info("Keeper with more than one allowed proxies");
+                }
 
                 if (keeper.getIdentityName() == null) {
                     LOG.warn("Null class Action, not included: " + keeper.getTag());
