@@ -1,20 +1,40 @@
 package identityMaster;
 
 import constants.Constants;
-import identity.action.*;
+import identity.action.AnchorIdentityAction;
+import identity.action.BaseIdentityAction;
+import identity.action.ImageIdentityAction;
+import identity.action.TableIdentityAction;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityKeeper;
 import identityMaster.entity.IdentityMaster;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.AbstractMap.SimpleEntry;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.Stack;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static identityMaster.TemplateUtil.mkBaseWrapTemplate;

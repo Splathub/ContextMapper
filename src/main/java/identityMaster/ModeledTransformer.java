@@ -2,7 +2,13 @@ package identityMaster;
 
 import constants.Constants;
 import identityMaster.entity.IdentityMaster;
-import opennlp.tools.doccat.*;
+import opennlp.tools.doccat.DoccatFactory;
+import opennlp.tools.doccat.DoccatModel;
+import opennlp.tools.doccat.DocumentCategorizerME;
+import opennlp.tools.doccat.DocumentSample;
+import opennlp.tools.doccat.DocumentSampleStream;
+import opennlp.tools.doccat.FeatureGenerator;
+import opennlp.tools.doccat.NGramFeatureGenerator;
 import opennlp.tools.ml.AbstractTrainer;
 import opennlp.tools.ml.naivebayes.NaiveBayesTrainer;
 import opennlp.tools.postag.POSModel;
@@ -17,7 +23,12 @@ import opennlp.tools.util.TrainingParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;

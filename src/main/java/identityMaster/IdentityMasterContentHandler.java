@@ -26,7 +26,6 @@ public class IdentityMasterContentHandler {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityMasterContentHandler.class);
 
     private IdentityMaster identityMaster;
-    private HeaderFooterBuilder hfBuilder;
     private File html;
     private File other;
 
@@ -41,8 +40,6 @@ public class IdentityMasterContentHandler {
     public IdentityMasterContentHandler(File html, File other) {
         this.html = html;
         this.other = other;
-
-        hfBuilder = new HeaderFooterBuilder();
     }
 
     private class WrappedHTMLHandler extends ToHTMLContentHandler {
