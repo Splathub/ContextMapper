@@ -1,5 +1,6 @@
 package identityMaster;
 
+import constants.Constants;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityKeeper;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ public class KeyGenerator implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(KeyGenerator.class);
     private final List<String> STOP_WORDS;
 
-    private int nextProxy = 0;
     private String algorithm;
 
 
@@ -99,7 +99,7 @@ public class KeyGenerator implements Serializable {
     public Set<String> cleanText(List<String> textChunks) {
         Set<String> tokens = textChunks.stream()
                 .flatMap(line -> Stream.of( line.toLowerCase().split(" "))
-                        .map( s -> s.replaceAll("^#%(.*?):|\\.|,|\"|\\(|\\)|:", "")))
+                        .map( s -> s.replaceAll( Constants.REGEX_REMOVE, "")))
                 .collect(Collectors.toSet());
        // tokens.removeAll(STOP_WORDS);
 
@@ -111,18 +111,6 @@ public class KeyGenerator implements Serializable {
             return "";
         }
         return element.getText();
-    }
-
-    public String getProxy() {
-        return String.format("%04d", nextProxy++);
-    }
-
-    public int getNextProxy() {
-        return nextProxy;
-    }
-
-    public void setNextProxy(int nextProxy) {
-        this.nextProxy = nextProxy;
     }
 
     public String getAlgorithm() {

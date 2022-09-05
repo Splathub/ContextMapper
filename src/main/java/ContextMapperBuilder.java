@@ -2,7 +2,7 @@ import identity.entity.HashedTextToAction;
 import identity.entity.ModeledTextToAction;
 import identityMaster.IdentityMasterBuilder;
 import identityMaster.ModeledTransformer;
-import identityMaster.RootIdentityBuilder;
+import identityMaster.IdentityBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -17,12 +17,12 @@ public class ContextMapperBuilder {
     private final String TEXT_TO_ACTION_PATH = "identity/textToAction/";
 
     private IdentityMasterBuilder identityMasterBuilder = new IdentityMasterBuilder();
-    private final ModeledTransformer modeledTransformer = new ModeledTransformer();
-    private RootIdentityBuilder rootIdentityBuilder;
+    private final ModeledTransformer modeledTransformer = ModeledTransformer.getInstance();
+    private IdentityBuilder identityBuilder;
 
 
     public ContextMapperBuilder() throws IOException {
-        rootIdentityBuilder = new RootIdentityBuilder(identityMasterBuilder.getIdentityMaster());
+        identityBuilder = new IdentityBuilder(identityMasterBuilder.getIdentityMaster());
     }
 
     public ContextMapperBuilder(String name) throws IOException {
@@ -31,7 +31,7 @@ public class ContextMapperBuilder {
 
     public void loadIdentityMaster(String name) throws IOException {
         identityMasterBuilder = new IdentityMasterBuilder(name);
-        rootIdentityBuilder = new RootIdentityBuilder(identityMasterBuilder.getIdentityMaster());
+        identityBuilder = new IdentityBuilder(identityMasterBuilder.getIdentityMaster());
     }
 
     // Only HTML input to learn from
@@ -50,12 +50,12 @@ public class ContextMapperBuilder {
     // uses IdentityMaster and makes training data and model
     // TODO: checks degree of accuracy by cat counts
     public String buildModeledIdentity() throws IOException {
-        File catFile = rootIdentityBuilder.syncedCATFileWithRootIdentityMap();
+        File catFile = identityBuilder.syncedCATFileWithRootIdentityMap();
         File modelFile = modeledTransformer.train(catFile);
 
         ModeledTextToAction modeledTextToAction = new ModeledTextToAction();
         modeledTextToAction.setModelPath(modelFile.getPath());
-        modeledTextToAction.setIdentityMap(rootIdentityBuilder.getIdentityMap());
+        modeledTextToAction.setIdentityMap(identityBuilder.getIdentityMap());
 
         String path = TEXT_TO_ACTION_PATH + modelFile.getName().split("\\.")[0]+".modeled.yaml";
 
@@ -68,12 +68,12 @@ public class ContextMapperBuilder {
 
     // uses IdentityMaster and builds hashed with selective algroithm
     public String buildHashedIdentity() throws IOException {
-        rootIdentityBuilder.buildRootIdentityMap();
+        identityBuilder.buildRootIdentityMap();
 
         HashedTextToAction hashedTextToAction = new HashedTextToAction();
         //hashedTextToAction.setContentMap();//TODO: figure out hashing order adn key checjking
         hashedTextToAction.setKeyGenerator(identityMasterBuilder.getIdentityMaster().getKeyGenerator());
-        hashedTextToAction.setIdentityMap(rootIdentityBuilder.buildRootIdentityMap());
+        hashedTextToAction.setIdentityMap(identityBuilder.buildRootIdentityMap());
 
         String path = TEXT_TO_ACTION_PATH + identityMasterBuilder.getIdentityMaster().getName().split("\\.")[0]+".hashed.yaml";
 

@@ -88,6 +88,43 @@ public class TemplateUtil {
         return template;
     }
 
+    public static String[] mkBaseWrapTemplate(Element element) {
+        String[] template = new String[2];
+
+        StringBuilder sb = new StringBuilder()
+                .append("<").append(element.getTag());
+
+        if (!element.getStyle().isEmpty()) {
+            sb.append(" STYLE=\"");
+            for(Map.Entry<String, String> e : element.getStyle().entrySet()) {
+                sb.append(e.getKey())
+                        .append(": ")
+                        .append(e.getValue())
+                        .append("; ");
+            }
+            sb.append('"');
+        }
+
+        if (!element.getAttributes().isEmpty()) {
+            for(Map.Entry<String, String> e : element.getAttributes().entrySet()) {
+                sb.append(' ')
+                        .append(e.getKey())
+                        .append("=\"")
+                        .append(e.getValue())
+                        .append('"');
+            }
+        }
+
+        sb.append(">");
+        template[0] = sb.toString();
+
+        sb = new StringBuilder();
+        sb.append("</").append(element.getTag()).append(">\n");
+        template[1] = sb.toString();
+
+        return template;
+    }
+
     public static String[] mkTableTemplate(IdentityKeeper keeper) {
         String[] template = new String[2];
         //TODO: table tempalte cration segs

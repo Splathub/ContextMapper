@@ -1,5 +1,6 @@
 package identityMaster;
 
+import constants.Constants;
 import identity.action.*;
 import identityMaster.entity.Element;
 import identityMaster.entity.IdentityKeeper;
@@ -16,18 +17,15 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static identityMaster.TemplateUtil.mkBaseWrapTemplate;
+
 public class IdentityMasterBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityMasterBuilder.class);
 
     private final IdentityMaster identityMaster;
-    //private HeaderFooterBuilder hfBuilder;
-
-    private Queue<SimpleEntry<String, org.jsoup.nodes.Element>> newRoots = new LinkedList<>();
+    private Queue<SimpleEntry<Element, org.jsoup.nodes.Element>> toBuildIdentities = new LinkedList<>();
     private List<String> textSlugs = new LinkedList<>();
 
-    public static final String SPECIAL_NOTE_PREFIX = "#%";
-    public static final Set<String> EMBEDDABLE = new HashSet(Arrays.asList("b", "u", "i", "sup", "sub", "em", "strong"));
-    public static final Set<String> FONTS = new HashSet(Arrays.asList("font", "span"));
 
     public IdentityMasterBuilder() throws IOException {
         identityMaster = new IdentityMaster("tempIdentityMaster");
@@ -71,7 +69,6 @@ public class IdentityMasterBuilder {
         return identityMaster;
     }
 
-
     /*
 
     public void build() throws IOException {
@@ -109,19 +106,18 @@ public class IdentityMasterBuilder {
         LOG.info("IdentityMaster HTML parsing successful");
 
         for (org.jsoup.nodes.Element e : doc.body().children()) {
-            newRoots.add(new SimpleEntry<>(new String(), e));
+            toBuildIdentities.add(new SimpleEntry<>(new Element(), e));
         }
 
-        SimpleEntry<String, org.jsoup.nodes.Element> pair;
-        Element rootParent;
-
-        while(!newRoots.isEmpty()) {
-            pair = newRoots.poll();
-            rootParent = new Element();
-            rootParent.setTag(pair.getValue().tagName().toLowerCase());
-            conformAttributes(rootParent, pair.getValue().attributes());
-            identitySelectionAndText(rootParent, pair.getValue());
-            identityMaster.mergeElement(rootParent, rootParent.getSelfProxy(), pair.getKey());
+        SimpleEntry<Element, org.jsoup.nodes.Element> pair;
+        Element element;
+        while(!toBuildIdentities.isEmpty()) {
+            pair = toBuildIdentities.poll();
+            element = pair.getKey();
+            element.setTag(pair.getValue().tagName().toLowerCase());
+            conformAttributes(element, pair.getValue().attributes());
+            identitySelectionAndText(element, pair.getValue());
+            identityMaster.mergeElement(element);
         }
 
             /*if (superParent == null) {
@@ -212,22 +208,38 @@ public class IdentityMasterBuilder {
     }
 
     public void identitySelectionAndText(Element ele, org.jsoup.nodes.Element element) {
+        switch (element.tagName()) {
+            case "a": //TODO: may have subs
+                ele.setIdentityName(AnchorIdentityAction.class.getName()); break;
+            case "img":
+                ele.setIdentityName(ImageIdentityAction.class.getName()); break;
+            case "table":
+            case "tbody":
+                ele.setIdentityName(TableIdentityAction.class.getName());
+                processTable(ele, element); //TODO: process info for tr, td, .. proxy
+                break;
+            default:
+                ele.setIdentityName(BaseIdentityAction.class.getName());
+        }
 
-        if (element.children().size() != 0) {
-            for ( Node n : element.childNodes()) {
+        List<String[]> embeddedStyleInOrderList = new LinkedList<>(); // of Start and End tag template, push to table for it's text pins
+        if (element.children().size() != 0 &&
+                !ele.getIdentityName().equalsIgnoreCase(TableIdentityAction.class.getName())) {
 
+            for (Node n : element.childNodes()) {
                 if (n instanceof TextNode) {
                     TextNode t = (TextNode) n;
                     textSlugs.add(t.text());
-                }
-                else if (n instanceof org.jsoup.nodes.Element) {
+                } else if (n instanceof org.jsoup.nodes.Element) {
                     org.jsoup.nodes.Element e = (org.jsoup.nodes.Element) n;
 
-                    if (EMBEDDABLE.contains(e.tagName()) || FONTS.contains(e.tagName())) {
+                    if (Constants.EMBEDDABLE.contains(e.tagName()) || Constants.FONTS.contains(e.tagName())) {
 
                         if (element.hasText() && !textSlugs.isEmpty()) {
-                            ele.setIdentityName(ConjoinedIdentityAction.class.getName());
-                            textSlugs.add(SPECIAL_NOTE_PREFIX+e.tagName()+":"+e.text()); //TODO: Assumes no inner text/nodes
+                            embeddedStyleInOrderList.add(mkBaseWrapTemplate(ele)); //TODO: fix, getting Ps
+                            textSlugs.add(" "+Constants.SPECIAL_NOTE_PREFIX+" "+e.text()+" "+Constants.SPECIAL_NOTE_POSTFIX); // Add pins;
+                            //TODO; may need a new pin type string
+
                         } else {
                             switch (e.tagName()) {
                                 case "b":
@@ -269,45 +281,40 @@ public class IdentityMasterBuilder {
                         }
 
                     } else if (e.tagName().equalsIgnoreCase("br")) {
-                        textSlugs.add(SPECIAL_NOTE_PREFIX + "br");  //TODO: Assumes no inner text/nodes, shouldn't have
+                        textSlugs.add(Constants.SPECIAL_NOTE_PREFIX + "br");  //TODO: Assumes no inner text/nodes, shouldn't have
 
-                    } else if (e.tagName().equalsIgnoreCase("table") ||
-                            e.tagName().equalsIgnoreCase("tbody")) {
-                        ele.setIdentityName(TableIdentityAction.class.getName());
-                        processTable(ele, e);
-                        //TODO: process info for tr, td, .. proxy
-                        //newRoots.add(new SimpleEntry<>(getProxy(ele), e));
-
-                    } else { // A Join/Wrap type; Div
-                        ele.setIdentityName(JoinIdentityAction.class.getName());
-                        newRoots.add(new SimpleEntry<>(getProxy(ele), e));
+                    } else { // sub elements children
+                        appendNewPendingIdentity(ele, e);
                     }
                 }
             }
         }
-        else {
-            switch (element.tagName()) {
-                case "a": //TODO: may have subs
-                    ele.setIdentityName(AnchorIdentityAction.class.getName()); break;
-                case "img":
-                    ele.setIdentityName(ImageIdentityAction.class.getName()); break;
-                default:
-                    ele.setIdentityName(BaseIdentityAction.class.getName());
-            }
-        }
-
-        if (ele.getIdentityName() == null) {
-            ele.setIdentityName(BaseIdentityAction.class.getName()); // watch out, should be fine
-        }
 
         ele.setTextSlugs(textSlugs);    // TODO: no text in a wrap needs to take first text and forward/push text with proxy~
         textSlugs = new LinkedList<>();
+
+        if (!embeddedStyleInOrderList.isEmpty()) {
+            ele.getArgs().put(Constants.EMBEDDED_STYLE_ID, identityMaster.getEmbeddedTextStyleID(ele.getText(), embeddedStyleInOrderList));
+        }
+    }
+
+    private void appendNewPendingIdentity(Element parentElement, org.jsoup.nodes.Element childElement) {
+        Element child = new Element();
+        String ssKey = identityMaster.getSSKey(parentElement);
+        child.setParentSSKey(ssKey);
+        if (parentElement.getRootParentSSKey() == null) {
+            child.setRootParentSSKey(ssKey);
+        }
+        else {
+            child.setRootParentSSKey(parentElement.getRootParentSSKey());
+        }
+        toBuildIdentities.add(new SimpleEntry<>(child, childElement));
     }
 
     private void processTable(Element ele, org.jsoup.nodes.Element element) {
         Map<String, Set<String>> tableMapSS = new HashMap<>();
         Set<String> tempSet;
-        Element temp = new Element();
+        Element temp;
 
         for(org.jsoup.nodes.Element e : element.children()) {
             if (e.tagName().equalsIgnoreCase("tr")) {
@@ -333,7 +340,7 @@ public class IdentityMasterBuilder {
                                 //textSlugs.add(t.text());
                                 //LOG.warn("Table TD has off-placed Text, not processed"); TODO: handle
                             } else if (n instanceof org.jsoup.nodes.Element) {
-                                newRoots.add(new SimpleEntry<>(getProxy(ele), (org.jsoup.nodes.Element)n));
+                                appendNewPendingIdentity(ele, (org.jsoup.nodes.Element)n);
                             }
                         }
                     }
@@ -417,23 +424,16 @@ public class IdentityMasterBuilder {
         }
     }
 
-    private String getProxy(Element e) {
-        String proxy = e.getSelfProxy();
-        if (proxy == null) {
-            proxy = identityMaster.getProxy(e);
-            e.setSelfProxy(proxy);
-        }
-        return proxy;
-    }
-
     public IdentityMaster getIdentityMaster() {
         return identityMaster;
     }
 
     private void serializeYAML() throws IOException {
         Yaml yaml = new Yaml();
-        Writer writer = new FileWriter(identityMaster.getPath()+".yaml");
+        String path = identityMaster.getPath()+".yaml";
+        Writer writer = new FileWriter(path);
         yaml.dump(identityMaster, writer);
+        LOG.info("Created IdentityMaster: " + path);
     }
 
 }

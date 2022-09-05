@@ -11,19 +11,18 @@ public class Element implements Serializable {
     private SortedMap<String, String> attributes = new TreeMap<>();
     private List<String> textSlugs = new LinkedList<>();
     private List<Element> children = new LinkedList<>();
+    private String rootParentSSKey;
+    private String parentSSKey;
 
     private String identityName;
     private Map<String, Object> args = new HashMap<>();
 
-    private String selfProxy;
-
     public String getSSKeyInfo() {
-        StringBuilder sb = new StringBuilder()
-                .append(tag)
-                .append(style)
-                .append(attributes)
-                .append(identityName);
-        return sb.toString();
+        return tag +
+                style +
+                attributes +
+                identityName +   //Action class
+                rootParentSSKey;
     }
 
     public void addToStyle(String key, String value) {
@@ -93,12 +92,20 @@ public class Element implements Serializable {
         this.textSlugs = textSlugs;
     }
 
-    public String getSelfProxy() {
-        return selfProxy;
+    public String getRootParentSSKey() {
+        return rootParentSSKey;
     }
 
-    public void setSelfProxy(String selfProxy) {
-        this.selfProxy = selfProxy;
+    public void setRootParentSSKey(String rootParentSSKey) {
+        this.rootParentSSKey = rootParentSSKey;
+    }
+
+    public String getParentSSKey() {
+        return parentSSKey;
+    }
+
+    public void setParentSSKey(String parentSSKey) {
+        this.parentSSKey = parentSSKey;
     }
 
     public List<Element> getChildren() {

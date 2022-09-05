@@ -1,41 +1,42 @@
 package identityMaster.entity;
 
+import constants.Constants;
 import identityMaster.KeyGenerator;
+import identityMaster.ModeledTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class IdentityMaster implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(IdentityKeeper.class);
 
-    private final String identityMasterPath = "identity/rootMaps/";
-    private final List<String> remove = new LinkedList<>();
-
     private String name;
-
     private KeyGenerator keyGenerator;
-    private HashMap<String, String> proxyToIK;
+    private final ModeledTransformer modeledTransformer;
     private HashMap<String, IdentityKeeper> sKHash;
     private HashMap<String, String> tKToSKHash;
+    private HashMap<Integer, EmbeddedTextStyle> embeddedTextStylePool;
+    private int nextEmbeddedTextStyleID = 0;
 
 
     public IdentityMaster(String name) throws IOException {
+        this();
         this.name = name;
         //TODO: validate path or create
 
         // temp
         keyGenerator = new KeyGenerator();
-        proxyToIK = new HashMap<>();
         sKHash = new HashMap<>();
         tKToSKHash = new HashMap<>();
+        embeddedTextStylePool = new HashMap<>();
+    }
 
-        remove.add("");
-        remove.add(" ");
+    public IdentityMaster() {
+        modeledTransformer = ModeledTransformer.getInstance();
     }
 
     public void generateAllTextKeys() {
@@ -48,47 +49,35 @@ public class IdentityMaster implements Serializable {
    //     return sKHash.getOrDefault(key, new IdentityKeeper());
    // }
 
-
-    public void setIdentityKeeper(IdentityKeeper identityKeeper) {
-        sKHash.merge(keyGenerator.generateStyleStrucKey(identityKeeper), identityKeeper, this::mergeIdentityKeepers);
-    }
-
-    public IdentityKeeper mergeIdentityKeepers(IdentityKeeper priority, IdentityKeeper secondary) {
-        return priority;
-    }
-
-    public void mergeIdentityKeeper(IdentityKeeper keeper) {
-        //TODO:
-    }
-
     public void mergeElement(Element element) {
-        mergeElement(element, null, null);
-    }
+        element.getTextSlugs().removeAll(Constants.REMOVE);
 
-    public void mergeElement(Element element, String ownProxy) {
-        mergeElement(element, ownProxy, null);
-    }
-
-    public void mergeElement(Element element, String ownProxy, String allowedProxy) {
-        element.getTextSlugs().removeAll(remove);
-
+        /*
         if (element.getTextSlugs().isEmpty() || element.getText().trim().isEmpty()) {
             //LOG.warn("Empty text Element, ignored"); TODO: handle?
             return;
         }
 
+         */
 
         String ssKey = keyGenerator.generateStyleStrucKey(element);
         if (ssKey != null) {
             IdentityKeeper keeper = sKHash.get(ssKey);
             if (keeper == null) {
-                keeper = new IdentityKeeper(element, ownProxy, allowedProxy);
+                keeper = new IdentityKeeper(element);
                 sKHash.put(ssKey, keeper);
-                proxyToIK.put(ownProxy, ssKey);
             } else {
                 keeper.addElement(element);
             }
 
+            if (keeper.getRootParentSSKey() != null) {
+                LOG.debug("Incremented rootParent child count" + keeper.getRootParentSSKey());
+                sKHash.get(keeper.getRootParentSSKey()).plusChild();
+                if (!keeper.getParentSSKey().equalsIgnoreCase(keeper.getRootParentSSKey())) {
+                    LOG.debug("Incremented parent child count" + keeper.getParentSSKey());
+                    sKHash.get(keeper.getParentSSKey()).plusChild();
+                }
+            }
 
 
         /*
@@ -102,24 +91,36 @@ public class IdentityMaster implements Serializable {
         }
     }
 
-    //TODO: doesn't hadnle nulls
-    public String getProxy(Element element) {
-        String ssKey = keyGenerator.generateStyleStrucKey(element);
-        if (ssKey != null) {
-            IdentityKeeper keeper = sKHash.get(ssKey);
-            if (keeper == null) {
-                return keyGenerator.getProxy();
-            } else if (keeper.getProxy() == null) {
-                LOG.warn("matching keeper but wants proxy.., force new? " + ssKey + "\n" + element.getText());
-            }
-            return keeper.getProxy();
-        }
-        else {
-            LOG.warn("Null ssKey for proxy E");
-            return null;
-        }
+    public int getEmbeddedTextStyleID(String text, List<String[]> insertsInOrder){
+        EmbeddedTextStyle embeddedTextStyle = new EmbeddedTextStyle(modeledTransformer);
+        embeddedTextStyle.buildSelector(text, insertsInOrder);
+        embeddedTextStylePool.put(nextEmbeddedTextStyleID, embeddedTextStyle);
+        return nextEmbeddedTextStyleID++;
     }
 
+    public String getSSKey(Element element) {
+        return keyGenerator.generateStyleStrucKey(element);
+    }
+
+    public HashMap<Integer, EmbeddedTextStyle> getEmbeddedTextStylePool() {
+        return embeddedTextStylePool;
+    }
+
+    public void setEmbeddedTextStylePool(HashMap<Integer, EmbeddedTextStyle> embeddedTextStylePool) {
+        this.embeddedTextStylePool = embeddedTextStylePool;
+    }
+
+    public int getNextEmbeddedTextStyleID() {
+        return nextEmbeddedTextStyleID;
+    }
+
+    public void setNextEmbeddedTextStyleID(int nextEmbeddedTextStyleID) {
+        this.nextEmbeddedTextStyleID = nextEmbeddedTextStyleID;
+    }
+
+    public String getPath() {
+        return Constants.IDENTITY_MAPS_PATH + name;
+    }
 
     public String getName() {
         return name;
@@ -127,10 +128,6 @@ public class IdentityMaster implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return identityMasterPath + name;
     }
 
     public KeyGenerator getKeyGenerator() {

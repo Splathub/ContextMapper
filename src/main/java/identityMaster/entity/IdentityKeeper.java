@@ -13,8 +13,9 @@ public class IdentityKeeper implements Serializable {
     private String instructionalID;
     private List<Element> elements = new LinkedList<>();
 
-    private String proxy;   // proxy owner
-    private Set<String> allowedProxies; //
+    private String parentSSKey;
+    private String rootParentSSKey;
+    private int children = 0;
     private String StyleStrucKey;
     private String textKey;
 
@@ -31,10 +32,6 @@ public class IdentityKeeper implements Serializable {
 
 
     public IdentityKeeper(Element element) {
-        this(element, null, null);
-    }
-
-    public IdentityKeeper(Element element, String myProxy, String allowedProxy) {
         if (element != null) {
             tag = element.getTag();
             style = element.getStyle();
@@ -43,10 +40,9 @@ public class IdentityKeeper implements Serializable {
             args = element.getArgs();
             elements.add(element);
             textProcess(element);
+            this.rootParentSSKey = element.getRootParentSSKey();
+            this.parentSSKey = element.getParentSSKey();
         }
-
-        proxy = myProxy;
-        includeProxy(allowedProxy);
     }
 
    // public IdentityKeeper() { }
@@ -58,9 +54,9 @@ public class IdentityKeeper implements Serializable {
                 elements.add(element);
                 textProcess(element);
 
-                if (proxy == null && element.getSelfProxy() != null ||
-                        proxy != null && !proxy.equalsIgnoreCase(element.getSelfProxy())) {
-                    LOG.warn("Add element to IdentityKeeper with different self-proxies"+proxy+"\n"+ element.getSelfProxy() + "\t"+element.getText());
+                if (rootParentSSKey == null && element.getRootParentSSKey() != null ||
+                        rootParentSSKey != null && !rootParentSSKey.equalsIgnoreCase(element.getRootParentSSKey())) {
+                    LOG.warn("Add element to IdentityKeeper with different root parents: "+ rootParentSSKey +"\n\t'"+ element.getRootParentSSKey() + "'\n\t"+element.getText());
                 }
 
                // identitySelection(element);
@@ -75,6 +71,10 @@ public class IdentityKeeper implements Serializable {
 
         //TODO: update unionElement: if union can't include new element, Algorithm update/Key change and rebuild (expensive)
         //TODO: then check key for update
+    }
+
+    public void plusChild() {
+        children++;
     }
 
     private void textProcess(Element element) {
@@ -94,15 +94,6 @@ public class IdentityKeeper implements Serializable {
             return true;
         }
         return false;
-    }
-
-    private void includeProxy(String proxy) {
-        if (proxy != null && !proxy.isEmpty()) {
-            if (allowedProxies == null) {
-                allowedProxies = new HashSet<>();
-            }
-            allowedProxies.add(proxy);
-        }
     }
 
 
@@ -140,20 +131,28 @@ public class IdentityKeeper implements Serializable {
         this.textMarks = textMarks;
     }
 
-    public String getProxy() {
-        return proxy;
+    public String getRootParentSSKey() {
+        return rootParentSSKey;
     }
 
-    public void setProxy(String proxy) {
-        this.proxy = proxy;
+    public void setRootParentSSKey(String rootParentSSKey) {
+        this.rootParentSSKey = rootParentSSKey;
     }
 
-    public Set<String> getAllowedProxies() {
-        return allowedProxies;
+    public int getChildren() {
+        return children;
     }
 
-    public void setAllowedProxies(Set<String> allowedProxies) {
-        this.allowedProxies = allowedProxies;
+    public void setChildren(int children) {
+        this.children = children;
+    }
+
+    public String getParentSSKey() {
+        return parentSSKey;
+    }
+
+    public void setParentSSKey(String parentSSKey) {
+        this.parentSSKey = parentSSKey;
     }
 
     public SortedMap<String, Integer> getKeywordStats() {
