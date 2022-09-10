@@ -70,13 +70,21 @@ public class IdentityMaster implements Serializable {
                 keeper.addElement(element);
             }
 
-            if (keeper.getRootParentSSKey() != null) {
-                LOG.debug("Incremented rootParent child count" + keeper.getRootParentSSKey());
-                sKHash.get(keeper.getRootParentSSKey()).plusChild();
-                if (!keeper.getParentSSKey().equalsIgnoreCase(keeper.getRootParentSSKey())) {
-                    LOG.debug("Incremented parent child count" + keeper.getParentSSKey());
-                    sKHash.get(keeper.getParentSSKey()).plusChild();
+            String parentSSKey = null;
+            try {
+                parentSSKey = keeper.getRootParentSSKey();
+                if (parentSSKey != null) {
+                    LOG.debug("Incremented rootParent child count" + parentSSKey);
+                    sKHash.get(parentSSKey).plusChild();
+                    parentSSKey = keeper.getParentSSKey();
+                    if (!parentSSKey.equalsIgnoreCase(keeper.getRootParentSSKey())) {
+                        LOG.debug("Incremented parent child count" + parentSSKey);
+                        sKHash.get(parentSSKey).plusChild();
+                    }
                 }
+            }
+            catch (NullPointerException e) {
+                LOG.error("Parent not found! Keeper parent: "+parentSSKey);
             }
 
 

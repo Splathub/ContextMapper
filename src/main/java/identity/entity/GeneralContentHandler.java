@@ -14,6 +14,8 @@ public class GeneralContentHandler extends DefaultHandler {
     private final Logger LOG = LoggerFactory.getLogger(GeneralContentHandler.class);
     private final char[] ENDS = new char[]{'\n'};
     private boolean inBody = false;
+    private boolean inTable = false;    // Set by ACtion and prevents additional stacking
+    private String currentTag = null;
 
     private Stack<Identity> identityStack = new Stack<>();
     private Identity currentIdentity;
@@ -30,15 +32,16 @@ public class GeneralContentHandler extends DefaultHandler {
 
     @Override
     public void startDocument() {
+        LOG.info("Started document writing");
         this.write("<HTML>\n<HEAD>\n<TITLE> </TITLE>\n</HEAD>\n<BODY>\n");
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) {
         if (inBody) {
-            if (currentIdentity != null) {
+            if (currentIdentity != null) {  // pending text
                 currentIdentity.process(sb, this);
-                identityStack.push(currentIdentity);
+                identityStack.push(currentIdentity);    // push for end tag. allow for sub element
                 currentIdentity = null;
             }
 
@@ -51,6 +54,10 @@ public class GeneralContentHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (inBody) {
+            if (localName.equalsIgnoreCase("table")) {
+                inTable = false;
+            }
+
             if (currentIdentity == null) {
                 try {
                     currentIdentity = toa.identify(sb); //TODO: may move to handle return of set and select for proxy
@@ -104,6 +111,10 @@ public class GeneralContentHandler extends DefaultHandler {
         else {
             //this.write(ch.toString());
         }
+    }
+
+    public String getCurrentTag() {
+        return currentTag;
     }
 
     public String toString() {

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -331,68 +332,111 @@ public class IdentityMasterBuilder {
         toBuildIdentities.add(new SimpleEntry<>(child, childElement));
     }
 
+    /**
+     * Builds the table, tr, td templates and any cycle, header,a nd footer of the table
+     * @param ele
+     * @param element
+     */
     private void processTable(Element ele, org.jsoup.nodes.Element element) {
-        Map<String, Set<String>> tableMapSS = new HashMap<>();
-        Set<String> tempSet;
+        LinkedHashMap<String, SimpleEntry<LinkedHashMap<String, Integer>, Integer>> tableMapSS = new LinkedHashMap<>();
+        SimpleEntry<LinkedHashMap<String, Integer>, Integer> tempEntry;
+        LinkedHashMap<String, Integer> tempMap;
         Element temp;
 
-        for(org.jsoup.nodes.Element e : element.children()) {
-            if (e.tagName().equalsIgnoreCase("tr")) {
-                temp = new Element();
-                conformAttributes(temp, e.attributes());
+        //TODO; get embeddedTextStyles if any
+        Stack<Node> tableStack = new Stack<>();
 
-                tempSet = tableMapSS.getOrDefault("tr", new LinkedHashSet<>());
-                tempSet.add(TemplateUtil.styleAttributesHTML(temp));
-                tableMapSS.put("tr", tempSet);
+        for(Node n : element.childNodes()) {
+            tableStack.push( n );
+        }
 
-                for (org.jsoup.nodes.Element trE : e.children()) {
-                    if (trE.tagName().equalsIgnoreCase("td")) {
-                        temp = new Element();
-                        conformAttributes(temp, trE.attributes());
+        // sort all data
+        Node currentItem;
+        while(!tableStack.isEmpty()) {
+            currentItem = tableStack.pop();
 
-                        tempSet = tableMapSS.getOrDefault("td", new LinkedHashSet<>());
-                        tempSet.add(TemplateUtil.styleAttributesHTML(temp));
-                        tableMapSS.put("td", tempSet); //TODO: table resume and build args
+            if (currentItem instanceof TextNode) {
+                //LOG.warn("Tag has text miss placed for table, ignored: " + ((TextNode) currentItem).text() );
+            }
+            else if (currentItem instanceof org.jsoup.nodes.Element) {
+                org.jsoup.nodes.Element itemElement = (org.jsoup.nodes.Element) currentItem;
 
-                        for (Node n : trE.childNodes()) {
-                            if (n instanceof TextNode) {
-                                //TextNode t = (TextNode) n;
-                                //textSlugs.add(t.text());
-                                //LOG.warn("Table TD has off-placed Text, not processed"); TODO: handle
-                            } else if (n instanceof org.jsoup.nodes.Element) {
-                                appendNewPendingIdentity(ele, (org.jsoup.nodes.Element)n);
+                if (itemElement.tagName().equalsIgnoreCase("tr")) {
+                    temp = new Element();
+                    temp.setTag("tr");
+                    conformAttributes(temp, itemElement.attributes());
+
+                    String trTagKey = TemplateUtil.mkBaseWrapTemplate(temp)[0];
+                    tempEntry = tableMapSS.getOrDefault(trTagKey, new SimpleEntry<>(new LinkedHashMap<>(), 0));
+                    tempEntry.setValue(tempEntry.getValue()+1);
+                    tempMap = tempEntry.getKey();
+
+                    for (Node trNode : itemElement.childNodes()) {
+                        if (trNode instanceof TextNode) {
+                            //LOG.warn("Tag has text miss placed for table;tr , ignored: " + ((TextNode) trNode).text() );
+                        }
+                        else if (trNode instanceof org.jsoup.nodes.Element) {
+                            org.jsoup.nodes.Element trElement = (org.jsoup.nodes.Element) trNode;
+                            if (trElement.tagName().equalsIgnoreCase("td")) {
+                                temp = new Element();
+                                temp.setTag("td");
+                                conformAttributes(temp, trElement.attributes());
+
+                                String tdTempKey = TemplateUtil.mkBaseWrapTemplate(temp)[0];
+                                tempMap.compute( tdTempKey, (k, v) -> v==null? v=1: v++);
+
+                                for (Node n : trElement.childNodes()) {
+                                    if (n instanceof TextNode) {
+                                        //TextNode t = (TextNode) n;
+                                        //textSlugs.add(t.text());
+                                        //LOG.error("TD has text ignored, TODO!!"); //TODO: handle
+                                    } else if (n instanceof org.jsoup.nodes.Element) {
+                                        LOG.debug("TD has sub element added to buildElement stack: " + ((org.jsoup.nodes.Element) n).tagName());
+                                        appendNewPendingIdentity(ele, (org.jsoup.nodes.Element) n);
+                                    }
+                                }
+                            } else {
+                                appendNewPendingIdentity(ele, trElement);
                             }
                         }
                     }
-                    else {
-                        LOG.warn("TD else ignored: " + trE.tagName());
-                    }
-                }
-            }
-            else if (e.tagName().equalsIgnoreCase("tbody")) {
-                /*temp = new Element();
-                conformAttributes(temp, e.attributes());
+                    tableMapSS.put(trTagKey, tempEntry); //TODO: table resume and build args
+                } else if (itemElement.tagName().equalsIgnoreCase("tbody")) {
+                    /*temp = new Element();
+                    conformAttributes(temp, e.attributes());
 
-                tempSet = tableMapSS.getOrDefault("tbody", new LinkedHashSet<>());
-                tempSet.add(TemplateUtil.styleAttributesHTML(temp));
-                tableMapSS.put("tbody", tempSet);*/
-                //LOG.warn("Ignored tbody element"); TODO: handle?
-            }
-            else {
-               LOG.warn("TR else ignored: " + e.tagName());
-               //newRoots.add(new SimpleEntry<>(proxy, e));
-                //identitySelectionAndText(temp, e);
+                    tempMap = tableMapSS.getOrDefault("tbody", new LinkedHashSet<>());
+                    tempMap.add(TemplateUtil.styleAttributesHTML(temp));
+                    tableMapSS.put("tbody", tempMap);*/
+                    if (!itemElement.attributes().isEmpty()) {
+                        //LOG.warn("Ignored tbody elements with Attributes! " + itemElement.attributes());//TODO: handle?
+                    }
+                    for (org.jsoup.nodes.Node n : itemElement.childNodes()) {
+                        if (n instanceof TextNode) {
+                            //LOG.warn("Ignored tbody text: " + ((TextNode) n).text());//TODO: handle?
+                        } else if (n instanceof org.jsoup.nodes.Element) {
+                            tableStack.push(n);
+                        }
+                    }
+                } else { // not a regular table item, assume sub-element
+                    LOG.debug("Outter pending table item pushed: " + itemElement.tagName());
+                    appendNewPendingIdentity(ele, itemElement);
+                }
             }
         }
 
 
-        Map<String, Object> args = new HashMap<>();
-        for(Map.Entry<String, Set<String>> e: tableMapSS.entrySet()) {
-            String tag = e.getKey();
-            Set<String> setTemplates = e.getValue();
+        /*
+        // Identitfy roles and templates FOR NOW ONLY ROW(TR)
+       Map<String, Object> args = new HashMap<>();
+       for(Map.Entry<String, SimpleEntry<LinkedHashMap<String, Integer>, Integer>> e: tableMapSS.entrySet()) {
+           String trTemplate = e.getKey();
+           SimpleEntry<LinkedHashMap<String, Integer>, Integer> pair = e.getValue();
 
+
+           // Currently, assumes only TR
             if (setTemplates.isEmpty()) {
-                args.put(tag, "<"+tag+">");
+                //args.put(tag, "<"+tag+">");
             }
             else {
                 //TODO: find pattern, len1=same,
@@ -429,7 +473,7 @@ public class IdentityMasterBuilder {
             }
         }
         ele.setArgs(args);
-
+        */
     }
 
     private void generateTextKeys() {

@@ -84,7 +84,7 @@ public class ModeledTransformer {
             ListIterator iterator = insertsInOrder.listIterator();
 
             for(int i=0; i < textTokens.length; i++){
-                if (textTokens[i].contains(Constants.SPECIAL_NOTE_PREFIX)) {
+                if (textTokens[i].contains(Constants.SPECIAL_NOTE_PREFIX) && i+1 < textTokens.length) {
                     i++;
                     POSCount.compute(tags[i], (k, v) -> v==null? v=1 :v++ );
                     if (iterator.hasNext()) {
