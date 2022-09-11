@@ -3,6 +3,7 @@ package constants;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Constants {
 
@@ -19,6 +20,9 @@ public class Constants {
     public static final String SPECIAL_NOTE_PREFIX = "~Pre_uqzqy"; //#%
     public static final String SPECIAL_NOTE_POSTFIX = "~Post_uqzqy";
 
+    public static final String SEC_WEB_DOMAIN = "http://www.sec.gov/";
+    public static final String REGEX_WEB_SELECT = "(?i)(http|www)(.*?)(?=\\s|$)";
+    public static final Pattern WEB_PATTERN = Pattern.compile(REGEX_WEB_SELECT);
     public static final String REGEX_REMOVE = "^"+Constants.SPECIAL_NOTE_PREFIX+//"(.*?):|" +
             "^"+Constants.SPECIAL_NOTE_POSTFIX +
             "|\\.|,|\"|\\(|\\)|:";

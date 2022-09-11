@@ -11,9 +11,7 @@ import java.util.Set;
 public class Identity implements Cloneable {
 
     private IdentityAction action;
-    private String template;
     private String[] templateSegments; // Only always two start and end tag (the wrap
-    private boolean started = false;
     private Map<String, Object> args;
 
     public static final Set<String> REMOVE_CHECK = new HashSet(Arrays.asList("\t", "\n", " "));
@@ -28,7 +26,6 @@ public class Identity implements Cloneable {
             this.args = args;
         }
 
-        this.template = template; //TODO: cover before as selected  or one time and cycle, graph
         templateSegments = template.split("%s");
     }
 
@@ -42,7 +39,6 @@ public class Identity implements Cloneable {
         }
 
         this.templateSegments = template; //TODO: cover before as selected  or one time and cycle, graph
-        this.template = "";
     }
 
     public Identity(){}
@@ -50,26 +46,13 @@ public class Identity implements Cloneable {
 
     public void process(StringBuilder sb, GeneralContentHandler handler) {
         if (isValidString(sb)) {
-            if (!started) {
-                handler.write(templateSegments[0]);
-                started = true;
-            }
             action.process(sb, this, handler);
         }
     }
 
     public void finalProcess(StringBuilder sb, GeneralContentHandler handler) {
        if (isValidString(sb)) {
-           if (!started) {
-               handler.write(templateSegments[0]);
-           }
            action.endProcess(sb, this, handler);
-           handler.write(templateSegments[1]);
-           started = false;
-       }
-       else if (started) {
-           handler.write(templateSegments[1]);
-           started = false;
        }
     }
 
@@ -146,20 +129,12 @@ public class Identity implements Cloneable {
         return action;
     }
 
-    public String getTemplate() {
-        return template;
-    }
-
     public Map<String, Object> getArgs() {
         return args;
     }
 
     public void setAction(IdentityAction action) {
         this.action = action;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
     }
 
     public void setTemplateSegments(String[] templateSegments) {

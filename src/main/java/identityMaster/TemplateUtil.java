@@ -46,12 +46,18 @@ public class TemplateUtil {
         switch (keeper.getIdentityName()) {
             case "TableIdentityAction": //TODO: table tempalte segs
                 return mkTableTemplate(keeper);
+            case "AnchorIdentityAction":
+                return mkAnchorWrapTemplate(keeper); // TODO: just test and check these names case
             default:
-                return mkBaseWrapTemplate(keeper);
+                return mkBaseWrapTemplate(keeper, false);
         }
     }
 
-    public static String[] mkBaseWrapTemplate(IdentityKeeper keeper) {
+    public static String[] mkAnchorWrapTemplate(IdentityKeeper keeper) {
+        return mkBaseWrapTemplate(keeper, true);
+    }
+
+    public static String[] mkBaseWrapTemplate(IdentityKeeper keeper, boolean openEnded) {
         String[] template = new String[2];
 
         StringBuilder sb = new StringBuilder()
@@ -78,7 +84,9 @@ public class TemplateUtil {
             }
         }
 
-        sb.append(">");
+        if (!openEnded) {
+            sb.append(">");
+        }
         template[0] = sb.toString();
 
         sb = new StringBuilder();

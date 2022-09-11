@@ -230,14 +230,17 @@ public class IdentityMasterBuilder {
 
     public void identitySelectionAndText(Element ele, org.jsoup.nodes.Element element) {
         switch (element.tagName()) {
-            case "a": //TODO: may have subs
-                ele.setIdentityName(AnchorIdentityAction.class.getName()); break;
+            case "a":
+                ele.setIdentityName(AnchorIdentityAction.class.getName());
+                ele.getAttributes().remove("href");
+                break;
             case "img":
-                ele.setIdentityName(ImageIdentityAction.class.getName()); break;
+                ele.setIdentityName(ImageIdentityAction.class.getName());
+                break;
             case "table":
             case "tbody":
                 ele.setIdentityName(TableIdentityAction.class.getName());
-                processTable(ele, element); //TODO: process info for tr, td, .. proxy
+                processTable(ele, element);
                 break;
             default:
                 ele.setIdentityName(BaseIdentityAction.class.getName());
