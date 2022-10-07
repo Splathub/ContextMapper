@@ -33,6 +33,7 @@ public class ContextMapper {
             throw new RuntimeException("Can find or read TTA file " + ttaPath);
         }
 
+        LOG.info("Loading TTA");
         TextToAction tta = parseTTA(ttaFile);
 
         try (OutputStream stream = new FileOutputStream(outputFile);

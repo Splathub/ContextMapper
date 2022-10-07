@@ -11,6 +11,7 @@ public class Constants {
     public static final String IDENTITY_MODELS_PATH = "identity/models/";
 
     //Args keys
+    public static final String PARENT = "PARENT";
     public static final String EMBEDDED_STYLE_ID = "EMBEDDED_STYLE_ID";
     public static final String TABLE_ROW = "TABLE_ROW";
     public static final String TABLE_COL = "TABLE_COL";
@@ -30,4 +31,8 @@ public class Constants {
 
     public static final Set<String> EMBEDDABLE = new HashSet(Arrays.asList("b", "u", "i", "sup", "sub", "em", "strong"));
     public static final Set<String> FONTS = new HashSet(Arrays.asList("font", "span"));
+
+
+    // Used to write
+    public static final String FILLER = "&nbsp;";
 }

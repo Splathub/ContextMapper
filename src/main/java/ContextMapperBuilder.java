@@ -48,7 +48,6 @@ public class ContextMapperBuilder {
     }
 
     // uses IdentityMaster and makes training data and model
-    // TODO: checks degree of accuracy by cat counts
     public String buildModeledIdentity() throws IOException {
         File catFile = identityBuilder.syncedCATFileWithRootIdentityMap();
         File modelFile = modeledTransformer.train(catFile);

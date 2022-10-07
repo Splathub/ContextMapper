@@ -28,7 +28,7 @@ public class IdentityBuilder {
 
     // Object array of File Cat, and Map<>; return name instead, maybe
     public File syncedCATFileWithRootIdentityMap() {
-        Map<Integer, Integer> catCounts = new HashMap<>();
+        Map<String, Integer> catCounts = new HashMap<>();
         int sum = 0;
 
         identityMap = new HashMap<>();
@@ -36,7 +36,7 @@ public class IdentityBuilder {
 
         FileWriter myWriter = null;
         try {
-            int id = 0;
+            //int id = 0;
             int count;
 
             StringBuilder sb;
@@ -45,7 +45,8 @@ public class IdentityBuilder {
             IdentityAction action;
             myWriter = new FileWriter(trainFile);
 
-            for(IdentityKeeper keeper : master.getsKHash().values()) {
+            for(Map.Entry<String, IdentityKeeper> entry : master.getsKHash().entrySet()) {
+                IdentityKeeper keeper = entry.getValue();
 
                 if (keeper.getIdentityName() == null) {
                     LOG.warn("Null class Action, not included: " + keeper.getTag());
@@ -64,7 +65,7 @@ public class IdentityBuilder {
                         }
 
                         if (sb.length() != 0) {
-                            myWriter.write(id + " ");
+                            myWriter.write(entry.getKey() + " ");
                             myWriter.write(sb.toString());
                             myWriter.write("\n");
                             count++;
@@ -72,17 +73,17 @@ public class IdentityBuilder {
                     }
 
                     identity = new Identity(action, TemplateUtil.mkTemplate(keeper), keeper.getArgs());
-                    identityMap.put(String.valueOf(id), identity);
+                    identityMap.put(String.valueOf(entry.getKey()), identity);
 
                     sum += count;
-                    catCounts.put(id, count);
-                    id++;
+                    catCounts.put(entry.getKey(), count);
+                    //id++;
                 }
                 else {
                     LOG.warn("Keeper invalid or dismissed: " + keeper.getTag());
                 }
             }
-            LOG.info("Successfully wrote synced CAT and SimpleRootMap ids: " + id);
+            LOG.info("Successfully wrote synced CAT and SimpleRootMap ids");
         } catch (IOException e) {
             LOG.error("Unknown IO error");
         } catch (ClassNotFoundException e) {

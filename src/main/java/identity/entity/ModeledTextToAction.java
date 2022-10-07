@@ -26,6 +26,13 @@ public class ModeledTextToAction implements TextToAction, Serializable {
         return (Identity) identityMap.get(category).clone();
     }
 
+    public boolean isSameIdentity(String key, Identity identity) {
+        return identityMap.get(key).equals(identity);
+    }
+
+    public Identity getIdentityByKey(String key) throws CloneNotSupportedException {
+        return (Identity) identityMap.get(key).clone();
+    }
 
     public String getModelPath() {
         return modelPath;
